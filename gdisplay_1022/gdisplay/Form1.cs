@@ -24,23 +24,6 @@ namespace gdisplay
         {
 
         }
-		        void userInit发表大该不该发你不敢()
-        {
-            cBox.Items.Add("人工模式");
-            cBox.Items.Add("高德模式");
-            cBox.SelectedIndex = 0;
-            lstview_s1.Columns.Add(new ColumnHeader() { Text = "ID", Width = 25 });
-            lstview_s1.Columns.Add(new ColumnHeader() { Text = "屏幕1" });
-            lstview_s1.Columns[1].Width = lstview_s1.ClientSize.Width - lstview_s1.Columns[0].Width;
-
-            lstview_s2.Columns.Add(new ColumnHeader() { Text = "ID", Width = 25 });
-            lstview_s2.Columns.Add(new ColumnHeader() { Text = "屏幕2" });
-            lstview_s2.Columns[1].Width = lstview_s2.ClientSize.Width - lstview_s2.Columns[0].Width;
-
-            lstview_s3.Columns.Add(new ColumnHeader() { Text = "ID", Width = 25 });
-            lstview_s3.Columns.Add(new ColumnHeader() { Text = "屏幕3" });
-            lstview_s3.Columns[1].Width = lstview_s3.ClientSize.Width - lstview_s3.Columns[0].Width;
-        }
         void userInit()
         {
             cBox.Items.Add("人工模式");
