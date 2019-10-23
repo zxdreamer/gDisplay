@@ -18,7 +18,8 @@ namespace gdisplay
         public byte[] readBuff = new byte[BUFFER_SIZE];  //读缓冲区
         public int buffCount = 0;                        //当前缓冲区大小
         public bool isUse = false;
-
+        public byte devNum = 0xFF;                       //设备编号
+        
         public Connect()
         {
             readBuff = new byte[BUFFER_SIZE];
@@ -28,6 +29,7 @@ namespace gdisplay
             this.socket = socket;
             isUse = true;
             buffCount = 0;
+
         }
         public int BuffRemain()
         {
@@ -56,9 +58,11 @@ namespace gdisplay
         public Socket listenfd;
         public Connect[] connects;
         public int maxConnectCount = 50;
-
-        public void Start(string host, int port)
+        FormInterface iform;
+        public void Start(string host, int port,FormInterface forminterface)
         {
+            //TcpServer和Form1两个类之间传递数据的接口赋值
+            iform = forminterface;        
             //1.connects数组初始化：connects的每个元素绑定1k缓存
             connects = new Connect[maxConnectCount];
             for (int i = 0; i < maxConnectCount; i++)
@@ -74,6 +78,7 @@ namespace gdisplay
             listenfd.BeginAccept(AcceptCb, null);  //state可以传递用户的数据，比如listrnfd????UI有问题
             //Console.WriteLine("[服务器]启动成功");
             //在控制栏显示服务器已经开启???
+            iform.SendResult("[服务器]已开启", 1);
         }
 
         //获取连接池索引，返回负数表示获取失败
@@ -113,7 +118,8 @@ namespace gdisplay
                 {
                     socket.Close();
                     //Console.WriteLine("[警告]连接已满");
-                    MessageBox.Show("[警告]连接已满");                    
+                    //form1.status_info.Text = "    [警告]连接已满     ";
+                    //
                 }
                 else
                 {
@@ -150,13 +156,16 @@ namespace gdisplay
                 int count = connect.socket.EndReceive(ar);
                 if (count <= 0)
                 {
-                    Console.WriteLine("收到[" + connect.GetAdress() + "]断开连接");
+                    //Console.WriteLine("收到[" + connect.GetAdress() + "]断开连接");
+                    //在状态栏label3处显示客户端断开连接
                     connect.Close();
                     return;
                 }
                 string str = System.Text.Encoding.UTF8.GetString(connect.readBuff, 0, count);
-                Console.WriteLine("收到[" + connect.GetAdress() + "]数据:" + str);
-                str = connect.GetAdress() + ":" + str;
+                //Console.WriteLine("收到[" + connect.GetAdress() + "]数据:" + str);
+                //在状态栏label2处显示接受到的数据
+                
+                str = connect.GetAdress() + ":" + str+"I am xian";
                 byte[] sdbytes = System.Text.Encoding.Default.GetBytes(str);
                 //广播???
                 //for(int i=0;i<connects.Length;i++)
@@ -168,7 +177,7 @@ namespace gdisplay
                 //    Console.WriteLine("将消息转播给" + connects[i].GetAdress());
                 //    connects[i].socket.Send(sdbytes);
                 //}
-                Console.WriteLine("将消息转播给" + connect.GetAdress());
+                //Console.WriteLine("将消息转播给" + connect.GetAdress());
                 connect.socket.Send(sdbytes);
                 //3.再一次启动异步调用接受函数
                 connect.socket.BeginReceive(connect.readBuff, connect.buffCount, connect.BuffRemain(), SocketFlags.None, ReceiveCb, connect);

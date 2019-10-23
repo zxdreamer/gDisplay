@@ -70,8 +70,13 @@
             this.s2_pa3 = new System.Windows.Forms.PictureBox();
             this.s2_pa4 = new System.Windows.Forms.PictureBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.listView1 = new System.Windows.Forms.ListView();
-            this.lbsv = new System.Windows.Forms.Label();
+            this.strip_info = new System.Windows.Forms.StatusStrip();
+            this.staserver_info = new System.Windows.Forms.ToolStripStatusLabel();
+            this.stadata_info = new System.Windows.Forms.ToolStripStatusLabel();
+            this.status_info = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lb_dev1 = new System.Windows.Forms.Label();
+            this.lb_dev2 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -92,6 +97,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.s2_pa2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.s2_pa3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.s2_pa4)).BeginInit();
+            this.tabPage4.SuspendLayout();
+            this.strip_info.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -105,6 +112,7 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(744, 592);
             this.tabControl1.TabIndex = 0;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // tabPage1
             // 
@@ -182,6 +190,7 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.White;
+            this.tabPage2.Controls.Add(this.lb_dev1);
             this.tabPage2.Controls.Add(this.label4);
             this.tabPage2.Controls.Add(this.label3);
             this.tabPage2.Controls.Add(this.label2);
@@ -331,6 +340,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.lb_dev2);
             this.tabPage3.Controls.Add(this.label7);
             this.tabPage3.Controls.Add(this.label6);
             this.tabPage3.Controls.Add(this.label5);
@@ -511,41 +521,81 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.label8);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(736, 553);
+            this.tabPage4.Size = new System.Drawing.Size(736, 566);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "tabS3";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // listView1
+            // strip_info
             // 
-            this.listView1.GridLines = true;
-            this.listView1.Location = new System.Drawing.Point(24, 58);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(267, 557);
-            this.listView1.TabIndex = 2;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
+            this.strip_info.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.staserver_info,
+            this.stadata_info,
+            this.status_info});
+            this.strip_info.Location = new System.Drawing.Point(0, 657);
+            this.strip_info.Name = "strip_info";
+            this.strip_info.Size = new System.Drawing.Size(1115, 26);
+            this.strip_info.TabIndex = 2;
+            this.strip_info.Text = "statusStrip1";
             // 
-            // lbsv
+            // staserver_info
             // 
-            this.lbsv.AutoSize = true;
-            this.lbsv.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbsv.Location = new System.Drawing.Point(21, 36);
-            this.lbsv.Name = "lbsv";
-            this.lbsv.Size = new System.Drawing.Size(93, 16);
-            this.lbsv.TabIndex = 3;
-            this.lbsv.Text = "服务器关闭";
+            this.staserver_info.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)));
+            this.staserver_info.Name = "staserver_info";
+            this.staserver_info.Size = new System.Drawing.Size(135, 21);
+            this.staserver_info.Text = "toolStripStatusLabel1";
+            // 
+            // stadata_info
+            // 
+            this.stadata_info.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
+            this.stadata_info.Name = "stadata_info";
+            this.stadata_info.Size = new System.Drawing.Size(834, 21);
+            this.stadata_info.Spring = true;
+            this.stadata_info.Text = "toolStripStatusLabel1";
+            // 
+            // status_info
+            // 
+            this.status_info.Name = "status_info";
+            this.status_info.Size = new System.Drawing.Size(131, 21);
+            this.status_info.Text = "toolStripStatusLabel1";
+            // 
+            // lb_dev1
+            // 
+            this.lb_dev1.AutoSize = true;
+            this.lb_dev1.Location = new System.Drawing.Point(566, 35);
+            this.lb_dev1.Name = "lb_dev1";
+            this.lb_dev1.Size = new System.Drawing.Size(41, 12);
+            this.lb_dev1.TabIndex = 4;
+            this.lb_dev1.Text = "label8";
+            // 
+            // lb_dev2
+            // 
+            this.lb_dev2.AutoSize = true;
+            this.lb_dev2.Location = new System.Drawing.Point(584, 38);
+            this.lb_dev2.Name = "lb_dev2";
+            this.lb_dev2.Size = new System.Drawing.Size(41, 12);
+            this.lb_dev2.TabIndex = 4;
+            this.lb_dev2.Text = "label8";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(593, 44);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(41, 12);
+            this.label8.TabIndex = 0;
+            this.label8.Text = "label8";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1115, 683);
-            this.Controls.Add(this.lbsv);
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.strip_info);
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -573,6 +623,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.s2_pa2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.s2_pa3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.s2_pa4)).EndInit();
+            this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
+            this.strip_info.ResumeLayout(false);
+            this.strip_info.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -622,8 +676,13 @@
         private System.Windows.Forms.ToolStripMenuItem Red2ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem Yellow2ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem Green2ToolStripMenuItem;
-        private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.Label lbsv;
+        public System.Windows.Forms.StatusStrip strip_info;
+        public System.Windows.Forms.ToolStripStatusLabel staserver_info;
+        public System.Windows.Forms.ToolStripStatusLabel stadata_info;
+        public System.Windows.Forms.ToolStripStatusLabel status_info;
+        private System.Windows.Forms.Label lb_dev1;
+        private System.Windows.Forms.Label lb_dev2;
+        private System.Windows.Forms.Label label8;
     }
 }
 

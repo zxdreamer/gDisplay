@@ -10,34 +10,38 @@ using System.Windows.Forms;
 
 namespace gdisplay
 {
-    public partial class Form1 : Form
+    public partial class Form1 : Form, FormInterface
     {
         Byte s1_num = 0;//1,2,3,4,5,0(未选中)
         Byte s2_num = 0;
         public Form1()
         {
             InitializeComponent();
-            userInit();
-            TcpServer sv = new TcpServer();
-            try
+            userUIInit();
+            userTcpInit();
+            //this.status_info.Text = "登录时间：" + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
+        }
+        void FormInterface.SendResult(string text,int area)
+        {
+            if(area==0)
             {
-                sv.Start("127.0.0.1", 1234);
-                lbsv.Text = "服务器打开";
-                lbsv.ForeColor = Color.Red;
+                //第一个区域显示text
             }
-            catch(Exception e)
+            else if(area==1)
             {
-                lbsv.Text = "服务器关闭";
-                lbsv.ForeColor = Color.Gray;
-                MessageBox.Show("服务器无法打开"+e.Message);
+                //第二个区域显示text
+                stadata_info.Text = text;
+            }
+            else if(area==2)
+            {
+                //第三个区域显示text
             }
         }
-
         private void Form1_Load(object sender, EventArgs e)
         {
 
         }
-        void userInit()
+        void userUIInit()
         {
             cBox.Items.Add("人工模式");
             cBox.Items.Add("高德模式");
@@ -54,6 +58,31 @@ namespace gdisplay
             lstview_s3.Columns.Add(new ColumnHeader() { Text = "屏幕3" });
             lstview_s3.Columns[1].Width = lstview_s3.ClientSize.Width - lstview_s3.Columns[0].Width;
         }
+
+        void userTcpInit()
+        {
+            TcpServer sv = new TcpServer();
+            //try
+            //{
+            sv.Start("127.0.0.1", 1234, this);
+            //staserver_info.Text = "    服务器已开启     ";
+            //}
+            //catch (Exception e)
+            //{
+            //    staserver_info.Text = "    服务器已关闭     ";
+            //    staserver_info.ForeColor = Color.Red;
+            //}
+            //以广播模式发送设备寻址
+            //询问谁是1,2,3号设备(在connect中增加一个设备编号)
+            //
+            //sv.connects[i];
+            //for i in 50:
+            //  sv.connects[i].socket.Send(arr, 0, len);
+            //  等待应答
+            //  更新devNum成员
+            
+        }
+
         void myRClickMenuColor_s1(int color)
         {
             if (s1_num<1 || s1_num>8)
@@ -240,12 +269,34 @@ namespace gdisplay
 
         private void s1_BtnSnd_Click(object sender, EventArgs e)
         {
-
+            //使用DEV1的设备
         }
 
         private void s2_BtnSnd_Click(object sender, EventArgs e)
         {
 
+        }
+        //发送DEV1寻址
+        //发问：我要寻找1号设备，返回1号设备的设备号
+        //以广播模式发送
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //发送设备寻址
+            if(tabControl1.SelectedTab.Name=="tabPage2")
+            {
+                //选中1号设备
+                MessageBox.Show("选中1号设备");
+            }
+            else if(tabControl1.SelectedTab.Name=="tabPage3")
+            {
+                //选中2号设备
+                MessageBox.Show("选中2号设备");
+            }
+            else if(tabControl1.SelectedTab.Name == "tabPage4")
+            {
+                //选中3号设备
+                MessageBox.Show("选中3号设备");
+            }
         }
     }
 }
