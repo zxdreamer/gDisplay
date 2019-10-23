@@ -39,6 +39,10 @@
             this.cBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.s1_devStateBox = new System.Windows.Forms.TextBox();
+            this.s1_devStatelb = new System.Windows.Forms.Label();
+            this.s1_devNameBox = new System.Windows.Forms.TextBox();
+            this.s1_devNamelb = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -53,6 +57,10 @@
             this.s1_pa2 = new System.Windows.Forms.PictureBox();
             this.s1_pa3 = new System.Windows.Forms.PictureBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.s2_devStateBox = new System.Windows.Forms.TextBox();
+            this.s2_devStatelb = new System.Windows.Forms.Label();
+            this.s2_devNameBox = new System.Windows.Forms.TextBox();
+            this.s2_devNamelb = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -70,13 +78,12 @@
             this.s2_pa3 = new System.Windows.Forms.PictureBox();
             this.s2_pa4 = new System.Windows.Forms.PictureBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.strip_info = new System.Windows.Forms.StatusStrip();
-            this.staserver_info = new System.Windows.Forms.ToolStripStatusLabel();
-            this.stadata_info = new System.Windows.Forms.ToolStripStatusLabel();
-            this.status_info = new System.Windows.Forms.ToolStripStatusLabel();
-            this.lb_dev1 = new System.Windows.Forms.Label();
-            this.lb_dev2 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
+            this.stsbar = new System.Windows.Forms.StatusStrip();
+            this.stsbarComPort = new System.Windows.Forms.ToolStripStatusLabel();
+            this.stsbarCMD = new System.Windows.Forms.ToolStripStatusLabel();
+            this.stsbarMAP = new System.Windows.Forms.ToolStripStatusLabel();
+            this.stsbarTime = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -98,7 +105,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.s2_pa3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.s2_pa4)).BeginInit();
             this.tabPage4.SuspendLayout();
-            this.strip_info.SuspendLayout();
+            this.stsbar.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -107,10 +114,10 @@
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
-            this.tabControl1.Location = new System.Drawing.Point(339, 36);
+            this.tabControl1.Location = new System.Drawing.Point(206, 22);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(744, 592);
+            this.tabControl1.Size = new System.Drawing.Size(744, 609);
             this.tabControl1.TabIndex = 0;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
@@ -125,7 +132,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(736, 566);
+            this.tabPage1.Size = new System.Drawing.Size(736, 583);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabMain";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -190,7 +197,10 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.White;
-            this.tabPage2.Controls.Add(this.lb_dev1);
+            this.tabPage2.Controls.Add(this.s1_devStateBox);
+            this.tabPage2.Controls.Add(this.s1_devStatelb);
+            this.tabPage2.Controls.Add(this.s1_devNameBox);
+            this.tabPage2.Controls.Add(this.s1_devNamelb);
             this.tabPage2.Controls.Add(this.label4);
             this.tabPage2.Controls.Add(this.label3);
             this.tabPage2.Controls.Add(this.label2);
@@ -203,15 +213,61 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(736, 566);
+            this.tabPage2.Size = new System.Drawing.Size(736, 583);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabS1";
+            // 
+            // s1_devStateBox
+            // 
+            this.s1_devStateBox.BackColor = System.Drawing.SystemColors.MenuBar;
+            this.s1_devStateBox.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.s1_devStateBox.ForeColor = System.Drawing.Color.Red;
+            this.s1_devStateBox.Location = new System.Drawing.Point(402, 273);
+            this.s1_devStateBox.Multiline = true;
+            this.s1_devStateBox.Name = "s1_devStateBox";
+            this.s1_devStateBox.ReadOnly = true;
+            this.s1_devStateBox.Size = new System.Drawing.Size(289, 36);
+            this.s1_devStateBox.TabIndex = 5;
+            // 
+            // s1_devStatelb
+            // 
+            this.s1_devStatelb.AutoSize = true;
+            this.s1_devStatelb.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.s1_devStatelb.ForeColor = System.Drawing.Color.Red;
+            this.s1_devStatelb.Location = new System.Drawing.Point(390, 252);
+            this.s1_devStatelb.Name = "s1_devStatelb";
+            this.s1_devStatelb.Size = new System.Drawing.Size(76, 16);
+            this.s1_devStatelb.TabIndex = 4;
+            this.s1_devStatelb.Text = "连接状态";
+            // 
+            // s1_devNameBox
+            // 
+            this.s1_devNameBox.BackColor = System.Drawing.SystemColors.MenuBar;
+            this.s1_devNameBox.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.s1_devNameBox.ForeColor = System.Drawing.Color.Red;
+            this.s1_devNameBox.Location = new System.Drawing.Point(402, 60);
+            this.s1_devNameBox.Multiline = true;
+            this.s1_devNameBox.Name = "s1_devNameBox";
+            this.s1_devNameBox.ReadOnly = true;
+            this.s1_devNameBox.Size = new System.Drawing.Size(289, 32);
+            this.s1_devNameBox.TabIndex = 5;
+            // 
+            // s1_devNamelb
+            // 
+            this.s1_devNamelb.AutoSize = true;
+            this.s1_devNamelb.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.s1_devNamelb.ForeColor = System.Drawing.Color.Red;
+            this.s1_devNamelb.Location = new System.Drawing.Point(390, 37);
+            this.s1_devNamelb.Name = "s1_devNamelb";
+            this.s1_devNamelb.Size = new System.Drawing.Size(76, 16);
+            this.s1_devNamelb.TabIndex = 4;
+            this.s1_devNamelb.Text = "设备名称";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label4.Location = new System.Drawing.Point(361, 281);
+            this.label4.Location = new System.Drawing.Point(266, 281);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(110, 24);
             this.label4.TabIndex = 3;
@@ -221,7 +277,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label3.Location = new System.Drawing.Point(361, 113);
+            this.label3.Location = new System.Drawing.Point(266, 113);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(110, 24);
             this.label3.TabIndex = 3;
@@ -231,7 +287,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label2.Location = new System.Drawing.Point(189, 35);
+            this.label2.Location = new System.Drawing.Point(94, 35);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(60, 24);
             this.label2.TabIndex = 3;
@@ -239,9 +295,9 @@
             // 
             // s1_BtnSnd
             // 
-            this.s1_BtnSnd.Location = new System.Drawing.Point(445, 490);
+            this.s1_BtnSnd.Location = new System.Drawing.Point(498, 437);
             this.s1_BtnSnd.Name = "s1_BtnSnd";
-            this.s1_BtnSnd.Size = new System.Drawing.Size(109, 45);
+            this.s1_BtnSnd.Size = new System.Drawing.Size(97, 45);
             this.s1_BtnSnd.TabIndex = 2;
             this.s1_BtnSnd.Text = "确定";
             this.s1_BtnSnd.UseVisualStyleBackColor = true;
@@ -251,7 +307,7 @@
             // 
             this.s1_pb.ContextMenuStrip = this.cMenu1_Color;
             this.s1_pb.Image = global::gdisplay.Properties.Resources.pbc_row1;
-            this.s1_pb.Location = new System.Drawing.Point(295, 312);
+            this.s1_pb.Location = new System.Drawing.Point(200, 312);
             this.s1_pb.Name = "s1_pb";
             this.s1_pb.Size = new System.Drawing.Size(126, 47);
             this.s1_pb.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -294,7 +350,7 @@
             this.s1_pc.BackColor = System.Drawing.Color.White;
             this.s1_pc.ContextMenuStrip = this.cMenu1_Color;
             this.s1_pc.Image = global::gdisplay.Properties.Resources.pbc_row1;
-            this.s1_pc.Location = new System.Drawing.Point(295, 153);
+            this.s1_pc.Location = new System.Drawing.Point(200, 153);
             this.s1_pc.Name = "s1_pc";
             this.s1_pc.Size = new System.Drawing.Size(126, 47);
             this.s1_pc.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -306,7 +362,7 @@
             // 
             this.s1_pa1.ContextMenuStrip = this.cMenu1_Color;
             this.s1_pa1.Image = global::gdisplay.Properties.Resources.pa_raw1;
-            this.s1_pa1.Location = new System.Drawing.Point(264, 353);
+            this.s1_pa1.Location = new System.Drawing.Point(169, 353);
             this.s1_pa1.Name = "s1_pa1";
             this.s1_pa1.Size = new System.Drawing.Size(32, 159);
             this.s1_pa1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -318,7 +374,7 @@
             // 
             this.s1_pa2.ContextMenuStrip = this.cMenu1_Color;
             this.s1_pa2.Image = global::gdisplay.Properties.Resources.pa_raw1;
-            this.s1_pa2.Location = new System.Drawing.Point(264, 194);
+            this.s1_pa2.Location = new System.Drawing.Point(169, 194);
             this.s1_pa2.Name = "s1_pa2";
             this.s1_pa2.Size = new System.Drawing.Size(32, 159);
             this.s1_pa2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -330,7 +386,7 @@
             // 
             this.s1_pa3.ContextMenuStrip = this.cMenu1_Color;
             this.s1_pa3.Image = global::gdisplay.Properties.Resources.pa_raw1;
-            this.s1_pa3.Location = new System.Drawing.Point(264, 35);
+            this.s1_pa3.Location = new System.Drawing.Point(169, 35);
             this.s1_pa3.Name = "s1_pa3";
             this.s1_pa3.Size = new System.Drawing.Size(32, 159);
             this.s1_pa3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -340,7 +396,10 @@
             // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.lb_dev2);
+            this.tabPage3.Controls.Add(this.s2_devStateBox);
+            this.tabPage3.Controls.Add(this.s2_devStatelb);
+            this.tabPage3.Controls.Add(this.s2_devNameBox);
+            this.tabPage3.Controls.Add(this.s2_devNamelb);
             this.tabPage3.Controls.Add(this.label7);
             this.tabPage3.Controls.Add(this.label6);
             this.tabPage3.Controls.Add(this.label5);
@@ -356,16 +415,62 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(736, 566);
+            this.tabPage3.Size = new System.Drawing.Size(736, 583);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "tabS2";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // s2_devStateBox
+            // 
+            this.s2_devStateBox.BackColor = System.Drawing.SystemColors.MenuBar;
+            this.s2_devStateBox.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.s2_devStateBox.ForeColor = System.Drawing.Color.Red;
+            this.s2_devStateBox.Location = new System.Drawing.Point(424, 275);
+            this.s2_devStateBox.Multiline = true;
+            this.s2_devStateBox.Name = "s2_devStateBox";
+            this.s2_devStateBox.ReadOnly = true;
+            this.s2_devStateBox.Size = new System.Drawing.Size(280, 41);
+            this.s2_devStateBox.TabIndex = 8;
+            // 
+            // s2_devStatelb
+            // 
+            this.s2_devStatelb.AutoSize = true;
+            this.s2_devStatelb.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.s2_devStatelb.ForeColor = System.Drawing.Color.Red;
+            this.s2_devStatelb.Location = new System.Drawing.Point(411, 256);
+            this.s2_devStatelb.Name = "s2_devStatelb";
+            this.s2_devStatelb.Size = new System.Drawing.Size(76, 16);
+            this.s2_devStatelb.TabIndex = 6;
+            this.s2_devStatelb.Text = "连接状态";
+            // 
+            // s2_devNameBox
+            // 
+            this.s2_devNameBox.BackColor = System.Drawing.SystemColors.MenuBar;
+            this.s2_devNameBox.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.s2_devNameBox.ForeColor = System.Drawing.Color.Red;
+            this.s2_devNameBox.Location = new System.Drawing.Point(424, 62);
+            this.s2_devNameBox.Multiline = true;
+            this.s2_devNameBox.Name = "s2_devNameBox";
+            this.s2_devNameBox.ReadOnly = true;
+            this.s2_devNameBox.Size = new System.Drawing.Size(280, 37);
+            this.s2_devNameBox.TabIndex = 9;
+            // 
+            // s2_devNamelb
+            // 
+            this.s2_devNamelb.AutoSize = true;
+            this.s2_devNamelb.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.s2_devNamelb.ForeColor = System.Drawing.Color.Red;
+            this.s2_devNamelb.Location = new System.Drawing.Point(411, 41);
+            this.s2_devNamelb.Name = "s2_devNamelb";
+            this.s2_devNamelb.Size = new System.Drawing.Size(76, 16);
+            this.s2_devNamelb.TabIndex = 7;
+            this.s2_devNamelb.Text = "设备名称";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label7.Location = new System.Drawing.Point(155, 321);
+            this.label7.Location = new System.Drawing.Point(54, 328);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(135, 24);
             this.label7.TabIndex = 3;
@@ -375,7 +480,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label6.Location = new System.Drawing.Point(389, 190);
+            this.label6.Location = new System.Drawing.Point(288, 197);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(110, 24);
             this.label6.TabIndex = 3;
@@ -385,7 +490,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label5.Location = new System.Drawing.Point(385, 66);
+            this.label5.Location = new System.Drawing.Point(284, 73);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(110, 24);
             this.label5.TabIndex = 3;
@@ -393,9 +498,9 @@
             // 
             // s2_BtnSnd
             // 
-            this.s2_BtnSnd.Location = new System.Drawing.Point(466, 489);
+            this.s2_BtnSnd.Location = new System.Drawing.Point(516, 446);
             this.s2_BtnSnd.Name = "s2_BtnSnd";
-            this.s2_BtnSnd.Size = new System.Drawing.Size(109, 45);
+            this.s2_BtnSnd.Size = new System.Drawing.Size(97, 45);
             this.s2_BtnSnd.TabIndex = 2;
             this.s2_BtnSnd.Text = "确定";
             this.s2_BtnSnd.UseVisualStyleBackColor = true;
@@ -405,7 +510,7 @@
             // 
             this.s2_pe.ContextMenuStrip = this.cMenu2_Color;
             this.s2_pe.Image = global::gdisplay.Properties.Resources.pe_black2;
-            this.s2_pe.Location = new System.Drawing.Point(347, 381);
+            this.s2_pe.Location = new System.Drawing.Point(246, 388);
             this.s2_pe.Name = "s2_pe";
             this.s2_pe.Size = new System.Drawing.Size(40, 83);
             this.s2_pe.TabIndex = 1;
@@ -446,7 +551,7 @@
             // 
             this.s2_pd.ContextMenuStrip = this.cMenu2_Color;
             this.s2_pd.Image = global::gdisplay.Properties.Resources.lpd_black2;
-            this.s2_pd.Location = new System.Drawing.Point(222, 351);
+            this.s2_pd.Location = new System.Drawing.Point(121, 358);
             this.s2_pd.Name = "s2_pd";
             this.s2_pd.Size = new System.Drawing.Size(93, 46);
             this.s2_pd.TabIndex = 1;
@@ -457,7 +562,7 @@
             // 
             this.s2_pb.ContextMenuStrip = this.cMenu2_Color;
             this.s2_pb.Image = global::gdisplay.Properties.Resources.rpd_black2;
-            this.s2_pb.Location = new System.Drawing.Point(347, 217);
+            this.s2_pb.Location = new System.Drawing.Point(246, 224);
             this.s2_pb.Name = "s2_pb";
             this.s2_pb.Size = new System.Drawing.Size(93, 47);
             this.s2_pb.TabIndex = 1;
@@ -468,7 +573,7 @@
             // 
             this.s2_pc.ContextMenuStrip = this.cMenu2_Color;
             this.s2_pc.Image = global::gdisplay.Properties.Resources.rpd_black2;
-            this.s2_pc.Location = new System.Drawing.Point(347, 104);
+            this.s2_pc.Location = new System.Drawing.Point(246, 111);
             this.s2_pc.Name = "s2_pc";
             this.s2_pc.Size = new System.Drawing.Size(93, 47);
             this.s2_pc.TabIndex = 1;
@@ -479,7 +584,7 @@
             // 
             this.s2_pa1.ContextMenuStrip = this.cMenu2_Color;
             this.s2_pa1.Image = ((System.Drawing.Image)(resources.GetObject("s2_pa1.Image")));
-            this.s2_pa1.Location = new System.Drawing.Point(316, 373);
+            this.s2_pa1.Location = new System.Drawing.Point(215, 380);
             this.s2_pa1.Name = "s2_pa1";
             this.s2_pa1.Size = new System.Drawing.Size(29, 111);
             this.s2_pa1.TabIndex = 0;
@@ -490,7 +595,7 @@
             // 
             this.s2_pa2.ContextMenuStrip = this.cMenu2_Color;
             this.s2_pa2.Image = global::gdisplay.Properties.Resources.lpa_row2;
-            this.s2_pa2.Location = new System.Drawing.Point(316, 260);
+            this.s2_pa2.Location = new System.Drawing.Point(215, 267);
             this.s2_pa2.Name = "s2_pa2";
             this.s2_pa2.Size = new System.Drawing.Size(29, 111);
             this.s2_pa2.TabIndex = 0;
@@ -501,7 +606,7 @@
             // 
             this.s2_pa3.ContextMenuStrip = this.cMenu2_Color;
             this.s2_pa3.Image = ((System.Drawing.Image)(resources.GetObject("s2_pa3.Image")));
-            this.s2_pa3.Location = new System.Drawing.Point(316, 147);
+            this.s2_pa3.Location = new System.Drawing.Point(215, 154);
             this.s2_pa3.Name = "s2_pa3";
             this.s2_pa3.Size = new System.Drawing.Size(29, 111);
             this.s2_pa3.TabIndex = 0;
@@ -512,7 +617,7 @@
             // 
             this.s2_pa4.ContextMenuStrip = this.cMenu2_Color;
             this.s2_pa4.Image = ((System.Drawing.Image)(resources.GetObject("s2_pa4.Image")));
-            this.s2_pa4.Location = new System.Drawing.Point(316, 34);
+            this.s2_pa4.Location = new System.Drawing.Point(215, 41);
             this.s2_pa4.Name = "s2_pa4";
             this.s2_pa4.Size = new System.Drawing.Size(29, 111);
             this.s2_pa4.TabIndex = 0;
@@ -525,61 +630,10 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(736, 566);
+            this.tabPage4.Size = new System.Drawing.Size(736, 583);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "tabS3";
             this.tabPage4.UseVisualStyleBackColor = true;
-            // 
-            // strip_info
-            // 
-            this.strip_info.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.staserver_info,
-            this.stadata_info,
-            this.status_info});
-            this.strip_info.Location = new System.Drawing.Point(0, 657);
-            this.strip_info.Name = "strip_info";
-            this.strip_info.Size = new System.Drawing.Size(1115, 26);
-            this.strip_info.TabIndex = 2;
-            this.strip_info.Text = "statusStrip1";
-            // 
-            // staserver_info
-            // 
-            this.staserver_info.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)));
-            this.staserver_info.Name = "staserver_info";
-            this.staserver_info.Size = new System.Drawing.Size(135, 21);
-            this.staserver_info.Text = "toolStripStatusLabel1";
-            // 
-            // stadata_info
-            // 
-            this.stadata_info.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
-            this.stadata_info.Name = "stadata_info";
-            this.stadata_info.Size = new System.Drawing.Size(834, 21);
-            this.stadata_info.Spring = true;
-            this.stadata_info.Text = "toolStripStatusLabel1";
-            // 
-            // status_info
-            // 
-            this.status_info.Name = "status_info";
-            this.status_info.Size = new System.Drawing.Size(131, 21);
-            this.status_info.Text = "toolStripStatusLabel1";
-            // 
-            // lb_dev1
-            // 
-            this.lb_dev1.AutoSize = true;
-            this.lb_dev1.Location = new System.Drawing.Point(566, 35);
-            this.lb_dev1.Name = "lb_dev1";
-            this.lb_dev1.Size = new System.Drawing.Size(41, 12);
-            this.lb_dev1.TabIndex = 4;
-            this.lb_dev1.Text = "label8";
-            // 
-            // lb_dev2
-            // 
-            this.lb_dev2.AutoSize = true;
-            this.lb_dev2.Location = new System.Drawing.Point(584, 38);
-            this.lb_dev2.Name = "lb_dev2";
-            this.lb_dev2.Size = new System.Drawing.Size(41, 12);
-            this.lb_dev2.TabIndex = 4;
-            this.lb_dev2.Text = "label8";
             // 
             // label8
             // 
@@ -590,12 +644,58 @@
             this.label8.TabIndex = 0;
             this.label8.Text = "label8";
             // 
+            // stsbar
+            // 
+            this.stsbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.stsbarComPort,
+            this.stsbarCMD,
+            this.stsbarMAP,
+            this.stsbarTime});
+            this.stsbar.Location = new System.Drawing.Point(0, 657);
+            this.stsbar.Name = "stsbar";
+            this.stsbar.Size = new System.Drawing.Size(1115, 26);
+            this.stsbar.TabIndex = 2;
+            this.stsbar.Text = "ststar";
+            // 
+            // stsbarComPort
+            // 
+            this.stsbarComPort.AutoSize = false;
+            this.stsbarComPort.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.stsbarComPort.Name = "stsbarComPort";
+            this.stsbarComPort.Size = new System.Drawing.Size(135, 21);
+            this.stsbarComPort.Text = "toolStripStatusLabel1";
+            // 
+            // stsbarCMD
+            // 
+            this.stsbarCMD.AutoSize = false;
+            this.stsbarCMD.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.stsbarCMD.Name = "stsbarCMD";
+            this.stsbarCMD.Size = new System.Drawing.Size(580, 21);
+            this.stsbarCMD.Spring = true;
+            this.stsbarCMD.Text = "toolStripStatusLabel1";
+            // 
+            // stsbarMAP
+            // 
+            this.stsbarMAP.AutoSize = false;
+            this.stsbarMAP.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.stsbarMAP.Name = "stsbarMAP";
+            this.stsbarMAP.Size = new System.Drawing.Size(250, 21);
+            this.stsbarMAP.Text = "toolStripStatusLabel1";
+            // 
+            // stsbarTime
+            // 
+            this.stsbarTime.AutoSize = false;
+            this.stsbarTime.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.stsbarTime.Name = "stsbarTime";
+            this.stsbarTime.Size = new System.Drawing.Size(135, 21);
+            this.stsbarTime.Text = "toolStripStatusLabel1";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1115, 683);
-            this.Controls.Add(this.strip_info);
+            this.Controls.Add(this.stsbar);
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -625,8 +725,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.s2_pa4)).EndInit();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
-            this.strip_info.ResumeLayout(false);
-            this.strip_info.PerformLayout();
+            this.stsbar.ResumeLayout(false);
+            this.stsbar.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -676,13 +776,20 @@
         private System.Windows.Forms.ToolStripMenuItem Red2ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem Yellow2ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem Green2ToolStripMenuItem;
-        public System.Windows.Forms.StatusStrip strip_info;
-        public System.Windows.Forms.ToolStripStatusLabel staserver_info;
-        public System.Windows.Forms.ToolStripStatusLabel stadata_info;
-        public System.Windows.Forms.ToolStripStatusLabel status_info;
-        private System.Windows.Forms.Label lb_dev1;
-        private System.Windows.Forms.Label lb_dev2;
+        public System.Windows.Forms.StatusStrip stsbar;
+        public System.Windows.Forms.ToolStripStatusLabel stsbarComPort;
+        public System.Windows.Forms.ToolStripStatusLabel stsbarCMD;
+        public System.Windows.Forms.ToolStripStatusLabel stsbarMAP;
+        private System.Windows.Forms.Label s1_devNamelb;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox s1_devStateBox;
+        private System.Windows.Forms.Label s1_devStatelb;
+        private System.Windows.Forms.TextBox s1_devNameBox;
+        private System.Windows.Forms.TextBox s2_devStateBox;
+        private System.Windows.Forms.Label s2_devStatelb;
+        private System.Windows.Forms.TextBox s2_devNameBox;
+        private System.Windows.Forms.Label s2_devNamelb;
+        private System.Windows.Forms.ToolStripStatusLabel stsbarTime;
     }
 }
 

@@ -12,8 +12,11 @@ namespace gdisplay
 {
     public partial class Form1 : Form
     {
-        Byte s1_num = 0;//1,2,3,4,5,0(未选中)
+        Byte s1_num = 0;               //1,2,3,4,5,0(未选中)
+        Byte[] s1_sdarr = new byte[50];//向屏幕1发送数据的缓存
         Byte s2_num = 0;
+        Byte[] s2_sdarr = new byte[50];
+        TcpServer sv=null;
         public Form1()
         {
             InitializeComponent();
@@ -30,7 +33,7 @@ namespace gdisplay
             else if (area == 1)
             {
                 //第二个区域显示text
-                stadata_info.Text = text;
+                stsbarCMD.Text = text;
             }
             else if (area == 2)
             {
@@ -40,6 +43,14 @@ namespace gdisplay
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        public void UpdateState(int msgType,int msgData,string text)
+        {
+            if (msgType == 0)
+                stsbarComPort.Text = text;
+            else if (msgType == 1)
+                ;
         }
         void userUIInit()
         {
@@ -61,8 +72,8 @@ namespace gdisplay
 
         void userTcpInit()
         {
-            TcpServer sv = new TcpServer();
-            sv.TcpResultEvent += new TcpServer.TcpResultDeg(TcpCallbackResult);
+            sv = new TcpServer();
+            //sv.TcpResultEvent += new TcpServer.TcpResultDeg(TcpCallbackResult);
             //try
             //{
             sv.Start("127.0.0.1", 1234);
@@ -86,6 +97,7 @@ namespace gdisplay
 
         void myRClickMenuColor_s1(int color)
         {
+            //填充s1_sdarr[50]数组
             if (s1_num<1 || s1_num>8)
             {
                 MessageBox.Show("请点击正确区域");
@@ -271,11 +283,33 @@ namespace gdisplay
         private void s1_BtnSnd_Click(object sender, EventArgs e)
         {
             //使用DEV1的设备
+            //1.遍历connects，查找1号屏对应的socket
+
+            //2.发送s1_sdarr[50]数据
+
+            //3.等待接受应答???
+            //
+            Byte[] CMD = new byte[8] { 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37 };
+            for(int i =0;i<sv.connects.Length;i++)
+            {
+                if (!sv.connects[i].isUse)
+                    continue;
+
+                int res = sv.SendData(sv.connects[i], CMD, CMD.Length);
+                if(res==-1)
+                {
+                    MessageBox.Show("Dev" + sv.connects[i].devNum + "已断开");
+                }
+                else if(res == -2)
+                {
+                    MessageBox.Show("Dev" + sv.connects[i].devNum + "发送失败");
+                }
+            }
         }
 
         private void s2_BtnSnd_Click(object sender, EventArgs e)
         {
-
+            
         }
         //发送DEV1寻址
         //发问：我要寻找1号设备，返回1号设备的设备号
@@ -286,17 +320,17 @@ namespace gdisplay
             if(tabControl1.SelectedTab.Name=="tabPage2")
             {
                 //选中1号设备
-                MessageBox.Show("选中1号设备");
+                //MessageBox.Show("选中1号设备");
             }
             else if(tabControl1.SelectedTab.Name=="tabPage3")
             {
                 //选中2号设备
-                MessageBox.Show("选中2号设备");
+                //MessageBox.Show("选中2号设备");
             }
             else if(tabControl1.SelectedTab.Name == "tabPage4")
             {
                 //选中3号设备
-                MessageBox.Show("选中3号设备");
+                //MessageBox.Show("选中3号设备");
             }
         }
     }

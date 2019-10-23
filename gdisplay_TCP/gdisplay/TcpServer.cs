@@ -36,7 +36,7 @@ namespace gdisplay
             return BUFFER_SIZE - buffCount;
         }
         //获取客户端IP地址和端口
-        public string GetAdress()
+        public string GetRemoteAdress()
         {
             if (!isUse)
             {
@@ -48,28 +48,29 @@ namespace gdisplay
         {
             if (!isUse)
                 return;
-            //Console.WriteLine("[断开连接]" + GetAdress());
+            //Console.WriteLine("[断开连接]" + GetAdress());????
             socket.Close();
             isUse = false;
+            MessageBox.Show("连接关闭");
+            devNum = 0xFF;
         }
     }
     class TcpServer
     {
-        public delegate void TcpResultDeg(string warning, int area);
-        public event TcpResultDeg TcpResultEvent;
-        public void trigger(string warning, int area)
-        {
-            TcpResultEvent(warning, area);
-        }
+        //public delegate void TcpResultDeg(string warning, int area);
+        //public event TcpResultDeg TcpResultEvent;
+        //public void trigger(string warning, int area)
+        //{
+        //    TcpResultEvent(warning, area);
+        //}
 
         public Socket listenfd;
         public Connect[] connects;
         public int maxConnectCount = 50;
-        //FormInterface iform;
+
+        //Start：启动TcpServer
         public void Start(string host, int port)
-        {
-            //TcpServer和Form1两个类之间传递数据的接口赋值
-            //iform = forminterface;        
+        {       
             //1.connects数组初始化：connects的每个元素绑定1k缓存
             connects = new Connect[maxConnectCount];
             for (int i = 0; i < maxConnectCount; i++)
@@ -82,13 +83,10 @@ namespace gdisplay
             listenfd.Bind(ipEp);
             listenfd.Listen(maxConnectCount);
             //3. 调用异步函数BeginAccept,参数使用委托
-            listenfd.BeginAccept(AcceptCb, null);  //state可以传递用户的数据，比如listrnfd????UI有问题
-            //Console.WriteLine("[服务器]启动成功");
-            //在控制栏显示服务器已经开启???
-            trigger("[服务器]已开启******", 1);
+            listenfd.BeginAccept(AcceptCb, null);  //state可以传递用户的数据，比如listernfd????UI有问题
         }
 
-        //获取连接池索引，返回负数表示获取失败
+        //NewIndex：获取连接池索引，返回负数表示获取失败
         public int NewIndex()
         {
             //connects可让UI来代用，加入超时机制，发起回调收不到的异常处理????
@@ -133,7 +131,7 @@ namespace gdisplay
                     //3.构造connect，绑定缓存，绑定fd
                     Connect connect = connects[index];
                     connect.Init(socket);  //socket->connect,isUse=true
-                    string adr = connect.GetAdress();
+                    string adr = connect.GetRemoteAdress();
                     //Console.WriteLine("客户端[" + adr + "]connect池ID:" + index);
                     //需要把每台设备的连接情况显示到一个text上???
                     //4.启动异步接受
@@ -145,7 +143,8 @@ namespace gdisplay
             }
             catch (Exception e)
             {
-                Console.WriteLine("AcceptCb失败" + e.Message);
+                MessageBox.Show("Receive断开");
+                //Console.WriteLine("AcceptCb失败" + e.Message);
             }
         }
 
@@ -172,7 +171,7 @@ namespace gdisplay
                 //Console.WriteLine("收到[" + connect.GetAdress() + "]数据:" + str);
                 //在状态栏label2处显示接受到的数据
                 
-                str = connect.GetAdress() + ":" + str+"I am xian";
+                str = connect.GetRemoteAdress() + ":" + str+"I am xian";
                 byte[] sdbytes = System.Text.Encoding.Default.GetBytes(str);
                 //广播???
                 //for(int i=0;i<connects.Length;i++)
@@ -185,17 +184,49 @@ namespace gdisplay
                 //    connects[i].socket.Send(sdbytes);
                 //}
                 //Console.WriteLine("将消息转播给" + connect.GetAdress());
-                connect.socket.Send(sdbytes);
+                //connect.socket.Send(sdbytes);
+                SendData(connect, sdbytes, sdbytes.Length);
                 //3.再一次启动异步调用接受函数
                 connect.socket.BeginReceive(connect.readBuff, connect.buffCount, connect.BuffRemain(), SocketFlags.None, ReceiveCb, connect);
             }
             catch (Exception e)
             {
-                Console.WriteLine("AcceptCb失败:" + e.Message);
-                Console.WriteLine("收到[" + connect.GetAdress() + "]断开连接");
+                MessageBox.Show("Receive断开");
+                Program.gdFrom.UpdateState(0, 0, "[Dev" + connect.devNum + "]" + "断开");
                 connect.Close();
             }
         }
-        //
+        //SendData:发送数据包
+        //Para:
+        //    con:  client句柄
+        //    arr:  发送缓存
+        //    size: 发送数据长度
+        public int SendData(Connect con, Byte[] arr, int size)
+        {
+            int nRes = 0;
+            //MessageBox.Show("发送OK1");
+            if (size == 0)
+                return 0;
+            ////检测数据包是否正确
+            try
+            {
+               
+                nRes = con.socket.Send(arr, size, 0);
+                //MessageBox.Show("发送OK2");
+            }
+            catch (ObjectDisposedException e)
+            {
+                nRes = -1;
+                Program.gdFrom.UpdateState(0, 0, "[Dev" + con.devNum + "]" + "已断开!");
+                con.Close();
+            }
+            catch(Exception e)
+            {
+                nRes = -2;
+                Program.gdFrom.UpdateState(0, 0, "[Dev" + con.devNum + "]" + "发送失败!");
+            }
+
+            return nRes;
+        }
     }
 }
