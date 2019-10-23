@@ -24,22 +24,22 @@ namespace gdisplay
             userTcpInit();
             //this.status_info.Text = "登录时间：" + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
         }
-        void TcpCallbackResult(string text, int area)
-        {
-            if (area == 0)
-            {
-                //第一个区域显示text
-            }
-            else if (area == 1)
-            {
-                //第二个区域显示text
-                stsbarCMD.Text = text;
-            }
-            else if (area == 2)
-            {
-                //第三个区域显示text
-            }
-        }
+        //void TcpCallbackResult(string text, int area)
+        //{
+        //    if (area == 0)
+        //    {
+        //        //第一个区域显示text
+        //    }
+        //    else if (area == 1)
+        //    {
+        //        //第二个区域显示text
+        //        stsbarCMD.Text = text;
+        //    }
+        //    else if (area == 2)
+        //    {
+        //        //第三个区域显示text
+        //    }
+        //}
         private void Form1_Load(object sender, EventArgs e)
         {
 
@@ -68,6 +68,9 @@ namespace gdisplay
             lstview_s3.Columns.Add(new ColumnHeader() { Text = "ID", Width = 25 });
             lstview_s3.Columns.Add(new ColumnHeader() { Text = "屏幕3" });
             lstview_s3.Columns[1].Width = lstview_s3.ClientSize.Width - lstview_s3.Columns[0].Width;
+
+            this.s1_pixBox = new System.Windows.Forms.PictureBox[5] { s1_pa1, s1_pa2, s1_pa3, s1_pb, s1_pc };
+            this.s2_pixBox = new System.Windows.Forms.PictureBox[8] { s2_pa1, s2_pa2, s2_pa3, s2_pa4, s2_pb, s2_pc, s2_pd, s2_pe };
         }
 
         void userTcpInit()
@@ -94,7 +97,9 @@ namespace gdisplay
             //  更新devNum成员
             
         }
-
+        //myRClickMenuColor_s1:屏1右键显示颜色
+        //Para:
+        //     color:颜色编号
         void myRClickMenuColor_s1(int color)
         {
             //填充s1_sdarr[50]数组

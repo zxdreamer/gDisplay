@@ -159,7 +159,7 @@ namespace gdisplay
             try
             {
                 //2.获得传入的数据的字节数
-                int count = connect.socket.EndReceive(ar);
+                int count = connect.socket.EndReceive(ar);  
                 if (count <= 0)
                 {
                     //Console.WriteLine("收到[" + connect.GetAdress() + "]断开连接");
