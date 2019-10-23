@@ -55,14 +55,21 @@ namespace gdisplay
     }
     class TcpServer
     {
+        public delegate void TcpResultDeg(string warning, int area);
+        public event TcpResultDeg TcpResultEvent;
+        public void trigger(string warning, int area)
+        {
+            TcpResultEvent(warning, area);
+        }
+
         public Socket listenfd;
         public Connect[] connects;
         public int maxConnectCount = 50;
-        FormInterface iform;
-        public void Start(string host, int port,FormInterface forminterface)
+        //FormInterface iform;
+        public void Start(string host, int port)
         {
             //TcpServer和Form1两个类之间传递数据的接口赋值
-            iform = forminterface;        
+            //iform = forminterface;        
             //1.connects数组初始化：connects的每个元素绑定1k缓存
             connects = new Connect[maxConnectCount];
             for (int i = 0; i < maxConnectCount; i++)
@@ -78,7 +85,7 @@ namespace gdisplay
             listenfd.BeginAccept(AcceptCb, null);  //state可以传递用户的数据，比如listrnfd????UI有问题
             //Console.WriteLine("[服务器]启动成功");
             //在控制栏显示服务器已经开启???
-            iform.SendResult("[服务器]已开启", 1);
+            trigger("[服务器]已开启******", 1);
         }
 
         //获取连接池索引，返回负数表示获取失败
@@ -189,5 +196,6 @@ namespace gdisplay
                 connect.Close();
             }
         }
+        //
     }
 }

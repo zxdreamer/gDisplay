@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace gdisplay
 {
-    public partial class Form1 : Form, FormInterface
+    public partial class Form1 : Form
     {
         Byte s1_num = 0;//1,2,3,4,5,0(未选中)
         Byte s2_num = 0;
@@ -21,18 +21,18 @@ namespace gdisplay
             userTcpInit();
             //this.status_info.Text = "登录时间：" + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
         }
-        void FormInterface.SendResult(string text,int area)
+        void TcpCallbackResult(string text, int area)
         {
-            if(area==0)
+            if (area == 0)
             {
                 //第一个区域显示text
             }
-            else if(area==1)
+            else if (area == 1)
             {
                 //第二个区域显示text
                 stadata_info.Text = text;
             }
-            else if(area==2)
+            else if (area == 2)
             {
                 //第三个区域显示text
             }
@@ -62,9 +62,10 @@ namespace gdisplay
         void userTcpInit()
         {
             TcpServer sv = new TcpServer();
+            sv.TcpResultEvent += new TcpServer.TcpResultDeg(TcpCallbackResult);
             //try
             //{
-            sv.Start("127.0.0.1", 1234, this);
+            sv.Start("127.0.0.1", 1234);
             //staserver_info.Text = "    服务器已开启     ";
             //}
             //catch (Exception e)
