@@ -29,13 +29,6 @@ namespace gdisplay
 
         }
 
-        public void UpdateState(int msgType,int msgData,string text)
-        {
-            if (msgType == 0)
-                stsbarComPort.Text = text;
-            else if (msgType == 1)
-                ;
-        }
         void userUIInit()
         {
             cBox.Items.Add("人工模式");
@@ -55,22 +48,15 @@ namespace gdisplay
 
             this.s1_pixBox = new System.Windows.Forms.PictureBox[5] { s1_pa1, s1_pa2, s1_pa3, s1_pb, s1_pc };
             this.s2_pixBox = new System.Windows.Forms.PictureBox[8] { s2_pa1, s2_pa2, s2_pa3, s2_pa4, s2_pb, s2_pc, s2_pd, s2_pe };
+            this.stsbarArr = new ToolStripStatusLabel[4] { stsbarComPort, stsbarCMD, stsbarMAP, stsbarTime };
+            this.devBoxArr = new TextBox[4] { s1_devNameBox, s1_devStateBox, s2_devNameBox, s2_devStateBox };
         }
 
         void userTcpInit()
         {
             sv = new TcpServer();
-            //sv.TcpResultEvent += new TcpServer.TcpResultDeg(TcpCallbackResult);
-            //try
-            //{
             sv.Start("127.0.0.1", 1234);
-            //staserver_info.Text = "    服务器已开启     ";
-            //}
-            //catch (Exception e)
-            //{
-            //    staserver_info.Text = "    服务器已关闭     ";
-            //    staserver_info.ForeColor = Color.Red;
-            //}
+
             //以广播模式发送设备寻址
             //询问谁是1,2,3号设备(在connect中增加一个设备编号)
             //
@@ -81,9 +67,36 @@ namespace gdisplay
             //  更新devNum成员
             
         }
+
+        /*********************************************
+        //UpdateState：有TcpServer更新UI控件数据
+        //Para:
+        //     msgType: 指定显示容器
+        //              0:在状态栏显示
+        //              1:在tabControl显示
+        //     msgData: 在msgData指定容器中的显示位置
+        //              0,1,2...n:依次从左到右，从上到下的控件
+        //     text   ：显示文本
+        ************************************************/
+        public void UpdateState(int msgType, int msgData, string text)
+        {
+            switch (msgType)
+            {
+                case 0:        //在状态栏显示
+                    stsbarArr[msgData].Text = text;
+                    break;
+                case 1:       //在tabControl显示
+                    devBoxArr[msgData].Text = text;
+                    break;
+                default:
+                    break;
+            }
+        }
+        /**********************************************
         //myRClickMenuColor_s1:屏1右键显示颜色
         //Para:
         //     color:颜色编号
+        ********************************************/
         void myRClickMenuColor_s1(int color)
         {
             //填充s1_sdarr[50]数组
@@ -112,7 +125,11 @@ namespace gdisplay
             }
             s1_num = 0;
         }
-
+        /**********************************************
+        //myRClickMenuColor_s2:屏2右键显示颜色
+        //Para:
+        //     color:颜色编号
+        ********************************************/
         void myRClickMenuColor_s2(int color)
         {
             if (s2_num < 1 || s2_num > 8)
@@ -124,7 +141,6 @@ namespace gdisplay
             {
                 if(color==1)
                     s2_pixBox[s2_num-1].Image = global::gdisplay.Properties.Resources.lpa_red2;
-                    //s2_pa4.Image= global::gdisplay.Properties.Resources.lpa_red2;
                 else if(color == 2)
                     s2_pixBox[s2_num-1].Image = global::gdisplay.Properties.Resources.lpa_yellow2;
                 else if(color==3)
@@ -142,21 +158,35 @@ namespace gdisplay
             else if(s2_num==7)
             {
                 if (color == 1)
-                    s2_pixBox[s2_num-1].Image = global::gdisplay.Properties.Resources.lpd_red2;
+                {
+                    s2_pixBox[s2_num - 1].Image = global::gdisplay.Properties.Resources.lpd_red2;
+                    s2_pixBox[s2_num].Image = global::gdisplay.Properties.Resources.pe_red2;
+                }
                 else if (color == 2)
-                    s2_pixBox[s2_num-1].Image = global::gdisplay.Properties.Resources.lpd_yellow2;
+                {
+                    s2_pixBox[s2_num - 1].Image = global::gdisplay.Properties.Resources.lpd_yellow2;
+                    s2_pixBox[s2_num].Image = global::gdisplay.Properties.Resources.pe_yellow2;
+                }                    
                 else if (color == 3)
-                    s2_pixBox[s2_num-1].Image = global::gdisplay.Properties.Resources.lpd_green2;
+                {
+                    s2_pixBox[s2_num - 1].Image = global::gdisplay.Properties.Resources.lpd_green2;
+                    s2_pixBox[s2_num].Image = global::gdisplay.Properties.Resources.pe_green2;
+                }                   
             }
-            else if (s2_num == 8)
-            {
-                if (color == 1)
-                    s2_pixBox[s2_num - 1].Image = global::gdisplay.Properties.Resources.pe_red2;
-                else if (color == 2)
-                    s2_pixBox[s2_num - 1].Image = global::gdisplay.Properties.Resources.pe_yellow2;
-                else if (color == 3)
-                    s2_pixBox[s2_num - 1].Image = global::gdisplay.Properties.Resources.pe_green2;
-            }
+            //屏2中半圆形路段与写向左上的路段不同时变化时，需要取消这段注释
+            #region
+            /*************************************************
+            //else if (s2_num == 8)
+            //{
+            //    if (color == 1)
+            //        s2_pixBox[s2_num - 1].Image = global::gdisplay.Properties.Resources.pe_red2;
+            //    else if (color == 2)
+            //        s2_pixBox[s2_num - 1].Image = global::gdisplay.Properties.Resources.pe_yellow2;
+            //    else if (color == 3)
+            //        s2_pixBox[s2_num - 1].Image = global::gdisplay.Properties.Resources.pe_green2;
+            //}
+            **************************************************/
+#endregion
             s1_num = 0;
         }
         private void s1_pa3_MouseUp(object sender, MouseEventArgs e)
@@ -245,7 +275,8 @@ namespace gdisplay
         private void s2_pe_MouseUp(object sender, MouseEventArgs e)
         {
             s2_pe.ContextMenuStrip = cMenu2_Color;
-            s2_num = 8;
+            //s2_num = 8;
+            s2_num = 7;
         }
 
         private void s2_pd_MouseUp(object sender, MouseEventArgs e)
@@ -279,19 +310,27 @@ namespace gdisplay
             //3.等待接受应答???
             //
             Byte[] CMD = new byte[8] { 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37 };
+            Byte[] sArr = new byte[8];
             for(int i =0;i<sv.connects.Length;i++)
             {
                 if (!sv.connects[i].isUse)
                     continue;
 
                 int res = sv.SendData(sv.connects[i], CMD, CMD.Length);
+                if (res>0)
+                {
+                    Array.Copy(CMD, sArr, res);
+                    UpdateState(0, 1, "DATA: To [DEV1] " + System.Text.Encoding.ASCII.GetString(sArr));
+                }
                 if(res==-1)
                 {
                     MessageBox.Show("Dev" + sv.connects[i].devNum + "已断开");
+                    UpdateState(0, 1, "DATA: To [DEV1] " + "NO Data");
                 }
                 else if(res == -2)
                 {
                     MessageBox.Show("Dev" + sv.connects[i].devNum + "发送失败");
+                    UpdateState(0, 1, "DATA: To [DEV1] " + "NO Data");
                 }
             }
         }

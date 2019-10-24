@@ -748,6 +748,7 @@
         private System.Windows.Forms.PictureBox s1_pa1;
         private System.Windows.Forms.PictureBox s1_pa2;
         private System.Windows.Forms.PictureBox s1_pa3;
+        //自定义数组，用于记录屏1的pictureBox，目的是简化myRClickMenuColor_s1代码
         public System.Windows.Forms.PictureBox[] s1_pixBox;
         private System.Windows.Forms.ContextMenuStrip cMenu1_Color;
         private System.Windows.Forms.ToolStripMenuItem Red1ToolStripMenuItem;
@@ -767,7 +768,13 @@
         private System.Windows.Forms.PictureBox s2_pa2;
         private System.Windows.Forms.PictureBox s2_pa3;
         private System.Windows.Forms.PictureBox s2_pa4;
+        //自定义数组，用于记录屏2的pictureBox，目的是简化myRClickMenuColor_s2代码
         public System.Windows.Forms.PictureBox[] s2_pixBox;
+        //自定义数组，用于记录stsbar的四个label，目的是简化UpdateState代码
+        public System.Windows.Forms.ToolStripStatusLabel[] stsbarArr;
+        public System.Drawing.Image[] s1_pxColor;
+        public System.Drawing.Image[] s2_pxColor;
+        public System.Windows.Forms.TextBox[] devBoxArr;
         private System.Windows.Forms.Button s2_BtnSnd;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;

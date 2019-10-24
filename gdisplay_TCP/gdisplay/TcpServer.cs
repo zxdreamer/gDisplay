@@ -51,19 +51,12 @@ namespace gdisplay
             //Console.WriteLine("[断开连接]" + GetAdress());????
             socket.Close();
             isUse = false;
-            MessageBox.Show("连接关闭");
+            //MessageBox.Show("连接关闭");
             devNum = 0xFF;
         }
     }
     class TcpServer
     {
-        //public delegate void TcpResultDeg(string warning, int area);
-        //public event TcpResultDeg TcpResultEvent;
-        //public void trigger(string warning, int area)
-        //{
-        //    TcpResultEvent(warning, area);
-        //}
-
         public Socket listenfd;
         public Connect[] connects;
         public int maxConnectCount = 50;
@@ -86,7 +79,9 @@ namespace gdisplay
             listenfd.BeginAccept(AcceptCb, null);  //state可以传递用户的数据，比如listernfd????UI有问题
         }
 
+        /**************************************************
         //NewIndex：获取连接池索引，返回负数表示获取失败
+        **************************************************/
         public int NewIndex()
         {
             //connects可让UI来代用，加入超时机制，发起回调收不到的异常处理????
@@ -106,11 +101,12 @@ namespace gdisplay
             }
             return -1;
         }
-
+        /******************************************************
         //Accept是BeginAccept的回调函数，它成立了如下3件事情
         //（1）给新的连接分配connect
         //（2）异步接收客户端数据
         //（3）再次调用BeginAccept实现循环
+        *******************************************************/
         private void AcceptCb(IAsyncResult ar)
         {
             try
@@ -122,9 +118,6 @@ namespace gdisplay
                 if (index < 0)
                 {
                     socket.Close();
-                    //Console.WriteLine("[警告]连接已满");
-                    //form1.status_info.Text = "    [警告]连接已满     ";
-                    //
                 }
                 else
                 {
@@ -132,8 +125,8 @@ namespace gdisplay
                     Connect connect = connects[index];
                     connect.Init(socket);  //socket->connect,isUse=true
                     string adr = connect.GetRemoteAdress();
-                    //Console.WriteLine("客户端[" + adr + "]connect池ID:" + index);
                     //需要把每台设备的连接情况显示到一个text上???
+                    Program.gdFrom.UpdateState(0, 0, "[Dev" + connect.devNum + "]" + "已连接");
                     //4.启动异步接受
                     //参数的含义:接受buffer,填充开始位置，填充长度，xxx，异步回调函数，传给回调函数的参数
                     connect.socket.BeginReceive(connect.readBuff, connect.buffCount, connect.BuffRemain(), SocketFlags.None, ReceiveCb, connect);
@@ -144,14 +137,14 @@ namespace gdisplay
             catch (Exception e)
             {
                 MessageBox.Show("Receive断开");
-                //Console.WriteLine("AcceptCb失败" + e.Message);
             }
         }
-
+        /******************************************************************
         //ReceiveCb是BeginReceive的回调函数，它处理了3件事情
         //（1）接收并处理消息，因为有多个客户端，服务端收到消息后，要把它转发给所有人
         //（2）如果收到客户端关闭连接的信号（count==0），则断开连接
         //（3）继续调用BeginReceive接收下一个数据
+        *******************************************************************/
         private void ReceiveCb(IAsyncResult ar)
         {
             //1.获得传入的connect
@@ -162,15 +155,14 @@ namespace gdisplay
                 int count = connect.socket.EndReceive(ar);  
                 if (count <= 0)
                 {
-                    //Console.WriteLine("收到[" + connect.GetAdress() + "]断开连接");
                     //在状态栏label3处显示客户端断开连接
+                    Program.gdFrom.UpdateState(0, 0, "[Dev" + connect.devNum + "]" + "已断开");
                     connect.Close();
                     return;
                 }
                 string str = System.Text.Encoding.UTF8.GetString(connect.readBuff, 0, count);
-                //Console.WriteLine("收到[" + connect.GetAdress() + "]数据:" + str);
-                //在状态栏label2处显示接受到的数据
                 
+                //在状态栏label2处显示接受到的数据                
                 str = connect.GetRemoteAdress() + ":" + str+"I am xian";
                 byte[] sdbytes = System.Text.Encoding.Default.GetBytes(str);
                 //广播???
@@ -196,11 +188,13 @@ namespace gdisplay
                 connect.Close();
             }
         }
+        /*****************************************************
         //SendData:发送数据包
         //Para:
         //    con:  client句柄
         //    arr:  发送缓存
         //    size: 发送数据长度
+        *****************************************************/
         public int SendData(Connect con, Byte[] arr, int size)
         {
             int nRes = 0;
