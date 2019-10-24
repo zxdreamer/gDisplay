@@ -24,22 +24,6 @@ namespace gdisplay
             userTcpInit();
             //this.status_info.Text = "登录时间：" + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
         }
-        //void TcpCallbackResult(string text, int area)
-        //{
-        //    if (area == 0)
-        //    {
-        //        //第一个区域显示text
-        //    }
-        //    else if (area == 1)
-        //    {
-        //        //第二个区域显示text
-        //        stsbarCMD.Text = text;
-        //    }
-        //    else if (area == 2)
-        //    {
-        //        //第三个区域显示text
-        //    }
-        //}
         private void Form1_Load(object sender, EventArgs e)
         {
 
