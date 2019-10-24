@@ -84,6 +84,7 @@
             this.stsbarCMD = new System.Windows.Forms.ToolStripStatusLabel();
             this.stsbarMAP = new System.Windows.Forms.ToolStripStatusLabel();
             this.stsbarTime = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tmDate = new System.Windows.Forms.Timer(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -690,6 +691,11 @@
             this.stsbarTime.Size = new System.Drawing.Size(135, 21);
             this.stsbarTime.Text = "toolStripStatusLabel1";
             // 
+            // tmDate
+            // 
+            this.tmDate.Interval = 1000;
+            this.tmDate.Tick += new System.EventHandler(this.tmDate_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -797,6 +803,7 @@
         private System.Windows.Forms.TextBox s2_devNameBox;
         private System.Windows.Forms.Label s2_devNamelb;
         private System.Windows.Forms.ToolStripStatusLabel stsbarTime;
+        private System.Windows.Forms.Timer tmDate;
     }
 }
 

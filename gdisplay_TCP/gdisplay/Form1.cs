@@ -31,6 +31,8 @@ namespace gdisplay
 
         void userUIInit()
         {
+            tmDate.Start();
+
             cBox.Items.Add("人工模式");
             cBox.Items.Add("高德模式");
             cBox.SelectedIndex = 0;
@@ -50,6 +52,7 @@ namespace gdisplay
             this.s2_pixBox = new System.Windows.Forms.PictureBox[8] { s2_pa1, s2_pa2, s2_pa3, s2_pa4, s2_pb, s2_pc, s2_pd, s2_pe };
             this.stsbarArr = new ToolStripStatusLabel[4] { stsbarComPort, stsbarCMD, stsbarMAP, stsbarTime };
             this.devBoxArr = new TextBox[4] { s1_devNameBox, s1_devStateBox, s2_devNameBox, s2_devStateBox };
+            
         }
 
         void userTcpInit()
@@ -360,6 +363,12 @@ namespace gdisplay
                 //选中3号设备
                 //MessageBox.Show("选中3号设备");
             }
+        }
+
+        private void tmDate_Tick(object sender, EventArgs e)
+        {
+            string localtime = DateTime.Now.ToString(" yyyy-MM-dd HH:mm:ss");
+            stsbarTime.Text = localtime;
         }
     }
 }
