@@ -44,9 +44,9 @@ namespace gdisplay
          * result：
          *      可以解析的JsonAmap对象
          * *************************/
-        public async Task<AmapJson> GetJsonFromAmapAsync(string rect)
+        public async Task<ydpAmapJson> GetJsonFromAmapAsync(string rect)
         {
-            AmapJson ydpAmap = new AmapJson();
+            ydpAmapJson ydpAmap = new ydpAmapJson();
             string url = "https://restapi.amap.com/v3/traffic/status/rectangle?rectangle=" + rect + "&key=" + Amapkey + "&extensions=all";
             client.Credentials = CredentialCache.DefaultCredentials;
             string pageHtml = null;
@@ -62,7 +62,7 @@ namespace gdisplay
                 return null;
             }
 
-            ydpAmap = JsonConvert.DeserializeObject<AmapJson>(pageHtml);
+            ydpAmap = JsonConvert.DeserializeObject<ydpAmapJson>(pageHtml);
             //MessageBox.Show(ydpAmap.status);
             return ydpAmap;
         }

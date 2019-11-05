@@ -695,7 +695,7 @@
             // 
             // tmDate
             // 
-            this.tmDate.Interval = 5000;
+            this.tmDate.Interval = 1000;
             this.tmDate.Tick += new System.EventHandler(this.tmDate_Tick);
             // 
             // button1

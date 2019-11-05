@@ -20,21 +20,25 @@ namespace gdisplay
         Byte[] s1SendArr = new byte[50];     //向屏幕1发送数据的缓存 
         //List<string> s1NodeList = new List<string>();       //用于按顺序存储屏1的路名
         Dictionary<string,List<string>> FindRectsDict = new Dictionary<string, List<string>>();     //用于存储屏1的搜索区域
-        Dictionary<string,List<pathCfgInfo>> PathsDict = new Dictionary<string, List<pathCfgInfo>>();   //用于存储屏ID和路号,搜索路径
+        Dictionary<string,List<RoadsResult>> PathsDict = new Dictionary<string, List<RoadsResult>>();   //用于存储屏ID和路号,搜索路径
         Dictionary<string, string> IpsDict = new Dictionary<string, string>();  //用于存储屏ID和IP的对应关系
         Dictionary<string, int> NumsDict=new Dictionary<string, int>();
+        List<ScreenResult> ScnResList=new List<ScreenResult>();
         Byte s2_num = 0;
         Byte[] s2SendArr = new byte[50];
         List<string> s2NodeList = new List<string>();       //用于按顺序存储屏1的路名
         List<string> s2FindRectList = new List<string>();   //用于存储屏1的搜索区域
         TcpServer sv=null;
-        JsonConfig ydpCfg = new JsonConfig();               //json配置文件对象
-        AmapJson ydpApJson = new AmapJson();                //json高德地图抓取数据
+        ydpJsonConfig ydpCfg = new ydpJsonConfig();               //json配置文件对象
+        //ydpAmapJson ydpApJson = new ydpAmapJson();                //json高德地图抓取数据
         AmapClient ydpApClient = AmapClient.CreateApClientObj("51a0f16ac37bcf88e634023f1529d84a");          //获得高德数据对象
+        int AMAPreqcnt = 0;
+        int AMAPreqtime = 0;
         public Form1()
         {
             InitializeComponent();
             userUIInit();
+            userJsonInit();
             userTcpInit();
             //this.status_info.Text = "登录时间：" + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss");
         }
@@ -43,7 +47,7 @@ namespace gdisplay
 
         }
 
-        async void userUIInit()
+        void userUIInit()
         {
             //1.开启定时器
             tmDate.Start();
@@ -68,44 +72,50 @@ namespace gdisplay
             this.s2_pixBox = new System.Windows.Forms.PictureBox[8] { s2_pa1, s2_pa2, s2_pa3, s2_pa4, s2_pb, s2_pc, s2_pd, s2_pe };
             this.stsbarArr = new ToolStripStatusLabel[4] { stsbarComPort, stsbarCMD, stsbarMAP, stsbarTime };
             this.devBoxArr = new TextBox[4] { s1_devNameBox, s1_devStateBox, s2_devNameBox, s2_devStateBox };
-            //5.解析json配置文件
+        } //async void userUIInit()
+
+        async void userJsonInit()
+        {
             using (StreamReader rd = new StreamReader("E:\\ytr3.json"))
             {
                 var jsonstr = await rd.ReadToEndAsync();
                 await Task.Run(() =>
                 {
-                    ydpCfg = JsonConvert.DeserializeObject<JsonConfig>(jsonstr);
+                    ydpCfg = JsonConvert.DeserializeObject<ydpJsonConfig>(jsonstr);
                     int ver = 1;
+                    AMAPreqtime = ydpCfg.AMAPreqtime;
                     foreach (CfgScreens screens in ydpCfg.screens)
                     {
-                        //1.添加屏id和数字的Dict
-                        NumsDict.Add(screens.id, ver);          
-                        ver++;
+                        //1.获得屏幕id
+                        string sid = screens.id;                        
                         //2.添加屏id和IP的Dict
-                        IpsDict.Add(screens.id, screens.ip);
+                        //IpsDict.Add(screens.id, screens.ip);
                         //3.添加屏id和搜索区域的Dict
-                        List<string> reL = new List<string>();  
-                        foreach(string rect in screens.regions)
+                        List<string> reL = new List<string>();
+                        foreach (string rect in screens.regions)
                         {
                             reL.Add(rect);
                         }
-                        FindRectsDict.Add(screens.id, reL);
+                        //FindRectsDict.Add(screens.id, reL);
                         //4.添加屏id和路结构的Dict
-                        List<pathCfgInfo> sigPaths = new List<pathCfgInfo>();
+                        List<RoadsResult> sigPaths = new List<RoadsResult>();
                         foreach (CfgRoads roads in screens.roads)
-                        {                            
+                        {
                             string mainRoad = roads.name;
+
                             List<string> nodeList = new List<string>();
                             foreach (string road in roads.sections)
                                 nodeList.Add(road);
 
-                            pathCfgInfo path = new pathCfgInfo(mainRoad,nodeList);
+                            RoadsResult path = new RoadsResult(mainRoad, nodeList);
                             sigPaths.Add(path);
                         }
-                        PathsDict.Add(screens.id, sigPaths);
+                        //PathsDict.Add(screens.id, sigPaths);
+                        //5.依次将每一块屏的配置信息添加进去
+                        ScnResList.Add(new ScreenResult(sigPaths, reL, sid));
                     }
                 });
-#region
+                #region
                 //用于调试配置文件的读取
                 //using (StreamWriter wr = new StreamWriter("E:\\test.txt"))
                 //{
@@ -123,11 +133,9 @@ namespace gdisplay
                 //        }
                 //    }
                 //}
-#endregion
+                #endregion
             }
-
-        } //async void userUIInit()
-
+        }
         void userTcpInit()
         {
             sv = new TcpServer();
@@ -437,77 +445,139 @@ namespace gdisplay
                 //MessageBox.Show("选中3号设备");
             }
         }
+        /****************************************************
+         * FromAndToDeal:解析从xxx附近
+         * Param：
+         *      pathDir:AMAP中一条主路描述
+         *      nodeList:屏的主路节点列表
+         * Result：
+         *      路段在节点中的索引
+         * *************************************************/
+        List<int> NearbyDeal(string pathDir,List<string> nodeList)
+        {
+            List<int> res = new List<int>() { 0, 0 };
+
+            return res;
+        }
+        /****************************************************
+         * FromAndToDeal:解析从xxx到xxx
+         * Param：
+         *      pathDir:AMAP中一条主路描述
+         *      nodeList:屏的主路节点列表
+         * Result：
+         *      路段在节点中的索引
+         * **************************************************/
+        List<int> FromAndToDeal(string pathDir,List<string> nodeList)
+        {
+            List<int> res = new List<int>() { 0, 0 };
+            string substr = pathDir.Substring(1);
+            string[] arrPath = substr.Split(new char[] { '到' }, 2);
+            if (arrPath.Length != 2)
+                return res;
+
+            int pre = nodeList.FindIndex((item) =>
+            {
+                return item.Equals(arrPath[0]);
+            });
+            int back = nodeList.FindIndex((Item) =>
+            {
+                return Item.Equals(arrPath[1]);
+            });
+            if (pre != -1 && back != -1 && back > pre)              //代表有效数据
+            {
+                res[0]=pre;
+                res[1]=back;
+            }
+            return res;
+        }
         /* ********************************************************
-         * ApJsonToStArr:高德地图中获得的Json填充主路的状态数组，
-         *               根据id判断是哪个屏，根据json数据判断是哪条主路
+         * RoadJsonToIndex: 由方向判断nodelist中节点的做引
+         * Param:
+         *      pathDir:AMAP的json数据的某条路的方向信息
+         *      nodeList:配置文件中某条路的节点列表
+         * Result:
+         *      MRoadArr数组的起止索引
+         * *****************************************************/
+        List<int> RoadJsonToIndex(string pathDir,List<string> nodeList)
+        {
+            List<int> res=null;
+            int index1 = pathDir.IndexOf("从");
+            int index2 = pathDir.IndexOf("到");
+            int index3 = pathDir.IndexOf("附近");
+            if(index1!=-1 && index2!=-1)    //解析从xxx到xxx
+            {
+                res = FromAndToDeal(pathDir, nodeList);
+            }
+            else if(index3 != -1)           //解析xxx附近
+            {
+                NearbyDeal(pathDir, nodeList);
+            }
+            else                           //格式错误
+            {
+
+            }
+            return res;
+        }
+        /* ********************************************************
+         * AmapJsonToSteArr:高德地图中获得的Json填充主路的状态数组，
+         *                  根据id判断是哪个屏，根据json数据判断是哪条主路
          * Param:
          *      jap:AMAP的json数据
          *      id:屏幕键值
          * *****************************************************/
-        public void ApJsonToStArr(ValidJsonInfo vdjson, string id)
+        public void AmapJsonToSteArr(List<ydpAmapJson> jsonList, ScreenResult screen)
         {
-            if (vdjson == null)                  
+            if (jsonList == null)                  
                 return;
-            if (!PathsDict.ContainsKey(id))                       //此键值不再配置文件所列范围内
-                return;
-
-            //1. 提取出屏幕的List<pathCfgInfo>
-            List<pathCfgInfo> tmpPaths = PathsDict[id];           //暂存屏的pathCfgInfo列表            
-
-            //2. 根据局部路段状态填充tmpPaths[roadIndex].MRoadArr数组 
-            Byte overSte = vdjson.ValStatus;                      //0：未知,1:畅通,2:缓行,3:拥堵,4:严重拥堵
-            foreach (AmapRoads road in vdjson.ValRoads)
+            int scIndex = ScnResList.FindIndex((item) =>         //此键值不再配置文件所列范围内
             {
-                int roadIndex = tmpPaths.FindIndex((item) =>      //Lambda表达式，搜索road是否在屏规定的路段内
+                  return item.Id.Equals(screen.Id);
+            });
+            if (scIndex == -1)
+                return;
+            foreach(var sigJson in jsonList)
+            {
+                try                 //解决AMAPjson缺少数据造成的异常
                 {
-                    return item.MRoad.Equals(road.name);
-                });
-                if (roadIndex == -1)                              //不是要找的主干道
-                    continue;
-                else if (tmpPaths[roadIndex].IsVisited == true)   //主干路已经访问过，继续向下搜索json数据
-                    continue;
-                //2.1 填充主路数组
-                else
-                {
-                    /*tmpPaths[roadIndex].IsVisited = true; */        //标志已经填充,发送完之后改成false
-                    string pathDesp = road.direction;             //描述方向:从xxx到yyy
-                    string pathSta = road.status;                 //拥堵状况
-                    string pathSpeed = road.speed;                //速度
-                    //2.1.1 先去掉'从'字,将路段按照'到'分隔
-                    string substr = pathDesp.Substring(1);
-                    string[] arrPath = substr.Split(new char[] { '到' }, 2);
-                    if (arrPath.Length != 2)   //"xxx附近"这种暂不处理
-                        continue;
-                    //2.1.2 获得路节点在配置文件中的索引
-                    int index1 = tmpPaths[roadIndex].NodeList.FindIndex((item) =>
+                    string wholeDesc = sigJson.trafficinfo.description;   //???整体描述不知道怎么处理
+                    foreach (var road in sigJson.trafficinfo.roads)
                     {
-                        return item.Equals(arrPath[0]);
-                    });
-                    int index2 = tmpPaths[roadIndex].NodeList.FindIndex((item) =>
-                    {
-                        return item.Equals(arrPath[1]);
-                    });
-                    if (index1 == -1 || index2 == -1)      //高德返回的数据不再配置文件给定的列表路段节点中
-                        continue;
-                    else if (index1 > index2)              //高德返回的路径与配置文件给出的路段相反
-                        continue;
-                    //2.1.3 开始填充主路数组  
-                    else                                   //正向且在搜索的主路上
-                    {
-                        tmpPaths[roadIndex].IsVisited = true;
-                        //a.根据整体路况，预填充数组
-                        for (int i =0;i< tmpPaths[roadIndex].NodeList.Count-1;i++)
-                            tmpPaths[roadIndex].MRoadArr[i]=(overSte);
+                        int mrIndex = screen.Sroads.FindIndex((item) =>
+                        {
+                            return item.MRoad.Equals(road.name);
+                        });
+                        if (mrIndex != -1)
+                        {
+                            string pathDir = road.direction;
+                            Byte pathSta = Byte.Parse(road.status);
+                            int pathSpeed = 0;
+                            try             //speed容易丢失 单独处理
+                            {
+                                pathSpeed = int.Parse(road.speed);
+                            }
+                            catch (Exception)
+                            { }
+                            
+                            List<int> nodes = RoadJsonToIndex(pathDir, screen.Sroads[mrIndex].NodeList);
+                            if (nodes[0] == 0 && nodes[1] == 0)
+                                continue;
 
-                        //b.改变tmpPaths[roadIndex].MRoadArr数组中的路段之间的所有值
-                        for (int i = index1; i < index2; i++)
-                            //s1SendArr[i] = Byte.Parse(pathSta); //string转成Byte
-                            tmpPaths[roadIndex].MRoadArr[i] = Byte.Parse(pathSta);
+                            for (int i = nodes[0]; i < nodes[1]; i++)
+                            {
+                                screen.Sroads[mrIndex].MRoadArr[i] = Math.Max(screen.Sroads[mrIndex].MRoadArr[i], pathSta);
+                            }
+                        }
                     }
+                }
+                catch(Exception e)
+                {
+                    stsbarMAP.Text = "高德解析数据异常";
+                    wrLog.WriteLine(DateTime.Now.ToString()+ "高德解析数据异常");
                 }
             }
         }
-        private ValidJsonInfo JsonToValid(AmapJson jap,string key)
+
+        private ValidJsonInfo JsonToValid(ydpAmapJson jap,string key)
         {
             ValidJsonInfo val = new ValidJsonInfo();
             if(jap == null)
@@ -528,44 +598,52 @@ namespace gdisplay
                 return null;
             }
         }
+
+        async void AMAPSendAndFullRoadsArr()
+        {
+            //1.对屏规定的区域向高德发送请求
+            foreach(var screen in ScnResList)
+            {
+                List<ydpAmapJson> scAmapJson = new List<ydpAmapJson>();
+                ydpAmapJson ydpApJson;
+                foreach (string region in screen.SfindRect)
+                {
+                    int reSendCont = 0;
+                    //2 按区域异步发送请求，失败，连发三次
+                    do
+                    {
+                        ydpApJson = await ydpApClient.GetJsonFromAmapAsync(region);
+                        if (ydpApJson == null)              //保证第一次成功不延迟，失败延迟
+                            await Task.Delay(10000);        //异步延迟
+                    } while (ydpApJson == null && reSendCont++ < 3);
+                    //3.对于返回的AmapJson数据到一个列表中，后面统一处理
+                    if (ydpApJson != null)
+                        scAmapJson.Add(ydpApJson);
+                }
+                //4.统一处理一块屏的所有AmapJson数据
+                AmapJsonToSteArr(scAmapJson, screen);
+
+                //5.通过写入文件模拟发送过程
+                wrLog.WriteLine("屏幕" + screen.Id);                
+                foreach(var mroad in screen.Sroads)
+                {
+                    wrLog.Write(mroad.MRoad + "状态数组: ");
+                    for (int i = 0; i < mroad.MRoadArr.Length; i++)
+                        wrLog.Write("0x" + mroad.MRoadArr[i] + " ");
+                    wrLog.Write("\n");
+                }
+            }
+        }
         private async void tmDate_Tick(object sender, EventArgs e)
         {
             //1.在状态栏显示时间
             string localtime = DateTime.Now.ToString(" yyyy-MM-dd HH:mm:ss");
             stsbarTime.Text = localtime;
-
-            //2.对屏i规定的区域向高德发送请求
-            foreach (var key in FindRectsDict.Keys)          //每个key代表一个屏
+            AMAPreqcnt++;
+            if(AMAPreqcnt >= AMAPreqtime)
             {
-                foreach (string rect in FindRectsDict[key]) //每个rect代表一个搜索区域
-                {
-                    int reSendCont = 0;
-                    ValidJsonInfo valJson;
-                    //2.1 按区域异步发送请求，失败，连发三次
-                    do
-                    {
-                        ydpApJson = await ydpApClient.GetJsonFromAmapAsync(rect);
-                        valJson = JsonToValid(ydpApJson, key);
-                        if (valJson == null)              //保证第一次成功不延迟，失败延迟
-                            Thread.Sleep(300);
-                    } while (valJson == null && reSendCont++ < 3);
-                    //2.2 对于返回的Json数据填充状态数组
-                    if (valJson != null)
-                        ApJsonToStArr(valJson, key);
-                }
-                //通过写入文件模拟发送过程
-                wrLog.WriteLine("屏幕" + key + "->IP:" + IpsDict[key]);
-                foreach (var paths in PathsDict[key])
-                {
-                    wrLog.Write(paths.MRoad + "的状态数组: ");
-                    for (int i = 0; i < paths.MRoadArr.Length; i++)
-                        wrLog.Write("0x" + paths.MRoadArr[i] + " ");
-                    wrLog.Write("\n");
-                }
-                wrLog.WriteLine(" ");
-
-                foreach (pathCfgInfo road in PathsDict[key])
-                    road.IsVisited = false;
+                AMAPreqcnt = 0;
+                AMAPSendAndFullRoadsArr();
             }
         }
 

@@ -15,7 +15,6 @@ namespace gdisplay
             get { return mRoad; }
             set { mRoad = value; }
         }
-
         private List<string> nodeList;
         public List<string> NodeList
         {
@@ -28,17 +27,10 @@ namespace gdisplay
             get { return mRoadArr; }
             set { mRoadArr = value; }
         }
-        private Boolean isVisited;
-        public Boolean IsVisited
-        {
-            get { return isVisited; }
-            set { isVisited = value; }
-        }
         public RoadsResult(string main, List<string> nodeList)
         {
             this.mRoad = main;
             this.nodeList = nodeList;
-            this.isVisited = false;
             this.mRoadArr = new byte[numRoads];
         }
     }
@@ -56,11 +48,17 @@ namespace gdisplay
             get { return sfindRect; }
             set { sfindRect = value; }
         }
-        public ScreenResult(List<RoadsResult> rds, List<string> fdr)
+        private string id;
+        public string Id
+        {
+            get { return id; }
+            set { id = value; }
+        }
+        public ScreenResult(List<RoadsResult> rds, List<string> fdr,string sid)
         {
             this.sroads = rds;
             this.sfindRect = fdr;
+            this.id = sid;
         }
-
     }
 }
