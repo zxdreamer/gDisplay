@@ -10,7 +10,6 @@ namespace gdisplay
     static class Program
     {
         public static Form1 gdFrom; //????全局变量
-
         /// <summary>
         /// 应用程序的主入口点。
         /// </summary>

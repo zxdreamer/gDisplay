@@ -34,15 +34,16 @@ namespace gdisplay
             get { return stateList; }
             set { stateList = value; }
         }
-        public RoadsResult(string main, List<string> nodeList)
+        public RoadsResult(string main, List<string> nodeList,List<int> angList)
         {
             this.mRoad = main;
             this.sectList = nodeList;
             this.stateList = new List<byte>();
             for(int i =0;i<nodeList.Count;i++)
             {
-                this.stateList.Add(0);  //1--:畅通???
+                this.stateList.Add(1);  //1--:畅通???
             }
+            this.angleList = angList;
         }
     }
 

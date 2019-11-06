@@ -24,7 +24,6 @@ namespace gdisplay
         {
             readBuff = new byte[RXBUFFER_SIZE];
         }
-
         public void Init(Socket socket)
         {
             this.socket = socket;
@@ -62,7 +61,6 @@ namespace gdisplay
         public Connect[] connects;
         public int maxConnectCount = 50;
         public ydpACK obj_ydpAck;         //诱导屏接受处理函数
-
         //Start：启动TcpServer
         public void Start(string host, int port)
         {       
