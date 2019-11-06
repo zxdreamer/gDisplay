@@ -19,11 +19,12 @@ namespace gdisplay
         {
             this.Amapkey = amapKey;
         }
-        /*********************
-         * Instance:单例模式的属性,使用默认参数，支持空参数
-         * Param：
-         *      amapKey:申请高德开发者获得的key值
-         * */
+
+        /***************************************************
+        * Instance:单例模式的属性,使用默认参数，支持空参数
+        * Param：
+        *      amapKey:申请高德开发者获得的key值
+        * **************************************************/
         public static AmapClient CreateApClientObj(string amapKey= "9bb7a2b28d8b790a33f43d4144d11098")
         {
             if (AmapObj == null)
@@ -58,7 +59,7 @@ namespace gdisplay
             catch
             {
                 //MessageBox.Show("获取高德数据失败");
-                Form1.wrLog.WriteLine(DateTime.Now.ToString() + "获取高德数据失败");
+                Form1.wrLog.WriteLine(DateTime.Now.ToString() + "高德数据获取异常");
                 return null;
             }
 

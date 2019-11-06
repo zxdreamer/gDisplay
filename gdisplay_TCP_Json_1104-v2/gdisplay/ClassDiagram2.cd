@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="在From1中使用一个List存储所有的屏">
+    <Position X="7.5" Y="12" Height="0.75" Width="1.7" />
+  </Comment>
+  <Comment CommentText="抓取高德数据,每次发送请求，临时创建对象">
+    <Position X="5.277" Y="1.638" Height="0.477" Width="3.209" />
+  </Comment>
+  <Comment CommentText="UI显示">
+    <Position X="10.585" Y="1.672" Height="0.477" Width="1.7" />
+  </Comment>
+  <Comment CommentText="启动程序">
+    <Position X="14.67" Y="1.672" Height="0.477" Width="1.7" />
+  </Comment>
+  <Comment CommentText="TCP监听、接受、发送">
+    <Position X="14.044" Y="3.947" Height="0.477" Width="1.7" />
+  </Comment>
+  <Comment CommentText="AMAPJson解析对应的类">
+    <Position X="6.75" Y="4.966" Height="0.477" Width="1.7" />
+  </Comment>
+  <Comment CommentText="配置文件解析对应的类,Form1中实例化对象ydpCfg&#xD;&#xA;">
+    <Position X="6.644" Y="7.428" Height="0.729" Width="1.7" />
+  </Comment>
+  <Comment CommentText="配置文件解析+高德解析">
+    <Position X="5.777" Y="11.432" Height="0.477" Width="1.7" />
+  </Comment>
+  <Class Name="gdisplay.RoadsResult" Collapsed="true">
+    <Position X="2.75" Y="12" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAAAAAAAAAAAAAAABAAAAgQBAAIAAQBAAAA=</HashCode>
+      <FileName>ScreenResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gdisplay.ScreenResult" Collapsed="true">
+    <Position X="5.75" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABCAAAAQAAAAAAAAIAAAACAAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>ScreenResult.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gdisplay.AmapClient" Collapsed="true">
+    <Position X="5.25" Y="2.25" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAEAAAAAAAAAAAAAACBEAAABAAAAAA=</HashCode>
+      <FileName>AmapClient.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gdisplay.Form1">
+    <Position X="10.5" Y="2.25" Width="3.25" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>gZCNAaGJUCDt1BQCpAOYSAAykmFaQiQCHOQEjCEdJPw=</HashCode>
+      <FileName>Form1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gdisplay.AmapRoads" Collapsed="true">
+    <Position X="2.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAEAAAAAAAIAIAAAAAAAAAAAAEAQAAAAAAAABAAAA=</HashCode>
+      <FileName>JsonAMAP.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gdisplay.AmapEvaluation" Collapsed="true">
+    <Position X="0.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAQAEAAAAAAAAAAAIAAAAAgAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>JsonAMAP.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gdisplay.AmapTrafficinfo" Collapsed="true">
+    <Position X="5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAABAAAAAAAAAAAAAAAAAAAAAIA=</HashCode>
+      <FileName>JsonAMAP.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gdisplay.ydpAmapJson" Collapsed="true">
+    <Position X="6.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAABIAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>JsonAMAP.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gdisplay.CfgRoads" Collapsed="true">
+    <Position X="2.75" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAEQAAAAAAAAABAAAA=</HashCode>
+      <FileName>JsonConfig.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gdisplay.CfgScreens" Collapsed="true">
+    <Position X="4.75" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABCAAAAAAAgABAAAAgAAAAAgE=</HashCode>
+      <FileName>JsonConfig.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gdisplay.ydpJsonConfig" Collapsed="true">
+    <Position X="6.75" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACCAQAAAEBAAAAAAAABAAAAAKgAAAQAAAAAAAAAQ=</HashCode>
+      <FileName>JsonConfig.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gdisplay.Program" Collapsed="true">
+    <Position X="14.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gdisplay.ydpACK">
+    <Position X="13.75" Y="8.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ydpACK.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gdisplay.Connect" Collapsed="true">
+    <Position X="16.5" Y="4.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAgAAAgIAACAAAAAAAAAAAAAECAASAgAA=</HashCode>
+      <FileName>TcpServer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gdisplay.TcpServer" Collapsed="true">
+    <Position X="14" Y="4.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAKAAAgAAAAAAAAAACAAAAAABAAAgAAAAgAQ=</HashCode>
+      <FileName>TcpServer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Microsoft YaHei UI" Size="9" />
+</ClassDiagram>

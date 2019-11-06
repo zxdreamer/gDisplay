@@ -30,22 +30,22 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabCtlSelect = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.lstview_s3 = new System.Windows.Forms.ListView();
             this.lstview_s2 = new System.Windows.Forms.ListView();
             this.lstview_s1 = new System.Windows.Forms.ListView();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.cBox = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.picBoxWhole = new System.Windows.Forms.PictureBox();
+            this.cBoxMode = new System.Windows.Forms.ComboBox();
+            this.lblModel = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.s1_devStateBox = new System.Windows.Forms.TextBox();
             this.s1_devStatelb = new System.Windows.Forms.Label();
             this.s1_devNameBox = new System.Windows.Forms.TextBox();
             this.s1_devNamelb = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.lblStatic4 = new System.Windows.Forms.Label();
+            this.lblStatic3 = new System.Windows.Forms.Label();
+            this.lblStatic2 = new System.Windows.Forms.Label();
             this.s1_BtnSnd = new System.Windows.Forms.Button();
             this.s1_pb = new System.Windows.Forms.PictureBox();
             this.cMenu1_Color = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -61,9 +61,9 @@
             this.s2_devStatelb = new System.Windows.Forms.Label();
             this.s2_devNameBox = new System.Windows.Forms.TextBox();
             this.s2_devNamelb = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
+            this.lblStatic7 = new System.Windows.Forms.Label();
+            this.lblStatic6 = new System.Windows.Forms.Label();
+            this.lblStatic5 = new System.Windows.Forms.Label();
             this.s2_BtnSnd = new System.Windows.Forms.Button();
             this.s2_pe = new System.Windows.Forms.PictureBox();
             this.cMenu2_Color = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -78,18 +78,17 @@
             this.s2_pa3 = new System.Windows.Forms.PictureBox();
             this.s2_pa4 = new System.Windows.Forms.PictureBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.label8 = new System.Windows.Forms.Label();
             this.stsbar = new System.Windows.Forms.StatusStrip();
             this.stsbarComPort = new System.Windows.Forms.ToolStripStatusLabel();
             this.stsbarCMD = new System.Windows.Forms.ToolStripStatusLabel();
-            this.stsbarMAP = new System.Windows.Forms.ToolStripStatusLabel();
+            this.stsbarAMAP = new System.Windows.Forms.ToolStripStatusLabel();
             this.stsbarTime = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tmDate = new System.Windows.Forms.Timer(this.components);
+            this.sysTimer = new System.Windows.Forms.Timer(this.components);
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.tabControl1.SuspendLayout();
+            this.tabCtlSelect.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxWhole)).BeginInit();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.s1_pb)).BeginInit();
             this.cMenu1_Color.SuspendLayout();
@@ -107,31 +106,30 @@
             ((System.ComponentModel.ISupportInitialize)(this.s2_pa2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.s2_pa3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.s2_pa4)).BeginInit();
-            this.tabPage4.SuspendLayout();
             this.stsbar.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tabControl1
+            // tabCtlSelect
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Controls.Add(this.tabPage4);
-            this.tabControl1.Location = new System.Drawing.Point(206, 22);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(744, 609);
-            this.tabControl1.TabIndex = 0;
-            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
+            this.tabCtlSelect.Controls.Add(this.tabPage1);
+            this.tabCtlSelect.Controls.Add(this.tabPage2);
+            this.tabCtlSelect.Controls.Add(this.tabPage3);
+            this.tabCtlSelect.Controls.Add(this.tabPage4);
+            this.tabCtlSelect.Location = new System.Drawing.Point(206, 22);
+            this.tabCtlSelect.Name = "tabCtlSelect";
+            this.tabCtlSelect.SelectedIndex = 0;
+            this.tabCtlSelect.Size = new System.Drawing.Size(744, 609);
+            this.tabCtlSelect.TabIndex = 0;
+            this.tabCtlSelect.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.lstview_s3);
             this.tabPage1.Controls.Add(this.lstview_s2);
             this.tabPage1.Controls.Add(this.lstview_s1);
-            this.tabPage1.Controls.Add(this.pictureBox1);
-            this.tabPage1.Controls.Add(this.cBox);
-            this.tabPage1.Controls.Add(this.label1);
+            this.tabPage1.Controls.Add(this.picBoxWhole);
+            this.tabPage1.Controls.Add(this.cBoxMode);
+            this.tabPage1.Controls.Add(this.lblModel);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -170,32 +168,32 @@
             this.lstview_s1.UseCompatibleStateImageBehavior = false;
             this.lstview_s1.View = System.Windows.Forms.View.Details;
             // 
-            // pictureBox1
+            // picBoxWhole
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(25, 72);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(343, 483);
-            this.pictureBox1.TabIndex = 2;
-            this.pictureBox1.TabStop = false;
+            this.picBoxWhole.Location = new System.Drawing.Point(25, 72);
+            this.picBoxWhole.Name = "picBoxWhole";
+            this.picBoxWhole.Size = new System.Drawing.Size(343, 483);
+            this.picBoxWhole.TabIndex = 2;
+            this.picBoxWhole.TabStop = false;
             // 
-            // cBox
+            // cBoxMode
             // 
-            this.cBox.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.cBox.FormattingEnabled = true;
-            this.cBox.Location = new System.Drawing.Point(113, 25);
-            this.cBox.Name = "cBox";
-            this.cBox.Size = new System.Drawing.Size(121, 24);
-            this.cBox.TabIndex = 1;
+            this.cBoxMode.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.cBoxMode.FormattingEnabled = true;
+            this.cBoxMode.Location = new System.Drawing.Point(113, 25);
+            this.cBoxMode.Name = "cBoxMode";
+            this.cBoxMode.Size = new System.Drawing.Size(121, 24);
+            this.cBoxMode.TabIndex = 1;
             // 
-            // label1
+            // lblModel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label1.Location = new System.Drawing.Point(22, 28);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(85, 16);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "模式配置:";
+            this.lblModel.AutoSize = true;
+            this.lblModel.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblModel.Location = new System.Drawing.Point(22, 28);
+            this.lblModel.Name = "lblModel";
+            this.lblModel.Size = new System.Drawing.Size(85, 16);
+            this.lblModel.TabIndex = 0;
+            this.lblModel.Text = "模式配置:";
             // 
             // tabPage2
             // 
@@ -204,9 +202,9 @@
             this.tabPage2.Controls.Add(this.s1_devStatelb);
             this.tabPage2.Controls.Add(this.s1_devNameBox);
             this.tabPage2.Controls.Add(this.s1_devNamelb);
-            this.tabPage2.Controls.Add(this.label4);
-            this.tabPage2.Controls.Add(this.label3);
-            this.tabPage2.Controls.Add(this.label2);
+            this.tabPage2.Controls.Add(this.lblStatic4);
+            this.tabPage2.Controls.Add(this.lblStatic3);
+            this.tabPage2.Controls.Add(this.lblStatic2);
             this.tabPage2.Controls.Add(this.s1_BtnSnd);
             this.tabPage2.Controls.Add(this.s1_pb);
             this.tabPage2.Controls.Add(this.s1_pc);
@@ -266,35 +264,35 @@
             this.s1_devNamelb.TabIndex = 4;
             this.s1_devNamelb.Text = "设备名称";
             // 
-            // label4
+            // lblStatic4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label4.Location = new System.Drawing.Point(266, 281);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(110, 24);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "虎门大桥";
+            this.lblStatic4.AutoSize = true;
+            this.lblStatic4.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblStatic4.Location = new System.Drawing.Point(266, 281);
+            this.lblStatic4.Name = "lblStatic4";
+            this.lblStatic4.Size = new System.Drawing.Size(110, 24);
+            this.lblStatic4.TabIndex = 3;
+            this.lblStatic4.Text = "虎门大桥";
             // 
-            // label3
+            // lblStatic3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label3.Location = new System.Drawing.Point(266, 113);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(110, 24);
-            this.label3.TabIndex = 3;
-            this.label3.Text = "南沙大桥";
+            this.lblStatic3.AutoSize = true;
+            this.lblStatic3.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblStatic3.Location = new System.Drawing.Point(266, 113);
+            this.lblStatic3.Name = "lblStatic3";
+            this.lblStatic3.Size = new System.Drawing.Size(110, 24);
+            this.lblStatic3.TabIndex = 3;
+            this.lblStatic3.Text = "南沙大桥";
             // 
-            // label2
+            // lblStatic2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label2.Location = new System.Drawing.Point(94, 35);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(60, 24);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "广州";
+            this.lblStatic2.AutoSize = true;
+            this.lblStatic2.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblStatic2.Location = new System.Drawing.Point(94, 35);
+            this.lblStatic2.Name = "lblStatic2";
+            this.lblStatic2.Size = new System.Drawing.Size(60, 24);
+            this.lblStatic2.TabIndex = 3;
+            this.lblStatic2.Text = "广州";
             // 
             // s1_BtnSnd
             // 
@@ -403,9 +401,9 @@
             this.tabPage3.Controls.Add(this.s2_devStatelb);
             this.tabPage3.Controls.Add(this.s2_devNameBox);
             this.tabPage3.Controls.Add(this.s2_devNamelb);
-            this.tabPage3.Controls.Add(this.label7);
-            this.tabPage3.Controls.Add(this.label6);
-            this.tabPage3.Controls.Add(this.label5);
+            this.tabPage3.Controls.Add(this.lblStatic7);
+            this.tabPage3.Controls.Add(this.lblStatic6);
+            this.tabPage3.Controls.Add(this.lblStatic5);
             this.tabPage3.Controls.Add(this.s2_BtnSnd);
             this.tabPage3.Controls.Add(this.s2_pe);
             this.tabPage3.Controls.Add(this.s2_pd);
@@ -469,35 +467,35 @@
             this.s2_devNamelb.TabIndex = 7;
             this.s2_devNamelb.Text = "设备名称";
             // 
-            // label7
+            // lblStatic7
             // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label7.Location = new System.Drawing.Point(54, 328);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(135, 24);
-            this.label7.TabIndex = 3;
-            this.label7.Text = "南沙港快速";
+            this.lblStatic7.AutoSize = true;
+            this.lblStatic7.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblStatic7.Location = new System.Drawing.Point(54, 328);
+            this.lblStatic7.Name = "lblStatic7";
+            this.lblStatic7.Size = new System.Drawing.Size(135, 24);
+            this.lblStatic7.TabIndex = 3;
+            this.lblStatic7.Text = "南沙港快速";
             // 
-            // label6
+            // lblStatic6
             // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label6.Location = new System.Drawing.Point(288, 197);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(110, 24);
-            this.label6.TabIndex = 3;
-            this.label6.Text = "虎门大桥";
+            this.lblStatic6.AutoSize = true;
+            this.lblStatic6.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblStatic6.Location = new System.Drawing.Point(288, 197);
+            this.lblStatic6.Name = "lblStatic6";
+            this.lblStatic6.Size = new System.Drawing.Size(110, 24);
+            this.lblStatic6.TabIndex = 3;
+            this.lblStatic6.Text = "虎门大桥";
             // 
-            // label5
+            // lblStatic5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label5.Location = new System.Drawing.Point(284, 73);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(110, 24);
-            this.label5.TabIndex = 3;
-            this.label5.Text = "南沙大桥";
+            this.lblStatic5.AutoSize = true;
+            this.lblStatic5.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblStatic5.Location = new System.Drawing.Point(284, 73);
+            this.lblStatic5.Name = "lblStatic5";
+            this.lblStatic5.Size = new System.Drawing.Size(110, 24);
+            this.lblStatic5.TabIndex = 3;
+            this.lblStatic5.Text = "南沙大桥";
             // 
             // s2_BtnSnd
             // 
@@ -629,7 +627,6 @@
             // 
             // tabPage4
             // 
-            this.tabPage4.Controls.Add(this.label8);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
@@ -638,21 +635,12 @@
             this.tabPage4.Text = "tabS3";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(593, 44);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(41, 12);
-            this.label8.TabIndex = 0;
-            this.label8.Text = "label8";
-            // 
             // stsbar
             // 
             this.stsbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.stsbarComPort,
             this.stsbarCMD,
-            this.stsbarMAP,
+            this.stsbarAMAP,
             this.stsbarTime});
             this.stsbar.Location = new System.Drawing.Point(0, 657);
             this.stsbar.Name = "stsbar";
@@ -677,13 +665,13 @@
             this.stsbarCMD.Spring = true;
             this.stsbarCMD.Text = "toolStripStatusLabel1";
             // 
-            // stsbarMAP
+            // stsbarAMAP
             // 
-            this.stsbarMAP.AutoSize = false;
-            this.stsbarMAP.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
-            this.stsbarMAP.Name = "stsbarMAP";
-            this.stsbarMAP.Size = new System.Drawing.Size(250, 21);
-            this.stsbarMAP.Text = "toolStripStatusLabel1";
+            this.stsbarAMAP.AutoSize = false;
+            this.stsbarAMAP.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.stsbarAMAP.Name = "stsbarAMAP";
+            this.stsbarAMAP.Size = new System.Drawing.Size(250, 21);
+            this.stsbarAMAP.Text = "toolStripStatusLabel1";
             // 
             // stsbarTime
             // 
@@ -693,10 +681,10 @@
             this.stsbarTime.Size = new System.Drawing.Size(135, 21);
             this.stsbarTime.Text = "toolStripStatusLabel1";
             // 
-            // tmDate
+            // sysTimer
             // 
-            this.tmDate.Interval = 1000;
-            this.tmDate.Tick += new System.EventHandler(this.tmDate_Tick);
+            this.sysTimer.Interval = 1000;
+            this.sysTimer.Tick += new System.EventHandler(this.tmDate_Tick);
             // 
             // button1
             // 
@@ -726,14 +714,14 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.stsbar);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.tabCtlSelect);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.tabControl1.ResumeLayout(false);
+            this.tabCtlSelect.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxWhole)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.s1_pb)).EndInit();
@@ -753,8 +741,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.s2_pa2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.s2_pa3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.s2_pa4)).EndInit();
-            this.tabPage4.ResumeLayout(false);
-            this.tabPage4.PerformLayout();
             this.stsbar.ResumeLayout(false);
             this.stsbar.PerformLayout();
             this.ResumeLayout(false);
@@ -764,14 +750,14 @@
 
         #endregion
 
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl tabCtlSelect;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.ComboBox cBox;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox cBoxMode;
+        private System.Windows.Forms.Label lblModel;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox picBoxWhole;
         private System.Windows.Forms.ListView lstview_s3;
         private System.Windows.Forms.ListView lstview_s2;
         private System.Windows.Forms.ListView lstview_s1;
@@ -779,7 +765,7 @@
         private System.Windows.Forms.PictureBox s1_pa2;
         private System.Windows.Forms.PictureBox s1_pa3;
         //自定义数组，用于记录屏1的pictureBox，目的是简化myRClickMenuColor_s1代码
-        public System.Windows.Forms.PictureBox[] s1_pixBox;
+        public System.Windows.Forms.PictureBox[] s1_picBoxArr;
         private System.Windows.Forms.ContextMenuStrip cMenu1_Color;
         private System.Windows.Forms.ToolStripMenuItem Red1ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem Yellow1ToolStripMenuItem;
@@ -787,9 +773,9 @@
         private System.Windows.Forms.PictureBox s1_pb;
         private System.Windows.Forms.PictureBox s1_pc;
         private System.Windows.Forms.Button s1_BtnSnd;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lblStatic4;
+        private System.Windows.Forms.Label lblStatic3;
+        private System.Windows.Forms.Label lblStatic2;
         private System.Windows.Forms.PictureBox s2_pe;
         private System.Windows.Forms.PictureBox s2_pd;
         private System.Windows.Forms.PictureBox s2_pb;
@@ -799,16 +785,14 @@
         private System.Windows.Forms.PictureBox s2_pa3;
         private System.Windows.Forms.PictureBox s2_pa4;
         //自定义数组，用于记录屏2的pictureBox，目的是简化myRClickMenuColor_s2代码
-        public System.Windows.Forms.PictureBox[] s2_pixBox;
+        public System.Windows.Forms.PictureBox[] s2_pixBoxArr;
         //自定义数组，用于记录stsbar的四个label，目的是简化UpdateState代码
         public System.Windows.Forms.ToolStripStatusLabel[] stsbarArr;
-        public System.Drawing.Image[] s1_pxColor;
-        public System.Drawing.Image[] s2_pxColor;
         public System.Windows.Forms.TextBox[] devBoxArr;
         private System.Windows.Forms.Button s2_BtnSnd;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label lblStatic7;
+        private System.Windows.Forms.Label lblStatic6;
+        private System.Windows.Forms.Label lblStatic5;
         private System.Windows.Forms.ContextMenuStrip cMenu2_Color;
         private System.Windows.Forms.ToolStripMenuItem Red2ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem Yellow2ToolStripMenuItem;
@@ -816,9 +800,8 @@
         public System.Windows.Forms.StatusStrip stsbar;
         public System.Windows.Forms.ToolStripStatusLabel stsbarComPort;
         public System.Windows.Forms.ToolStripStatusLabel stsbarCMD;
-        public System.Windows.Forms.ToolStripStatusLabel stsbarMAP;
+        public System.Windows.Forms.ToolStripStatusLabel stsbarAMAP;
         private System.Windows.Forms.Label s1_devNamelb;
-        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox s1_devStateBox;
         private System.Windows.Forms.Label s1_devStatelb;
         private System.Windows.Forms.TextBox s1_devNameBox;
@@ -827,7 +810,7 @@
         private System.Windows.Forms.TextBox s2_devNameBox;
         private System.Windows.Forms.Label s2_devNamelb;
         private System.Windows.Forms.ToolStripStatusLabel stsbarTime;
-        private System.Windows.Forms.Timer tmDate;
+        private System.Windows.Forms.Timer sysTimer;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
     }
