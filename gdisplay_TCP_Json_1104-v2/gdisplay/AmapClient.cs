@@ -58,11 +58,16 @@ namespace gdisplay
             }
             catch
             {
-                Form1.WriteLineLog(DateTime.Now.ToString() + "获取高德数据失败");
+                //using (StreamWriter wrLog = new StreamWriter(".\\log_file.txt", true))
+                //{
+                //    wrLog.WriteLine(DateTime.Now.ToString() + "获取高德数据失败");
+                //} 
+                Form1.WriteLog(DateTime.Now.ToString() + "获取高德数据失败");
                 return null;
             }
 
             ydpAmap = JsonConvert.DeserializeObject<ydpAmapJson>(pageHtml);
+            //MessageBox.Show(ydpAmap.status);
             return ydpAmap;
         }
 
