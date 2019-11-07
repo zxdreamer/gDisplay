@@ -15,7 +15,6 @@ namespace gdisplay
 {
     public partial class Form1 : Form
     {
-        //public static StreamWriter wrLog = new StreamWriter("E:\\log_file.txt",true);  //日志文件
         Byte s1_num = 0;                     //1,2,3,4,5,0(未选中)
         Byte s2_num = 0;                     //屏体区域编号
 
@@ -33,10 +32,8 @@ namespace gdisplay
             userUIInit();       //窗体控件初始化
             userJsonInit();     //Json配置文件解析
             userTcpInit();      //TCPserver初始化，并启动监听
-            using (StreamWriter wrLog = new StreamWriter(".\\log_file.txt", true))
-            {
-                wrLog.WriteLine(DateTime.Now.ToString() + "---------------------------程序开始启动----------------------------------");
-            }                
+
+            WriteLineLog(DateTime.Now.ToString() + "---------------------------程序开始启动----------------------------------");
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -73,69 +70,86 @@ namespace gdisplay
 
         async void userJsonInit()
         {
-            using (StreamReader rd = new StreamReader("E:\\ytr3.json"))
+            try
             {
-                var jsonstr = await rd.ReadToEndAsync();
-                await Task.Run(() =>
+                using (StreamReader rd = new StreamReader("E:\\ytr3.json"))
                 {
-                    ydpCfg = JsonConvert.DeserializeObject<ydpJsonConfig>(jsonstr);
-
-                    ydpApClient = AmapClient.CreateApClientObj(ydpCfg.AMAPkey);     //获得高德数据对象
-                    AMAPreqtime = ydpCfg.AMAPreqtime;
-                    foreach (CfgScreens screens in ydpCfg.screens)
+                    var jsonstr = await rd.ReadToEndAsync();
+                    await Task.Run(() =>
                     {
-                        //1.获得屏幕id
-                        string sid = screens.id;
-                        
-                        //2.添加屏id和搜索区域的Dict
-                        List<string> reL = new List<string>();
-                        foreach (string rect in screens.regions)
+                        ydpCfg = JsonConvert.DeserializeObject<ydpJsonConfig>(jsonstr);
+
+                        WriteLineLog("开始解析配置文件......");
+                        ydpApClient = AmapClient.CreateApClientObj(ydpCfg.AMAPkey);     //获得高德数据对象
+                        AMAPreqtime = ydpCfg.AMAPreqtime;
+                        foreach (CfgScreens screens in ydpCfg.screens)
                         {
-                            reL.Add(rect);
+                            //1.获得屏幕id
+                            string sid = screens.id;
+
+                            //2.添加屏id和搜索区域的Dict
+                            List<string> reL = new List<string>();
+                            foreach (string rect in screens.regions)
+                            {
+                                reL.Add(rect);
+                            }
+
+                            //4.添加屏id和路结构的Dict
+                            List<RoadsResult> sigPaths = new List<RoadsResult>();
+                            foreach (CfgRoads roads in screens.roads)
+                            {
+                                string mainRoad = roads.name;
+
+                                List<string> nodeList = new List<string>();
+                                foreach (string road in roads.sections)
+                                    nodeList.Add(road);
+
+                                List<int> angList = new List<int>();
+                                foreach (int anl in roads.angles)
+                                    angList.Add(anl);
+
+                                RoadsResult path = new RoadsResult(mainRoad, nodeList, angList);
+                                sigPaths.Add(path);
+                            }
+                            //5.依次将每一块屏的配置信息添加进去
+                            ScnRestList.Add(new ScreenResult(sigPaths, reL, sid));
                         }
-                        
-                        //4.添加屏id和路结构的Dict
-                        List<RoadsResult> sigPaths = new List<RoadsResult>();
-                        foreach (CfgRoads roads in screens.roads)
+                    });
+                    WriteLineLog("配置文件解析结果:");
+                    foreach(var sc in ScnRestList)
+                    {
+                        WriteLineLog("屏幕 "+sc.Id);
+
+                        string region = "搜索区域：";
+                        foreach (var rect in sc.SfindRect)
                         {
-                            string mainRoad = roads.name;
-
-                            List<string> nodeList = new List<string>();
-                            foreach (string road in roads.sections)
-                                nodeList.Add(road);
-
-                            List<int> angList = new List<int>();
-                            foreach (int anl in roads.angles)
-                                angList.Add(anl);
-
-                            RoadsResult path = new RoadsResult(mainRoad, nodeList, angList);
-                            sigPaths.Add(path);
+                            region += rect + " ";
                         }
-                        //5.依次将每一块屏的配置信息添加进去
-                        ScnRestList.Add(new ScreenResult(sigPaths, reL, sid));
+                        WriteLineLog(region);
+
+                        foreach (var path in sc.Sroads)
+                        {
+                            WriteLineLog(path.MRoad);
+                            string nodes = "节点:";
+                            foreach(var node in path.SectList)
+                            {
+                                nodes += node+" ";
+                            }
+                            WriteLineLog(nodes);
+                        }
                     }
-                });
-                #region
-                //用于调试配置文件的读取
-                //using (StreamWriter wr = new StreamWriter("E:\\test.txt"))
-                //{
-                //    foreach (string r in IpsDict.Keys)
-                //        wr.WriteLine(IpsDict[r]);
-
-                //    foreach (var val in PathsDict.Values)
-                //    {
-                //        foreach (var road in val)
-                //        {
-                //            wr.Write(road.Main + " ");
-                //            foreach (var r in road.NodeList)
-                //                wr.Write(r + " ");
-                //            wr.WriteLine("");
-                //        }
-                //    }
-                //}
-                #endregion
+                }
+            }
+            catch(FileNotFoundException e)
+            {
+                MessageBox.Show("配置文件不存在");
+            }
+            catch(Exception e)
+            {
+                WriteLineLog("配置文件解析异常" + e.Message);
             }
         }
+
         void userTcpInit()
         {
             sv = new TcpServer();
@@ -151,17 +165,38 @@ namespace gdisplay
             //  更新devNum成员
             
         }
+        /*************************************************
+         * WriteLineLog:日志文件写函数
+         * Param：
+         *      strlog：一条写入数据
+         * ************************************************/
+        public static int WriteLineLog(string strlog)
+        {
+            try
+            {
+                using (StreamWriter wrLog = new StreamWriter(@".\\logFile.txt",true))
+                {
+                    wrLog.WriteLine(strlog);
+                }
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show("文件系统异常" + e.Message);
+                return -1;
+            }
 
-        /************************************************************
-        //UpdateState：有TcpServer更新UI控件数据
-        //Para:
-        //     msgType: 指定显示容器
-        //              0:在状态栏显示
-        //              1:在tabControl显示
-        //     msgData: 在msgData指定容器中的显示位置
-        //              0,1,2...n:依次从左到右，从上到下的控件
-        //     text   ：显示文本
-        **************************************************************/
+            return 0;
+        }
+        /* ***********************************************************
+        * UpdateState：更新UI控件数据
+        * Para:
+        *      msgType: 指定显示容器
+        *               0:在状态栏显示
+        *               1:在tabControl显示
+        *      msgData: 在msgData指定容器中的显示位置
+        *               0,1,2...n:依次从左到右，从上到下的控件
+        *      text   ：显示文本
+        * *************************************************************/
         public void UpdateState(int msgType, int msgData, string text)
         {
             switch (msgType)
@@ -177,12 +212,13 @@ namespace gdisplay
             }
         }
         /**********************************************
-        //myRClickMenuColor_s1:屏1右键显示颜色
-        //Para:
-        //     color:颜色编号
+        * myRClickMenuColor_s1:屏1右键显示颜色
+        * Para:
+        *      color:颜色编号
         ********************************************/
         void myRClickMenuColor_s1(int color)
         {
+            WriteLineLog("右击屏1：" + "区域"+s1_num + " " + "颜色"+color);
             //填充s1_sdarr[50]数组
             if (s1_num<1 || s1_num>8)
             {
@@ -216,6 +252,7 @@ namespace gdisplay
         ********************************************/
         void myRClickMenuColor_s2(int color)
         {
+            WriteLineLog("右击屏2：" + "区域" + s1_num + " " + "颜色" + color);
             if (s2_num < 1 || s2_num > 8)
             {
                 MessageBox.Show("请点击正确区域");
@@ -475,27 +512,20 @@ namespace gdisplay
                 }
                 else
                 {
-                    try
+                    if (Math.Abs(pathAngle - angleList[mrIndex]) <= 30)     //误差暂定成30
                     {
-                        if (Math.Abs(pathAngle - angleList[mrIndex]) <= 30)     //误差暂定成30
+                        //3.索引为0，只返回后面一段路
+                        if (mrIndex == 0)
                         {
-                            //3.索引为0，只返回后面一段路
-                            if (mrIndex == 0)
-                            {
-                                res[0] = 0;
-                                res[1] = 1;
-                            }
-                            //4.索引为(0,nodeList.Count-1),返回前后两段路
-                            else
-                            {
-                                res[0] = mrIndex - 1;
-                                res[1] = mrIndex + 1;
-                            }
+                            res[0] = 0;
+                            res[1] = 1;
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        MessageBox.Show(e.ToString() + mrIndex + pathDir + pathAngle);
+                        //4.索引为(0,nodeList.Count-1),返回前后两段路
+                        else
+                        {
+                            res[0] = mrIndex - 1;
+                            res[1] = mrIndex + 1;
+                        }
                     }
                 }
             }
@@ -556,19 +586,53 @@ namespace gdisplay
             }
             else                           //新播报格式
             {
-                using (StreamWriter wrLog = new StreamWriter(".\\log_file.txt", true))
-                {
-                    wrLog.WriteLine("另一种数据格式：" + pathDir);
-                }
+                WriteLineLog("另一种数据格式：" + pathDir);
             }
             return res;
+        }
+        /***************************************************************
+         * WholeDescFullSteList:通过AmapJson中description填充状态数组
+         * Param：
+         *      wholeDesc:description
+         *      screen   :配置文件中的整屏信息
+         * **************************************************************/
+        private void WholeDescFullSteList(string wholeDesc, ScreenResult screen)
+        {
+            if (wholeDesc == null)
+                return;
+
+            string[] descArr = wholeDesc.Split(';');
+            foreach(string desc in descArr)
+            {
+                string[] pathd = desc.Split(':');
+                int index = screen.Sroads.FindIndex((item) =>
+                {
+                    return item.MRoad.Equals(pathd[0]);
+                });
+                if (index == -1)
+                    continue;
+
+                if (pathd[1].IndexOf("畅通") != -1)
+                {
+                    for (int i = 0; i < screen.Sroads[index].SectList.Count; i++)
+                        screen.Sroads[index].StateList[i] = 1;
+                }
+                else if(pathd[1].IndexOf("缓慢") != -1)
+                {
+
+                }
+                else if(pathd[1].IndexOf("严重拥堵")!=-1)
+                {
+
+                }
+            }
         }
         /* ********************************************************
          * AmapJsonToSteArr:高德地图中获得的Json填充主路的状态数组，
          *                  根据id判断是哪个屏，根据json数据判断是哪条主路
          * Param:
-         *      jap:AMAP的json数据
-         *      id:屏幕键值
+         *      jsonRegionList:AMAP的json数据列表
+         *      screen:屏幕配置文件的整屏json信息
          * *****************************************************/
         public void AmapJsonToSteArr(List<ydpAmapJson> jsonRegionList, ScreenResult screen)
         {
@@ -588,6 +652,8 @@ namespace gdisplay
                 try                 //解决AMAPjson缺少数据造成的异常
                 {
                     string wholeDesc = sigJson.trafficinfo.description;   //???整体描述不知道怎么处理
+                    WholeDescFullSteList(wholeDesc, screen);              //通过description预填充数组
+
                     using (StreamWriter w = new StreamWriter(".\\description.txt",true))
                     {
                         w.WriteLine(wholeDesc);
@@ -625,33 +691,27 @@ namespace gdisplay
                 catch(Exception e)
                 {                    
                     stsbarAMAP.Text = "高德解析数据异常";
-                    using (StreamWriter wrLog = new StreamWriter(".\\log_file.txt", true))
-                    {
-                        wrLog.WriteLine(DateTime.Now.ToString() + "高德解析数据异常");
-                    }                       
+                    WriteLineLog(DateTime.Now.ToString() + "高德解析数据异常");
                 }
             }
         }
         int IsValidJsonResult(ydpAmapJson json)
         {
+            WriteLineLog(DateTime.Now.ToString() + " " + json.status+" "+json.info);
             if (json.status == "0")
             {
-                using (StreamWriter wr = new StreamWriter(".\\log_file.txt", true))
-                {
-                    wr.WriteLine("错误码："+json.infocode);
                     if (json.info == "DAILY_QUERY_OVER_LIMIT")
                     {
-                        wr.WriteLine("当前key值已经超限");
+                        WriteLineLog("当前key值已经超限");
                         return -1;
                     }
                     else if (json.info == "INVALID_USER_KEY")
                     {
-                        wr.WriteLine("AMAP请求参数错误");
+                        WriteLineLog("AMAP请求参数错误");
                         return -2;
                     }
                     else
                         return -3;
-                }
             }
 
             return 0;
@@ -688,19 +748,16 @@ namespace gdisplay
                 AmapJsonToSteArr(scAmapJson, screen);
 
                 //5.通过写入文件模拟发送过程
-                using (StreamWriter wrLog = new StreamWriter(".\\log_file.txt", true))
+                WriteLineLog("屏幕" + screen.Id);
+                foreach (var mroad in screen.Sroads)
                 {
-                    wrLog.WriteLine("屏幕" + screen.Id);
-                    foreach (var mroad in screen.Sroads)
+                    string str = mroad.MRoad + "状态数组: ";
+                    for (int i = 0; i < mroad.StateList.Count; i++)
                     {
-                        wrLog.Write(mroad.MRoad + "状态数组: ");
-                        for (int i = 0; i < mroad.StateList.Count; i++)
-                        {
-                            wrLog.Write("0x" + mroad.StateList[i] + " ");
-                            mroad.StateList[i] = 0;    //先默认是无效数据
-                        }
-                        wrLog.Write("\n");
+                        str += "0x" + mroad.StateList[i] + " ";
+                        mroad.StateList[i] = 0;    //先默认是无效数据
                     }
+                    WriteLineLog(str);
                 }
             }
         }
@@ -717,9 +774,11 @@ namespace gdisplay
             }
         }
 
-        private async void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-
+            string s = "高新路：桃园桥附近自南向北行驶缓慢。";
+            string[] sa = s.Split(';');
+            MessageBox.Show(sa.Length.ToString());
         }
 
         private void button2_Click(object sender, EventArgs e)
