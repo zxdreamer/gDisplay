@@ -103,9 +103,99 @@ namespace gdisplay.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap lpb_black3 {
+            get {
+                object obj = ResourceManager.GetObject("lpb_black3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap lpb_green3 {
+            get {
+                object obj = ResourceManager.GetObject("lpb_green3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap lpb_red3 {
+            get {
+                object obj = ResourceManager.GetObject("lpb_red3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap lpb_yellow3 {
+            get {
+                object obj = ResourceManager.GetObject("lpb_yellow3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap lpc_black3 {
+            get {
+                object obj = ResourceManager.GetObject("lpc_black3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap lpc_green3 {
+            get {
+                object obj = ResourceManager.GetObject("lpc_green3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap lpc_red3 {
+            get {
+                object obj = ResourceManager.GetObject("lpc_red3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap lpc_yellow3 {
+            get {
+                object obj = ResourceManager.GetObject("lpc_yellow3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap lpd_black2 {
             get {
                 object obj = ResourceManager.GetObject("lpd_black2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap lpd_black3 {
+            get {
+                object obj = ResourceManager.GetObject("lpd_black3", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -123,6 +213,16 @@ namespace gdisplay.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap lpd_green3 {
+            get {
+                object obj = ResourceManager.GetObject("lpd_green3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap lpd_red2 {
             get {
                 object obj = ResourceManager.GetObject("lpd_red2", resourceCulture);
@@ -133,9 +233,39 @@ namespace gdisplay.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap lpd_red3 {
+            get {
+                object obj = ResourceManager.GetObject("lpd_red3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap lpd_yellow2 {
             get {
                 object obj = ResourceManager.GetObject("lpd_yellow2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap lpd_yellow3 {
+            get {
+                object obj = ResourceManager.GetObject("lpd_yellow3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap pa_black3 {
+            get {
+                object obj = ResourceManager.GetObject("pa_black3", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -156,6 +286,16 @@ namespace gdisplay.Properties {
         internal static System.Drawing.Bitmap pa_green2 {
             get {
                 object obj = ResourceManager.GetObject("pa_green2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap pa_green3 {
+            get {
+                object obj = ResourceManager.GetObject("pa_green3", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -193,6 +333,16 @@ namespace gdisplay.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap pa_red3 {
+            get {
+                object obj = ResourceManager.GetObject("pa_red3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap pa_row2 {
             get {
                 object obj = ResourceManager.GetObject("pa_row2", resourceCulture);
@@ -216,6 +366,16 @@ namespace gdisplay.Properties {
         internal static System.Drawing.Bitmap pa_yellow2 {
             get {
                 object obj = ResourceManager.GetObject("pa_yellow2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap pa_yellow3 {
+            get {
+                object obj = ResourceManager.GetObject("pa_yellow3", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

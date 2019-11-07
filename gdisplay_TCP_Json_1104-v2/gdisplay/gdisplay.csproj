@@ -173,5 +173,53 @@
   <ItemGroup>
     <None Include="res\s2\rpd_yellow2.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\lpb_black3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\lpb_green3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\lpb_red3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\lpb_yellow3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\lpc_black3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\lpc_green3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\lpc_red3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\lpc_yellow3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\pa_black3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\pa_green3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\pa_red3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\pa_yellow3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\lpd_green3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\lpd_red3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\lpd_yellow3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\lpd_black3.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -16,8 +16,8 @@ namespace gdisplay
     public partial class Form1 : Form
     {
         Byte s1_num = 0;                     //1,2,3,4,5,0(未选中)
-        Byte s2_num = 0;                     //屏体区域编号
-
+        Byte s2_num = 0;                     //屏体2区域编号
+        Byte s3_num = 0;                     //屏体3区域编号
         List<ScreenResult> ScnRestList=new List<ScreenResult>();
                                            
         TcpServer sv=null;
@@ -63,6 +63,7 @@ namespace gdisplay
             //4.设置后面筛选用的数组，简化switch-case
             this.s1_picBoxArr = new System.Windows.Forms.PictureBox[5] { s1_pa1, s1_pa2, s1_pa3, s1_pb, s1_pc };
             this.s2_picBoxArr = new System.Windows.Forms.PictureBox[8] { s2_pa1, s2_pa2, s2_pa3, s2_pa4, s2_pb, s2_pc, s2_pd, s2_pe };
+            this.s3_picBoxArr = new System.Windows.Forms.PictureBox[6] { s3_pa1, s3_pa2, s3_pa3, s3_pb, s3_pc, s3_pd};
             this.stsbarArr = new ToolStripStatusLabel[4] { stsbarComPort, stsbarCMD, stsbarAMAP, stsbarTime };
             this.devBoxArr = new TextBox[4] { s1_devNameBox, s1_devStateBox, s2_devNameBox, s2_devStateBox };
             
@@ -252,7 +253,7 @@ namespace gdisplay
         ********************************************/
         void myRClickMenuColor_s2(int color)
         {
-            WriteLineLog("右击屏2：" + "区域" + s1_num + " " + "颜色" + color);
+            WriteLineLog("右击屏2：" + "区域" + s2_num + " " + "颜色" + color);
             if (s2_num < 1 || s2_num > 8)
             {
                 MessageBox.Show("请点击正确区域");
@@ -308,6 +309,71 @@ namespace gdisplay
             //}
             **************************************************/
 #endregion
+            s1_num = 0;
+        }
+        /**********************************************
+        //myRClickMenuColor_s2:屏2右键显示颜色
+        //Para:
+        //     color:颜色编号
+        ********************************************/
+        void myRClickMenuColor_s3(int color)
+        {
+            WriteLineLog("右击屏3：" + "区域" + s3_num + " " + "颜色" + color);
+            if (s3_num < 1 || s3_num > 6)
+            {
+                MessageBox.Show("请点击正确区域");
+                return;
+            }
+            else if (s3_num >= 1 && s3_num <= 3)   //s2_num=1..3：代表同一种类型的图片
+            {
+                if (color == 1)
+                    s3_picBoxArr[s3_num - 1].Image = global::gdisplay.Properties.Resources.pa_red3;
+                else if (color == 2)
+                    s3_picBoxArr[s3_num - 1].Image = global::gdisplay.Properties.Resources.pa_yellow3;
+                else if (color == 3)
+                    s3_picBoxArr[s3_num - 1].Image = global::gdisplay.Properties.Resources.pa_green3;
+            }
+            else if (s3_num == 4)
+            {
+                if (color == 1)
+                    s3_picBoxArr[s3_num - 1].Image = global::gdisplay.Properties.Resources.lpb_red3;
+                else if (color == 2)
+                    s3_picBoxArr[s3_num - 1].Image = global::gdisplay.Properties.Resources.lpb_yellow3;
+                else if (color == 3)
+                    s3_picBoxArr[s3_num - 1].Image = global::gdisplay.Properties.Resources.lpb_green3;
+            }
+            else if (s3_num == 5)
+            {
+                if (color == 1)
+                {
+                    s3_picBoxArr[s3_num - 1].Image = global::gdisplay.Properties.Resources.lpc_red3;
+                    s3_picBoxArr[s3_num].Image = global::gdisplay.Properties.Resources.lpd_red3;
+                }
+                else if (color == 2)
+                {
+                    s3_picBoxArr[s3_num - 1].Image = global::gdisplay.Properties.Resources.lpc_yellow3;
+                    s3_picBoxArr[s3_num].Image = global::gdisplay.Properties.Resources.lpd_yellow3;
+                }
+                else if (color == 3)
+                {
+                    s3_picBoxArr[s3_num - 1].Image = global::gdisplay.Properties.Resources.lpc_green3;
+                    s3_picBoxArr[s3_num].Image = global::gdisplay.Properties.Resources.lpd_green3;
+                }
+            }
+            //屏2中半圆形路段与写向左上的路段不同时变化时，需要取消这段注释
+            #region
+            /*************************************************
+            //else if (s2_num == 8)
+            //{
+            //    if (color == 1)
+            //        s2_pixBox[s2_num - 1].Image = global::gdisplay.Properties.Resources.pe_red2;
+            //    else if (color == 2)
+            //        s2_pixBox[s2_num - 1].Image = global::gdisplay.Properties.Resources.pe_yellow2;
+            //    else if (color == 3)
+            //        s2_pixBox[s2_num - 1].Image = global::gdisplay.Properties.Resources.pe_green2;
+            //}
+            **************************************************/
+            #endregion
             s1_num = 0;
         }
         private void s1_pa3_MouseUp(object sender, MouseEventArgs e)
@@ -785,6 +851,57 @@ namespace gdisplay
         {
             Byte[] arr = new byte[5]{ 49, 50, 51, 52, 53 };
             MessageBox.Show(Encoding.Default.GetString(arr));
+        }
+
+        private void s3_pa1_MouseUp(object sender, MouseEventArgs e)
+        {
+            s3_pa1.ContextMenuStrip = cMenu3_Color;
+            s3_num = 1;
+        }
+
+        private void s3_pa2_MouseUp(object sender, MouseEventArgs e)
+        {
+            s3_pa2.ContextMenuStrip = cMenu3_Color;
+            s3_num = 2;
+        }
+
+        private void s3_pa3_MouseUp(object sender, MouseEventArgs e)
+        {
+            s3_pa3.ContextMenuStrip = cMenu3_Color;
+            s3_num = 3;
+        }
+
+        private void s3_pb_MouseUp(object sender, MouseEventArgs e)
+        {
+            s3_pb.ContextMenuStrip = cMenu3_Color;
+            s3_num = 4;
+        }
+
+        private void s3_pd_MouseUp(object sender, MouseEventArgs e)
+        {
+            s3_pd.ContextMenuStrip = cMenu3_Color;
+            s3_num = 5;
+        }
+
+        private void s3_pc_MouseUp(object sender, MouseEventArgs e)
+        {
+            s3_pc.ContextMenuStrip = cMenu3_Color;
+            s3_num = 5;
+        }
+
+        private void Red3ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            myRClickMenuColor_s3(1);
+        }
+
+        private void Yellow3ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            myRClickMenuColor_s3(2);
+        }
+
+        private void Green3ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            myRClickMenuColor_s3(3);
         }
     }
 }

@@ -202,4 +202,52 @@
   <data name="rpd_yellow2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\res\s2\rpd_yellow2.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="lpb_black3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\s3\lpb_black3.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lpb_green3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\s3\lpb_green3.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lpb_red3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\s3\lpb_red3.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lpb_yellow3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\s3\lpb_yellow3.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lpc_black3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\s3\lpc_black3.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lpc_green3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\s3\lpc_green3.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lpc_red3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\s3\lpc_red3.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lpc_yellow3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\s3\lpc_yellow3.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="pa_black3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\s3\pa_black3.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="pa_green3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\s3\pa_green3.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="pa_red3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\s3\pa_red3.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="pa_yellow3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\s3\pa_yellow3.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lpd_black3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\s3\lpd_black3.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lpd_green3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\s3\lpd_green3.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lpd_red3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\s3\lpd_red3.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lpd_yellow3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\res\s3\lpd_yellow3.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
