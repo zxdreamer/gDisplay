@@ -6,47 +6,12 @@ using System.Threading.Tasks;
 
 namespace gdisplay
 {
-    //public class pathCfgInfo
-    //{
-    //    private int numRoads = 20;
-    //    private string mRoad;
-    //    public string MRoad
-    //    {
-    //        get { return mRoad; }
-    //        set { mRoad = value; }
-    //    }
-
-    //    private List<string> nodeList;
-    //    public List<string> NodeList
-    //    {
-    //        get { return nodeList; }
-    //        set { nodeList = value; }
-    //    }
-    //    private Byte[] mRoadArr;
-    //    public Byte[] MRoadArr
-    //    {
-    //        get { return mRoadArr; }
-    //        set { mRoadArr = value; }
-    //    }
-    //    private Boolean isVisited;
-    //    public Boolean IsVisited
-    //    {
-    //        get { return isVisited; }
-    //        set { isVisited = value; }
-    //    }
-    //    public pathCfgInfo(string main, List<string> nodeList)
-    //    {
-    //        this.mRoad = main;
-    //        this.nodeList = nodeList;
-    //        this.isVisited = false;
-    //        this.mRoadArr = new byte[numRoads];
-    //    }
-    //}
     public class CfgRoads
     {
         public string name { get; set; }
         public List<string> sections { get; set; }
-        public List<int> angles { get; set; }
+        public List<string> ids { get; set; }
+        public List<int> angles { get; set; }        
     }
     public class CfgScreens
     {

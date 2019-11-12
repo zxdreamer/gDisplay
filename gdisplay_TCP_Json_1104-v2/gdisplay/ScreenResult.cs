@@ -34,7 +34,14 @@ namespace gdisplay
             get { return stateList; }
             set { stateList = value; }
         }
-        public RoadsResult(string main, List<string> nodeList,List<int> angList)
+
+        private List<string> idsList;        //主路路段编号
+        public List<string> IdsList
+        {
+            get { return idsList; }
+            set { idsList = value; }
+        }
+        public RoadsResult(string main, List<string> nodeList,List<int> angList,List<string> iList)
         {
             this.mRoad = main;
             this.sectList = nodeList;
@@ -44,6 +51,7 @@ namespace gdisplay
                 this.stateList.Add(1);  //1--:畅通???
             }
             this.angleList = angList;
+            this.idsList = iList;
         }
     }
 

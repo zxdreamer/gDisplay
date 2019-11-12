@@ -97,23 +97,27 @@ namespace gdisplay
 
                             //4.添加屏id和路结构的Dict
                             List<RoadsResult> sigPaths = new List<RoadsResult>();
-                            foreach (CfgRoads roads in screens.roads)
+                            foreach (CfgRoads road in screens.roads)
                             {
-                                string mainRoad = roads.name;
-
+                                string mainRoad = road.name;
+                                //4.1 添加路段节点
                                 List<string> nodeList = new List<string>();
-                                foreach (string road in roads.sections)
-                                    nodeList.Add(road);
-
+                                foreach (string node in road.sections)
+                                    nodeList.Add(node);
+                                //4.2 添加路段编号
+                                List<string> idsList = new List<string>();
+                                foreach (string id in road.ids)
+                                    idsList.Add(id);
+                                //4.3 添加路段角度
                                 List<int> angList = new List<int>();
-                                foreach (int anl in roads.angles)
+                                foreach (int anl in road.angles)
                                     angList.Add(anl);
 
-                                RoadsResult path = new RoadsResult(mainRoad, nodeList, angList);
+                                RoadsResult path = new RoadsResult(mainRoad, nodeList, angList,idsList);
                                 sigPaths.Add(path);
                             }
                             //5.依次将每一块屏的配置信息添加进去
-                            ScnRestList.Add(new ScreenResult(sigPaths, reL, sid));
+                             ScnRestList.Add(new ScreenResult(sigPaths, reL, sid));
                         }
                     });
                     WriteLineLog("配置文件解析结果:");
@@ -785,24 +789,29 @@ namespace gdisplay
 
         async void AMAPReqAndFullMRoadsList()
         {
-            //1.对屏规定的区域向高德发送请求
+            //1.遍历屏体列表
             foreach(var screen in ScnRestList)
             {
                 List<ydpAmapJson> scAmapJson = new List<ydpAmapJson>();
                 ydpAmapJson ydpApJson=null;
+
+                //2.对某一屏规定的区域向高德发送请求
                 foreach (string region in screen.SfindRect)
                 {
                     int reSendCont = 0;
-                    //2 按区域异步发送请求，失败，连发三次
+
+                    //2.1 按区域异步发送请求，失败，连发三次
                     do
                     {
                         ydpApJson = await ydpApClient.GetJsonFromAmapAsync(region);
                         if (ydpApJson == null)              //保证第一次成功不延迟，失败延迟
                             await Task.Delay(20000);        //异步延迟
                     } while (ydpApJson == null && reSendCont++ < 3);
-                    //3.对于返回的AmapJson数据到一个列表中，后面统一处理
+
+                    //2.2 对于返回的AmapJson数据到一个列表中，后面统一处理
                     if (ydpApJson != null)
                     {
+                        //返回结果是否正确
                         if(0 == IsValidJsonResult(ydpApJson))
                             scAmapJson.Add(ydpApJson);
 
@@ -810,10 +819,10 @@ namespace gdisplay
                     }
                 }
 
-                //4.统一处理一块屏的所有AmapJson数据
+                //3.统一处理一块屏的所有AmapJson数据
                 AmapJsonToSteArr(scAmapJson, screen);
 
-                //5.通过写入文件模拟发送过程
+                //4.通过写入文件模拟发送过程
                 WriteLineLog("屏幕" + screen.Id);
                 foreach (var mroad in screen.Sroads)
                 {
@@ -842,15 +851,15 @@ namespace gdisplay
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string s = "高新路：桃园桥附近自南向北行驶缓慢。";
-            string[] sa = s.Split(';');
-            MessageBox.Show(sa.Length.ToString());
+            //string s = "高新路：桃园桥附近自南向北行驶缓慢。";
+            //string[] sa = s.Split(';');
+            //MessageBox.Show(sa.Length.ToString());
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Byte[] arr = new byte[5]{ 49, 50, 51, 52, 53 };
-            MessageBox.Show(Encoding.Default.GetString(arr));
+            //Byte[] arr = new byte[5]{ 49, 50, 51, 52, 53 };
+            //MessageBox.Show(Encoding.Default.GetString(arr));
         }
 
         private void s3_pa1_MouseUp(object sender, MouseEventArgs e)
