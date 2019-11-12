@@ -15,11 +15,12 @@ namespace gdisplay
     {
         public Socket socket;
         public const int RXBUFFER_SIZE = 1024;
-        public byte[] readBuff = new byte[RXBUFFER_SIZE];  //读缓冲区
-        public int buffCount = 0;                        //当前缓冲区大小
+        public byte[] readBuff = new byte[RXBUFFER_SIZE];   //读缓冲区
+        public int buffCount = 0;                           //当前缓冲区大小
         public bool isUse = false;
-        public byte devNum = 0xFF;                       //设备编号
-        
+        public string devid;                                //设备编号
+        public bool bAskId;                                 //连接标志位
+        public bool bRecvData;                              //接受标志位
         public Connect()
         {
             readBuff = new byte[RXBUFFER_SIZE];
@@ -29,7 +30,8 @@ namespace gdisplay
             this.socket = socket;
             isUse = true;
             buffCount = 0;
-
+            bAskId = false;
+            bRecvData = false;
         }
         public int BuffRemain()
         {
@@ -48,11 +50,9 @@ namespace gdisplay
         {
             if (!isUse)
                 return;
-            //Console.WriteLine("[断开连接]" + GetAdress());????
             socket.Close();
             isUse = false;
-            //MessageBox.Show("连接关闭");
-            devNum = 0xFF;
+            devid = null;
         }
     }
     class TcpServer
@@ -110,7 +110,7 @@ namespace gdisplay
         private void AcceptCb(IAsyncResult ar)
         {
             try
-               {
+            {
                 //1.获得连接到的客户端的fd
                 Socket socket = listenfd.EndAccept(ar);
                 //2.从connects中查找一个空位置
@@ -125,13 +125,19 @@ namespace gdisplay
                     Connect connect = connects[index];
                     connect.Init(socket);  //socket->connect,isUse=true
                     string adr = connect.GetRemoteAdress();
-                    //需要把每台设备的连接情况显示到一个text上???
-                    Program.gdFrom.UpdateState(0, 0, "[Dev" + connect.devNum + "]" + "已连接");
-                    //4.启动异步接受
+
+                    //需要把每台设备的连接情况显示到状态栏和日志文件
+                    Program.gdFrom.UpdateState(0, 0, "[Dev:" + connect.devid + "]" + "已连接");
+                    Form1.WriteLineLog(DateTime.Now.ToString()+":[Dev:" + connect.devid + "]" + "已连接");
+                    
+                    //4.连接成功标志位有效
+                    connect.bAskId = true;
+
+                    //5.启动异步接受
                     //参数的含义:接受buffer,填充开始位置，填充长度，xxx，异步回调函数，传给回调函数的参数
                     connect.socket.BeginReceive(connect.readBuff, connect.buffCount, connect.BuffRemain(), SocketFlags.None, ReceiveCb, connect);
                 }
-                //5.再次开启等待连接事件
+                //6.再次开启等待连接事件
                 listenfd.BeginAccept(AcceptCb, null);
             }
             catch (Exception e)
@@ -156,35 +162,24 @@ namespace gdisplay
                 if (count <= 0)
                 {
                     //在状态栏label3处显示客户端断开连接
-                    Program.gdFrom.UpdateState(0, 0, "[Dev" + connect.devNum + "]" + "已断开");
+                    Program.gdFrom.UpdateState(0, 0, "[Dev:" + connect.devid + "]" + "已断开");
+                    Form1.WriteLineLog(DateTime.Now.ToString()+":[Dev:" + connect.devid + "]" + "已断开");
                     connect.Close();
                     return;
                 }
+                //3.接受标志位有效
+                connect.bRecvData = true;
+
                 string str = System.Text.Encoding.UTF8.GetString(connect.readBuff, 0, count);
                 
-                //在状态栏label2处显示接受到的数据                
-                str = connect.GetRemoteAdress() + ":" + str+"I am xian";
-                byte[] sdbytes = System.Text.Encoding.Default.GetBytes(str);
-                //广播???
-                //for(int i=0;i<connects.Length;i++)
-                //{
-                //    if (connects[i] == null)
-                //        continue;
-                //    if (!connects[i].isUse)
-                //        continue;
-                //    Console.WriteLine("将消息转播给" + connects[i].GetAdress());
-                //    connects[i].socket.Send(sdbytes);
-                //}
-                //Console.WriteLine("将消息转播给" + connect.GetAdress());
-                //connect.socket.Send(sdbytes);
-                SendData(connect, sdbytes, sdbytes.Length);
-                //3.再一次启动异步调用接受函数
+                //4.再一次启动异步调用接受函数
                 connect.socket.BeginReceive(connect.readBuff, connect.buffCount, connect.BuffRemain(), SocketFlags.None, ReceiveCb, connect);
             }
             catch (Exception e)
             {
                 MessageBox.Show("Receive断开");
-                Program.gdFrom.UpdateState(0, 0, "[Dev" + connect.devNum + "]" + "断开");
+                Program.gdFrom.UpdateState(0, 0, "[Dev:" + connect.devid + "]" + "断开");
+                Form1.WriteLineLog(DateTime.Now.ToString() + ":[Dev:" + connect.devid + "]" + "已断开");
                 connect.Close();
             }
         }
@@ -203,21 +198,19 @@ namespace gdisplay
                 return 0;
             ////检测数据包是否正确
             try
-            {
-               
+            {               
                 nRes = con.socket.Send(arr, size, 0);
-                //MessageBox.Show("发送OK2");
             }
             catch (ObjectDisposedException e)
             {
                 nRes = -1;
-                Program.gdFrom.UpdateState(0, 0, "[Dev" + con.devNum + "]" + "已断开!");
+                Program.gdFrom.UpdateState(0, 0, "[Dev:" + con.devid + "]" + "已断开!");
                 con.Close();
             }
             catch(Exception e)
             {
                 nRes = -2;
-                Program.gdFrom.UpdateState(0, 0, "[Dev" + con.devNum + "]" + "发送失败!");
+                Program.gdFrom.UpdateState(0, 0, "[Dev:" + con.devid + "]" + "发送失败!");
             }
 
             return nRes;

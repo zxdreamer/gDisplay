@@ -24,8 +24,9 @@ namespace gdisplay
         ydpJsonConfig ydpCfg = new ydpJsonConfig();               //json配置文件对象
         //AmapClient ydpApClient = AmapClient.CreateApClientObj("51a0f16ac37bcf88e634023f1529d84a");          //获得高德数据对象
         AmapClient ydpApClient = null;
-        int AMAPreqcnt = 0;
-        int AMAPreqtime = 0;
+        int AMAPreqcnt = 0;         //50ms计数器
+        int AMAPreqtime = 0;        //配置文件中高德请求时间
+        int AMAPReadly = 0;         //高德数据处理完成标志位
         public Form1()
         {
             InitializeComponent();
@@ -73,7 +74,7 @@ namespace gdisplay
         {
             try
             {
-                using (StreamReader rd = new StreamReader("E:\\ytr3.json"))
+                using (StreamReader rd = new StreamReader(@".\\ytr3.json"))
                 {
                     var jsonstr = await rd.ReadToEndAsync();
                     await Task.Run(() =>
@@ -82,7 +83,7 @@ namespace gdisplay
 
                         WriteLineLog("开始解析配置文件......");
                         ydpApClient = AmapClient.CreateApClientObj(ydpCfg.AMAPkey);     //获得高德数据对象
-                        AMAPreqtime = ydpCfg.AMAPreqtime;
+                        AMAPreqtime = ydpCfg.AMAPreqtime*2;    //定时器定时500ms，这里乘2
                         foreach (CfgScreens screens in ydpCfg.screens)
                         {
                             //1.获得屏幕id
@@ -514,12 +515,12 @@ namespace gdisplay
                 }
                 if(res==-1)
                 {
-                    MessageBox.Show("Dev" + sv.connects[i].devNum + "已断开");
+                    MessageBox.Show("Dev:" + sv.connects[i].devid + "已断开");
                     UpdateState(0, 1, "DATA: To [DEV1] " + "NO Data");
                 }
                 else if(res == -2)
                 {
-                    MessageBox.Show("Dev" + sv.connects[i].devNum + "发送失败");
+                    MessageBox.Show("Dev:" + sv.connects[i].devid + "发送失败");
                     UpdateState(0, 1, "DATA: To [DEV1] " + "NO Data");
                 }
             }
@@ -821,39 +822,218 @@ namespace gdisplay
 
                 //3.统一处理一块屏的所有AmapJson数据
                 AmapJsonToSteArr(scAmapJson, screen);
-
-                //4.通过写入文件模拟发送过程
-                WriteLineLog("屏幕" + screen.Id);
-                foreach (var mroad in screen.Sroads)
-                {
-                    string str = mroad.MRoad + "状态数组: ";
-                    for (int i = 0; i < mroad.StateList.Count; i++)
-                    {
-                        str += "0x" + mroad.StateList[i] + " ";
-                        mroad.StateList[i] = 0;    //先默认是无效数据
-                    }
-                    WriteLineLog(str);
-                }
             }
         }
+        
         private void tmDate_Tick(object sender, EventArgs e)
         {
             //1.在状态栏显示时间
             string localtime = DateTime.Now.ToString(" yyyy-MM-dd HH:mm:ss");
             stsbarTime.Text = localtime;
             AMAPreqcnt++;
+            //1.高德定时时间到100s，逐屏填充数据
             if(AMAPreqcnt >= AMAPreqtime)
             {
                 AMAPreqcnt = 0;
                 AMAPReqAndFullMRoadsList();   //高德请求，抓取路况交通态势
+                AMAPReadly = 1;
+            }
+
+            //2.逐屏广播模式发送数据
+            foreach (var screen in ScnRestList)
+            {
+                ydpBroadCastSend(screen);
+                ydpLoopRecv();                //???怎样保证等待500ms
             }
         }
+        /*********************************************************************
+         * ytrBroadCastSend:广播形式发送，遍历connects中的每个描述符，依次处理               
+         * Param：
+         *       无
+         * *******************************************************************/
+        private async void ydpBroadCastSend(ScreenResult screen)
+        {            
+            int len = sv.connects.Length;
+            for (int i = 0; i < len; i++)
+            {
+                //1 对于没有连接的描述符，直接跳过
+                if (!sv.connects[i].isUse)
+                    continue;
 
+                //2 对于刚连接等待询问设备号的描述符，发送查询指令
+                if (sv.connects[i].bAskId)
+                {
+                    sv.connects[i].bAskId = false;
+                    byte[] ckArr = DataPacked(1, null); 
+
+                    ydpSendData(sv.connects[i], ckArr, ckArr.Length);
+                }
+
+                //3 对于已经准备好一屏数据的描述符，发送屏幕显示的数据
+                if(AMAPReadly == 1)
+                {
+                    WriteLineLog("屏幕" + screen.Id);
+                    await Task.Delay(10);        //???防止连续发送   
+
+                    byte[] showArr = DataPacked(2, screen);
+                    ydpSendData(sv.connects[i], showArr, showArr.Length);
+                    
+                    foreach (var mroad in screen.Sroads)
+                    {
+                        string str = mroad.MRoad + "状态数组: ";
+                        for (int j = 0; j < mroad.StateList.Count; j++)
+                        {
+                            str += "0x" + mroad.StateList[j] + " ";
+                            mroad.StateList[j] = 0x01;    //先默认是无效数据
+                        }
+                        WriteLineLog(str);
+                    }
+                }
+            }
+            AMAPReadly = 0;
+        }
+        /*****************************************************************
+         * ydpSendData：发送失败连发三次
+         * Param:
+         *      con:发送数据的描述符
+         *      arr:发送数组
+         *      size:数组长度
+         * ***************************************************************/
+        private void ydpSendData(Connect con, Byte[] arr, int size)
+        {
+            int res = 0;
+            int sdCnt = 0;
+            do
+            {
+                res = sv.SendData(con, arr, size);
+                sdCnt++;
+            } while (res < 0 && sdCnt < 3);
+
+            if (res > 0)
+            {
+                Program.gdFrom.UpdateState(0, 1, "发送指令:" + ByteToRawStr(arr));
+                Form1.WriteLineLog(DateTime.Now.ToString() + ":发送指令:" + ByteToRawStr(arr));
+            }
+        }
+        /*****************************************************************
+         * ytrLoopRecv:接受应答，遍历connects中的每个描述符，依次处理
+         *             对于查询应答("91")指令：02 30 30 '9' '1' 0/1 id xx xx 03,接应答结果存到devid中
+         *             对于发送显示数据应答("81")指令：02 30 30 '8' '1' 0/1 xx xx 03
+         * Param：
+         *       无
+         * ****************************************************************/
+        private void ydpLoopRecv()
+        {
+            int len = sv.connects.Length;
+            for(int i = 0;i<len;i++)
+            {
+                //1 此描述符接受到数据
+                if(sv.connects[i].bRecvData)
+                {
+                    sv.connects[i].bRecvData = false;
+                    byte[] rBuff = sv.connects[i].readBuff;
+                    //2 接受到39 31状态码，代表查询应答
+                    if (rBuff[3] == 0x39 && rBuff[4] == 0x31)
+                    {
+                        if(rBuff[5] == 0x31)
+                        {
+                            byte[] idbt = new byte[7];
+                            //3 记录屏幕id
+                            for(int j=0;j<6;j++)
+                            {
+                                idbt[j] = rBuff[j + 6];
+                            }
+                            sv.connects[i].devid = Encoding.Default.GetString(idbt);
+
+                            MessageBox.Show("[Dev:" + sv.connects[i].devid + "]" + " 已连接");
+                            Program.gdFrom.UpdateState(0, 0, "[Dev:" + sv.connects[i].devid + "]" + "已连接");
+                            Form1.WriteLineLog(DateTime.Now.ToString() + ":应答的设备号" + sv.connects[i].devid);
+                        }
+                    }
+                    else if(rBuff[3]==0x38 && rBuff[4]==0x31)
+                    {
+
+                    }
+                }
+            }
+        }
+        /*********************************************************************
+         * DataPacked:广播形式发送，遍历connects中的每个描述符，依次处理
+         * Param：
+         *      flag:标志是查询指令打包还是发送显示数据指令打包
+         *      screen:记录屏幕信息
+         * Result:
+         *       要发送的状态数组
+         *       对于查询("91")指令：数据包：02 30 30 '9' '1' xx xx 03
+         *       对于发送状态("81")指令：数据包：02 30 30 '8' '1' '{' id ':' xx} ...
+         * *******************************************************************/
+        private byte[] DataPacked(int flag,ScreenResult screen)
+        {
+            List<byte> res = new List<byte>();
+            res.Add(0x02);              //前三位固定 0x02 0x30 0x30
+            res.Add(0x30);
+            res.Add(0x30);
+
+            if (flag == 1)              //打包查询设备号
+            {
+                res.Add(0x39);
+                res.Add(0x31);                
+            }
+            else if(flag == 2)          //打包显示数据
+            {
+                res.Add(0x38);
+                res.Add(0x31);
+                byte[] tmp1 = Encoding.Default.GetBytes("{");
+                byte[] tmp2 = Encoding.Default.GetBytes(":");
+                byte[] tmp3 = Encoding.Default.GetBytes("}");
+                //1. 获得屏幕的一条路
+                foreach (var road in screen.Sroads)
+                {
+                    //2.获得屏幕上路的路段编号和路段状态
+                    for(int i=0;i<road.IdsList.Count;i++)
+                    {
+                        //3.填充"{id:x}"
+                        res.Add(tmp1[0]);
+                        byte[] idbt = Encoding.Default.GetBytes(road.IdsList[i]);
+                        foreach(var id in idbt)
+                        {
+                            res.Add(id);
+                        }
+                        res.Add(tmp2[0]);
+                        res.Add(road.StateList[i]);
+                        res.Add(tmp3[0]);
+                    }
+                }
+            }
+
+            res.Add(0x03);          //包尾0x03
+            return res.ToArray();
+        }
+        /**********************************************************
+         * ByteToRawStr:将byte[]数组直译成字符串，便于日志文件，状态栏记录
+         * Param:
+         *      arr:需要转换的数组
+         * Result:
+         *      数组直译后的字符串
+         * */
+        public string ByteToRawStr(byte[] arr)
+        {
+            string res = null;
+            string[] state = new string[16] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9","A","B","C","D","E","F" };
+            for (int i = 0; i < arr.Length; i++)
+            {
+                string shi = state[(arr[i] & 0xf0) >> 4];
+                string ge = state[arr[i] & 0x0f];
+                res += (shi + ge + " ");
+            }
+
+            return res;
+        }
         private void button1_Click(object sender, EventArgs e)
         {
-            //string s = "高新路：桃园桥附近自南向北行驶缓慢。";
-            //string[] sa = s.Split(';');
-            //MessageBox.Show(sa.Length.ToString());
+            string s = null;
+            s = "02" + "39";
+            MessageBox.Show(s);
         }
 
         private void button2_Click(object sender, EventArgs e)
