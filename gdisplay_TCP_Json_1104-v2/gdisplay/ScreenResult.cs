@@ -64,6 +64,12 @@ namespace gdisplay
             get { return id; }
             set { id = value; }
         }
+        private Connect con;
+        public Connect Con
+        {
+            get { return con; }
+            set { con = value; }
+        }
         private List<string> sfindRect;
         public List<string> SfindRect
         {

@@ -26,7 +26,8 @@ namespace gdisplay
         AmapClient ydpApClient = null;
         int AMAPreqcnt = 0;         //50ms计数器
         int AMAPreqtime = 0;        //配置文件中高德请求时间
-        int AMAPReadly = 0;         //高德数据处理完成标志位
+        bool[] AMAPReadly = new bool[3] { false,false,false};      //屏幕1,2,3高德数据处理完成标志位
+        int AMAPScCnt = 0;          //处理哪块儿屏幕计数
         public Form1()
         {
             InitializeComponent();
@@ -77,8 +78,8 @@ namespace gdisplay
                 using (StreamReader rd = new StreamReader(@".\\ytr3.json"))
                 {
                     var jsonstr = await rd.ReadToEndAsync();
-                    await Task.Run(() =>
-                    {
+                    //await Task.Run(() =>
+                    //{
                         ydpCfg = JsonConvert.DeserializeObject<ydpJsonConfig>(jsonstr);
 
                         WriteLineLog("开始解析配置文件......");
@@ -120,7 +121,7 @@ namespace gdisplay
                             //5.依次将每一块屏的配置信息添加进去
                              ScnRestList.Add(new ScreenResult(sigPaths, reL, sid));
                         }
-                    });
+                    //});
                     WriteLineLog("配置文件解析结果:");
                     foreach(var sc in ScnRestList)
                     {
@@ -791,38 +792,39 @@ namespace gdisplay
         async void AMAPReqAndFullMRoadsList()
         {
             //1.遍历屏体列表
-            foreach(var screen in ScnRestList)
+            //foreach (var screen in ScnRestList)
+            ScreenResult screen = ScnRestList[AMAPScCnt];
+//            {
+            List<ydpAmapJson> scAmapJson = new List<ydpAmapJson>();
+            ydpAmapJson ydpApJson=null;
+
+            //2.对某一屏规定的区域向高德发送请求
+            foreach (string region in screen.SfindRect)
             {
-                List<ydpAmapJson> scAmapJson = new List<ydpAmapJson>();
-                ydpAmapJson ydpApJson=null;
+                int reSendCont = 0;
 
-                //2.对某一屏规定的区域向高德发送请求
-                foreach (string region in screen.SfindRect)
+                //2.1 按区域异步发送请求，失败，连发三次
+                do
                 {
-                    int reSendCont = 0;
+                    ydpApJson = await ydpApClient.GetJsonFromAmapAsync(region);
+                    if (ydpApJson == null)              //保证第一次成功不延迟，失败延迟
+                        await Task.Delay(10000);        //异步延迟
+                } while (ydpApJson == null && reSendCont++ < 3);
 
-                    //2.1 按区域异步发送请求，失败，连发三次
-                    do
-                    {
-                        ydpApJson = await ydpApClient.GetJsonFromAmapAsync(region);
-                        if (ydpApJson == null)              //保证第一次成功不延迟，失败延迟
-                            await Task.Delay(20000);        //异步延迟
-                    } while (ydpApJson == null && reSendCont++ < 3);
+                //2.2 对于返回的AmapJson数据到一个列表中，后面统一处理
+                if (ydpApJson != null)
+                {
+                    //返回结果是否正确
+                    if(0 == IsValidJsonResult(ydpApJson))
+                        scAmapJson.Add(ydpApJson);
 
-                    //2.2 对于返回的AmapJson数据到一个列表中，后面统一处理
-                    if (ydpApJson != null)
-                    {
-                        //返回结果是否正确
-                        if(0 == IsValidJsonResult(ydpApJson))
-                            scAmapJson.Add(ydpApJson);
-
-                        ydpApJson = null;
-                    }
+                    ydpApJson = null;
                 }
-
-                //3.统一处理一块屏的所有AmapJson数据
-                AmapJsonToSteArr(scAmapJson, screen);
             }
+
+            //3.统一处理一块屏的所有AmapJson数据
+            AmapJsonToSteArr(scAmapJson, screen);
+//            }
         }
         
         private void tmDate_Tick(object sender, EventArgs e)
@@ -831,21 +833,21 @@ namespace gdisplay
             string localtime = DateTime.Now.ToString(" yyyy-MM-dd HH:mm:ss");
             stsbarTime.Text = localtime;
             AMAPreqcnt++;
-            //1.高德定时时间到100s，逐屏填充数据
+            //1.高德定时时间到60s，逐屏填充数据
             if(AMAPreqcnt >= AMAPreqtime)
             {
-                AMAPreqcnt = 0;
-                AMAPReqAndFullMRoadsList();   //高德请求，抓取路况交通态势
-                AMAPReadly = 1;
+                AMAPreqcnt = 0;               
+                AMAPReqAndFullMRoadsList();              //高德请求，抓取一屏路况交通态势                
+                AMAPReadly[AMAPScCnt] = true;            //屏幕AMAPScCnt抓取完成标志位置true
+                ydpBroadCastSend(ScnRestList[AMAPScCnt]);//发送一屏路况交通态势
+                AMAPScCnt = (AMAPScCnt + 1) % 3;
             }
 
             //2.逐屏广播模式发送数据
-            foreach (var screen in ScnRestList)
-            {
-                ydpBroadCastSend(screen);
-                ydpLoopRecv();                //???怎样保证等待500ms
-            }
+            ydpBroadCastSend(null);
+            ydpLoopRecv();                //???怎样保证等待500ms
         }
+
         /*********************************************************************
          * ytrBroadCastSend:广播形式发送，遍历connects中的每个描述符，依次处理               
          * Param：
@@ -870,14 +872,16 @@ namespace gdisplay
                 }
 
                 //3 对于已经准备好一屏数据的描述符，发送屏幕显示的数据
-                if(AMAPReadly == 1)
+                //AMAPScCnt 记录哪一屏数据准备好
+                if (screen!=null && screen.Id == sv.connects[i].devid.Replace("\0",""))
                 {
+                    AMAPReadly[AMAPScCnt] = false;
                     WriteLineLog("屏幕" + screen.Id);
-                    await Task.Delay(10);        //???防止连续发送   
+                    //await Task.Delay(10);        //???防止连续发送   
 
                     byte[] showArr = DataPacked(2, screen);
                     ydpSendData(sv.connects[i], showArr, showArr.Length);
-                    
+
                     foreach (var mroad in screen.Sroads)
                     {
                         string str = mroad.MRoad + "状态数组: ";
@@ -889,8 +893,7 @@ namespace gdisplay
                         WriteLineLog(str);
                     }
                 }
-            }
-            AMAPReadly = 0;
+            }            
         }
         /*****************************************************************
          * ydpSendData：发送失败连发三次
@@ -944,7 +947,7 @@ namespace gdisplay
                                 idbt[j] = rBuff[j + 6];
                             }
                             sv.connects[i].devid = Encoding.Default.GetString(idbt);
-
+                            
                             MessageBox.Show("[Dev:" + sv.connects[i].devid + "]" + " 已连接");
                             Program.gdFrom.UpdateState(0, 0, "[Dev:" + sv.connects[i].devid + "]" + "已连接");
                             Form1.WriteLineLog(DateTime.Now.ToString() + ":应答的设备号" + sv.connects[i].devid);
@@ -1031,9 +1034,10 @@ namespace gdisplay
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            string s = null;
-            s = "02" + "39";
-            MessageBox.Show(s);
+            string s1 = "123";
+            string s2 = "123\0";
+            if(s1==s2.Replace("\0",""))
+                MessageBox.Show("is ");
         }
 
         private void button2_Click(object sender, EventArgs e)

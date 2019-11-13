@@ -32,6 +32,7 @@ namespace gdisplay
             buffCount = 0;
             bAskId = false;
             bRecvData = false;
+            devid = null;
         }
         public int BuffRemain()
         {
@@ -59,7 +60,7 @@ namespace gdisplay
     {
         public Socket listenfd;
         public Connect[] connects;
-        public int maxConnectCount = 50;
+        public int maxConnectCount = 10;
         public ydpACK obj_ydpAck;         //诱导屏接受处理函数
         //Start：启动TcpServer
         public void Start(string host, int port)
