@@ -30,11 +30,34 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            this.cMenu1_Color = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.Red1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Yellow1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Green1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cMenu2_Color = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.Red2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Yellow2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Green2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stsbar = new System.Windows.Forms.StatusStrip();
+            this.stsbarComPort = new System.Windows.Forms.ToolStripStatusLabel();
+            this.stsbarCMD = new System.Windows.Forms.ToolStripStatusLabel();
+            this.stsbarAMAP = new System.Windows.Forms.ToolStripStatusLabel();
+            this.stsbarTime = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tmDate = new System.Windows.Forms.Timer(this.components);
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.cMenu3_Color = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.Red3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Yellow3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Green3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tabCtlSelect = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.lstview_s1 = new System.Windows.Forms.ListView();
             this.lstview_s3 = new System.Windows.Forms.ListView();
             this.lstview_s2 = new System.Windows.Forms.ListView();
-            this.lstview_s1 = new System.Windows.Forms.ListView();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.cBoxMode = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -48,10 +71,6 @@
             this.lblstatic1 = new System.Windows.Forms.Label();
             this.s1_BtnSnd = new System.Windows.Forms.Button();
             this.s1_pb = new System.Windows.Forms.PictureBox();
-            this.cMenu1_Color = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.Red1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Yellow1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Green1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.s1_pc = new System.Windows.Forms.PictureBox();
             this.s1_pa1 = new System.Windows.Forms.PictureBox();
             this.s1_pa2 = new System.Windows.Forms.PictureBox();
@@ -66,10 +85,6 @@
             this.lblstatic6 = new System.Windows.Forms.Label();
             this.s2_BtnSnd = new System.Windows.Forms.Button();
             this.s2_pe = new System.Windows.Forms.PictureBox();
-            this.cMenu2_Color = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.Red2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Yellow2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Green2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.s2_pd = new System.Windows.Forms.PictureBox();
             this.s2_pb = new System.Windows.Forms.PictureBox();
             this.s2_pc = new System.Windows.Forms.PictureBox();
@@ -78,6 +93,9 @@
             this.s2_pa3 = new System.Windows.Forms.PictureBox();
             this.s2_pa4 = new System.Windows.Forms.PictureBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.lblstatic7 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.lblstatic8 = new System.Windows.Forms.Label();
             this.s3_devStateBox = new System.Windows.Forms.TextBox();
             this.s3_devStatelb = new System.Windows.Forms.Label();
             this.s3_devNameBox = new System.Windows.Forms.TextBox();
@@ -89,31 +107,24 @@
             this.s3_pb = new System.Windows.Forms.PictureBox();
             this.s3_pa1 = new System.Windows.Forms.PictureBox();
             this.s3_pa3 = new System.Windows.Forms.PictureBox();
-            this.stsbar = new System.Windows.Forms.StatusStrip();
-            this.stsbarComPort = new System.Windows.Forms.ToolStripStatusLabel();
-            this.stsbarCMD = new System.Windows.Forms.ToolStripStatusLabel();
-            this.stsbarAMAP = new System.Windows.Forms.ToolStripStatusLabel();
-            this.stsbarTime = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tmDate = new System.Windows.Forms.Timer(this.components);
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.cMenu3_Color = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.Red3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Yellow3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Green3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cMenu1_Color.SuspendLayout();
+            this.cMenu2_Color.SuspendLayout();
+            this.stsbar.SuspendLayout();
+            this.cMenu3_Color.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.tabCtlSelect.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.s1_pb)).BeginInit();
-            this.cMenu1_Color.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.s1_pc)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.s1_pa1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.s1_pa2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.s1_pa3)).BeginInit();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.s2_pe)).BeginInit();
-            this.cMenu2_Color.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.s2_pd)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.s2_pb)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.s2_pc)).BeginInit();
@@ -128,9 +139,183 @@
             ((System.ComponentModel.ISupportInitialize)(this.s3_pb)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.s3_pa1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.s3_pa3)).BeginInit();
-            this.stsbar.SuspendLayout();
-            this.cMenu3_Color.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // cMenu1_Color
+            // 
+            this.cMenu1_Color.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Red1ToolStripMenuItem,
+            this.Yellow1ToolStripMenuItem,
+            this.Green1ToolStripMenuItem});
+            this.cMenu1_Color.Name = "cMenu_Color";
+            this.cMenu1_Color.Size = new System.Drawing.Size(101, 70);
+            // 
+            // Red1ToolStripMenuItem
+            // 
+            this.Red1ToolStripMenuItem.Name = "Red1ToolStripMenuItem";
+            this.Red1ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.Red1ToolStripMenuItem.Text = "红色";
+            this.Red1ToolStripMenuItem.Click += new System.EventHandler(this.Red1ToolStripMenuItem_Click);
+            // 
+            // Yellow1ToolStripMenuItem
+            // 
+            this.Yellow1ToolStripMenuItem.Name = "Yellow1ToolStripMenuItem";
+            this.Yellow1ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.Yellow1ToolStripMenuItem.Text = "黄色";
+            this.Yellow1ToolStripMenuItem.Click += new System.EventHandler(this.Yellow1ToolStripMenuItem_Click);
+            // 
+            // Green1ToolStripMenuItem
+            // 
+            this.Green1ToolStripMenuItem.Name = "Green1ToolStripMenuItem";
+            this.Green1ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.Green1ToolStripMenuItem.Text = "绿色";
+            this.Green1ToolStripMenuItem.Click += new System.EventHandler(this.Green1ToolStripMenuItem_Click);
+            // 
+            // cMenu2_Color
+            // 
+            this.cMenu2_Color.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Red2ToolStripMenuItem,
+            this.Yellow2ToolStripMenuItem,
+            this.Green2ToolStripMenuItem});
+            this.cMenu2_Color.Name = "cMenu2_Color";
+            this.cMenu2_Color.Size = new System.Drawing.Size(101, 70);
+            // 
+            // Red2ToolStripMenuItem
+            // 
+            this.Red2ToolStripMenuItem.Name = "Red2ToolStripMenuItem";
+            this.Red2ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.Red2ToolStripMenuItem.Text = "红色";
+            this.Red2ToolStripMenuItem.Click += new System.EventHandler(this.Red2ToolStripMenuItem_Click);
+            // 
+            // Yellow2ToolStripMenuItem
+            // 
+            this.Yellow2ToolStripMenuItem.Name = "Yellow2ToolStripMenuItem";
+            this.Yellow2ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.Yellow2ToolStripMenuItem.Text = "黄色";
+            this.Yellow2ToolStripMenuItem.Click += new System.EventHandler(this.Yellow2ToolStripMenuItem_Click);
+            // 
+            // Green2ToolStripMenuItem
+            // 
+            this.Green2ToolStripMenuItem.Name = "Green2ToolStripMenuItem";
+            this.Green2ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.Green2ToolStripMenuItem.Text = "绿色";
+            this.Green2ToolStripMenuItem.Click += new System.EventHandler(this.Green2ToolStripMenuItem_Click);
+            // 
+            // stsbar
+            // 
+            this.stsbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.stsbarComPort,
+            this.stsbarCMD,
+            this.stsbarAMAP,
+            this.stsbarTime});
+            this.stsbar.Location = new System.Drawing.Point(0, 657);
+            this.stsbar.Name = "stsbar";
+            this.stsbar.Size = new System.Drawing.Size(1115, 26);
+            this.stsbar.TabIndex = 2;
+            this.stsbar.Text = "ststar";
+            // 
+            // stsbarComPort
+            // 
+            this.stsbarComPort.AutoSize = false;
+            this.stsbarComPort.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.stsbarComPort.Name = "stsbarComPort";
+            this.stsbarComPort.Size = new System.Drawing.Size(135, 21);
+            this.stsbarComPort.Text = "toolStripStatusLabel1";
+            // 
+            // stsbarCMD
+            // 
+            this.stsbarCMD.AutoSize = false;
+            this.stsbarCMD.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.stsbarCMD.Name = "stsbarCMD";
+            this.stsbarCMD.Size = new System.Drawing.Size(580, 21);
+            this.stsbarCMD.Spring = true;
+            this.stsbarCMD.Text = "toolStripStatusLabel1";
+            // 
+            // stsbarAMAP
+            // 
+            this.stsbarAMAP.AutoSize = false;
+            this.stsbarAMAP.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.stsbarAMAP.Name = "stsbarAMAP";
+            this.stsbarAMAP.Size = new System.Drawing.Size(250, 21);
+            this.stsbarAMAP.Text = "toolStripStatusLabel1";
+            // 
+            // stsbarTime
+            // 
+            this.stsbarTime.AutoSize = false;
+            this.stsbarTime.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.stsbarTime.Name = "stsbarTime";
+            this.stsbarTime.Size = new System.Drawing.Size(135, 21);
+            this.stsbarTime.Text = "toolStripStatusLabel1";
+            // 
+            // tmDate
+            // 
+            this.tmDate.Interval = 500;
+            this.tmDate.Tick += new System.EventHandler(this.tmDate_Tick);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(1019, 22);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "测试按钮";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(1019, 89);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 4;
+            this.button2.Text = "测试";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // cMenu3_Color
+            // 
+            this.cMenu3_Color.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Red3ToolStripMenuItem,
+            this.Yellow3ToolStripMenuItem,
+            this.Green3ToolStripMenuItem});
+            this.cMenu3_Color.Name = "cMenu3_Color";
+            this.cMenu3_Color.Size = new System.Drawing.Size(101, 70);
+            // 
+            // Red3ToolStripMenuItem
+            // 
+            this.Red3ToolStripMenuItem.Name = "Red3ToolStripMenuItem";
+            this.Red3ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.Red3ToolStripMenuItem.Text = "红色";
+            this.Red3ToolStripMenuItem.Click += new System.EventHandler(this.Red3ToolStripMenuItem_Click);
+            // 
+            // Yellow3ToolStripMenuItem
+            // 
+            this.Yellow3ToolStripMenuItem.Name = "Yellow3ToolStripMenuItem";
+            this.Yellow3ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.Yellow3ToolStripMenuItem.Text = "黄色";
+            this.Yellow3ToolStripMenuItem.Click += new System.EventHandler(this.Yellow3ToolStripMenuItem_Click);
+            // 
+            // Green3ToolStripMenuItem
+            // 
+            this.Green3ToolStripMenuItem.Name = "Green3ToolStripMenuItem";
+            this.Green3ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.Green3ToolStripMenuItem.Text = "绿色";
+            this.Green3ToolStripMenuItem.Click += new System.EventHandler(this.Green3ToolStripMenuItem_Click);
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.tabCtlSelect, 0, 0);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(122, 22);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(812, 632);
+            this.tableLayoutPanel1.TabIndex = 5;
             // 
             // tabCtlSelect
             // 
@@ -138,64 +323,100 @@
             this.tabCtlSelect.Controls.Add(this.tabPage2);
             this.tabCtlSelect.Controls.Add(this.tabPage3);
             this.tabCtlSelect.Controls.Add(this.tabPage4);
-            this.tabCtlSelect.Location = new System.Drawing.Point(206, 22);
+            this.tabCtlSelect.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabCtlSelect.Location = new System.Drawing.Point(3, 3);
             this.tabCtlSelect.Name = "tabCtlSelect";
             this.tabCtlSelect.SelectedIndex = 0;
-            this.tabCtlSelect.Size = new System.Drawing.Size(744, 609);
-            this.tabCtlSelect.TabIndex = 0;
-            this.tabCtlSelect.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
+            this.tabCtlSelect.Size = new System.Drawing.Size(806, 626);
+            this.tabCtlSelect.TabIndex = 1;
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.lstview_s3);
-            this.tabPage1.Controls.Add(this.lstview_s2);
-            this.tabPage1.Controls.Add(this.lstview_s1);
-            this.tabPage1.Controls.Add(this.pictureBox1);
+            this.tabPage1.Controls.Add(this.tableLayoutPanel2);
             this.tabPage1.Controls.Add(this.cBoxMode);
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(736, 583);
+            this.tabPage1.Size = new System.Drawing.Size(798, 600);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabMain";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel3, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.pictureBox1, 0, 0);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(12, 74);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(773, 503);
+            this.tableLayoutPanel2.TabIndex = 4;
+            // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.ColumnCount = 1;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.Controls.Add(this.lstview_s1, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.lstview_s3, 0, 2);
+            this.tableLayoutPanel3.Controls.Add(this.lstview_s2, 0, 1);
+            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(389, 3);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 3;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(381, 497);
+            this.tableLayoutPanel3.TabIndex = 5;
+            // 
+            // lstview_s1
+            // 
+            this.lstview_s1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstview_s1.GridLines = true;
+            this.lstview_s1.Location = new System.Drawing.Point(3, 3);
+            this.lstview_s1.Name = "lstview_s1";
+            this.lstview_s1.Size = new System.Drawing.Size(375, 159);
+            this.lstview_s1.TabIndex = 3;
+            this.lstview_s1.UseCompatibleStateImageBehavior = false;
+            this.lstview_s1.View = System.Windows.Forms.View.Details;
+            // 
             // lstview_s3
             // 
+            this.lstview_s3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstview_s3.GridLines = true;
-            this.lstview_s3.Location = new System.Drawing.Point(394, 438);
+            this.lstview_s3.Location = new System.Drawing.Point(3, 333);
             this.lstview_s3.Name = "lstview_s3";
-            this.lstview_s3.Size = new System.Drawing.Size(302, 116);
+            this.lstview_s3.Size = new System.Drawing.Size(375, 161);
             this.lstview_s3.TabIndex = 3;
             this.lstview_s3.UseCompatibleStateImageBehavior = false;
             this.lstview_s3.View = System.Windows.Forms.View.Details;
             // 
             // lstview_s2
             // 
+            this.lstview_s2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstview_s2.GridLines = true;
-            this.lstview_s2.Location = new System.Drawing.Point(394, 255);
+            this.lstview_s2.Location = new System.Drawing.Point(3, 168);
             this.lstview_s2.Name = "lstview_s2";
-            this.lstview_s2.Size = new System.Drawing.Size(302, 116);
+            this.lstview_s2.Size = new System.Drawing.Size(375, 159);
             this.lstview_s2.TabIndex = 3;
             this.lstview_s2.UseCompatibleStateImageBehavior = false;
             this.lstview_s2.View = System.Windows.Forms.View.Details;
             // 
-            // lstview_s1
-            // 
-            this.lstview_s1.GridLines = true;
-            this.lstview_s1.Location = new System.Drawing.Point(394, 72);
-            this.lstview_s1.Name = "lstview_s1";
-            this.lstview_s1.Size = new System.Drawing.Size(302, 116);
-            this.lstview_s1.TabIndex = 3;
-            this.lstview_s1.UseCompatibleStateImageBehavior = false;
-            this.lstview_s1.View = System.Windows.Forms.View.Details;
-            // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(25, 72);
+            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Location = new System.Drawing.Point(3, 3);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(343, 483);
+            this.pictureBox1.Size = new System.Drawing.Size(380, 497);
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
             // 
@@ -237,12 +458,14 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(736, 583);
+            this.tabPage2.Size = new System.Drawing.Size(798, 600);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabS1";
             // 
             // s1_devStateBox
             // 
+            this.s1_devStateBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.s1_devStateBox.BackColor = System.Drawing.SystemColors.MenuBar;
             this.s1_devStateBox.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.s1_devStateBox.ForeColor = System.Drawing.Color.Red;
@@ -266,6 +489,8 @@
             // 
             // s1_devNameBox
             // 
+            this.s1_devNameBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.s1_devNameBox.BackColor = System.Drawing.SystemColors.MenuBar;
             this.s1_devNameBox.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.s1_devNameBox.ForeColor = System.Drawing.Color.Red;
@@ -319,13 +544,13 @@
             // 
             // s1_BtnSnd
             // 
-            this.s1_BtnSnd.Location = new System.Drawing.Point(498, 437);
+            this.s1_BtnSnd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.s1_BtnSnd.Location = new System.Drawing.Point(551, 451);
             this.s1_BtnSnd.Name = "s1_BtnSnd";
-            this.s1_BtnSnd.Size = new System.Drawing.Size(97, 45);
+            this.s1_BtnSnd.Size = new System.Drawing.Size(140, 61);
             this.s1_BtnSnd.TabIndex = 2;
             this.s1_BtnSnd.Text = "确定";
             this.s1_BtnSnd.UseVisualStyleBackColor = true;
-            this.s1_BtnSnd.Click += new System.EventHandler(this.s1_BtnSnd_Click);
             // 
             // s1_pb
             // 
@@ -338,36 +563,6 @@
             this.s1_pb.TabIndex = 1;
             this.s1_pb.TabStop = false;
             this.s1_pb.MouseUp += new System.Windows.Forms.MouseEventHandler(this.s1_pb_MouseUp);
-            // 
-            // cMenu1_Color
-            // 
-            this.cMenu1_Color.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.Red1ToolStripMenuItem,
-            this.Yellow1ToolStripMenuItem,
-            this.Green1ToolStripMenuItem});
-            this.cMenu1_Color.Name = "cMenu_Color";
-            this.cMenu1_Color.Size = new System.Drawing.Size(101, 70);
-            // 
-            // Red1ToolStripMenuItem
-            // 
-            this.Red1ToolStripMenuItem.Name = "Red1ToolStripMenuItem";
-            this.Red1ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
-            this.Red1ToolStripMenuItem.Text = "红色";
-            this.Red1ToolStripMenuItem.Click += new System.EventHandler(this.Red1ToolStripMenuItem_Click);
-            // 
-            // Yellow1ToolStripMenuItem
-            // 
-            this.Yellow1ToolStripMenuItem.Name = "Yellow1ToolStripMenuItem";
-            this.Yellow1ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
-            this.Yellow1ToolStripMenuItem.Text = "黄色";
-            this.Yellow1ToolStripMenuItem.Click += new System.EventHandler(this.Yellow1ToolStripMenuItem_Click);
-            // 
-            // Green1ToolStripMenuItem
-            // 
-            this.Green1ToolStripMenuItem.Name = "Green1ToolStripMenuItem";
-            this.Green1ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
-            this.Green1ToolStripMenuItem.Text = "绿色";
-            this.Green1ToolStripMenuItem.Click += new System.EventHandler(this.Green1ToolStripMenuItem_Click);
             // 
             // s1_pc
             // 
@@ -439,13 +634,15 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(736, 583);
+            this.tabPage3.Size = new System.Drawing.Size(798, 600);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "tabS2";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // s2_devStateBox
             // 
+            this.s2_devStateBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.s2_devStateBox.BackColor = System.Drawing.SystemColors.MenuBar;
             this.s2_devStateBox.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.s2_devStateBox.ForeColor = System.Drawing.Color.Red;
@@ -469,6 +666,8 @@
             // 
             // s2_devNameBox
             // 
+            this.s2_devNameBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.s2_devNameBox.BackColor = System.Drawing.SystemColors.MenuBar;
             this.s2_devNameBox.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.s2_devNameBox.ForeColor = System.Drawing.Color.Red;
@@ -522,13 +721,13 @@
             // 
             // s2_BtnSnd
             // 
-            this.s2_BtnSnd.Location = new System.Drawing.Point(516, 446);
+            this.s2_BtnSnd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.s2_BtnSnd.Location = new System.Drawing.Point(564, 430);
             this.s2_BtnSnd.Name = "s2_BtnSnd";
-            this.s2_BtnSnd.Size = new System.Drawing.Size(97, 45);
+            this.s2_BtnSnd.Size = new System.Drawing.Size(140, 61);
             this.s2_BtnSnd.TabIndex = 2;
             this.s2_BtnSnd.Text = "确定";
             this.s2_BtnSnd.UseVisualStyleBackColor = true;
-            this.s2_BtnSnd.Click += new System.EventHandler(this.s2_BtnSnd_Click);
             // 
             // s2_pe
             // 
@@ -540,36 +739,6 @@
             this.s2_pe.TabIndex = 1;
             this.s2_pe.TabStop = false;
             this.s2_pe.MouseUp += new System.Windows.Forms.MouseEventHandler(this.s2_pe_MouseUp);
-            // 
-            // cMenu2_Color
-            // 
-            this.cMenu2_Color.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.Red2ToolStripMenuItem,
-            this.Yellow2ToolStripMenuItem,
-            this.Green2ToolStripMenuItem});
-            this.cMenu2_Color.Name = "cMenu2_Color";
-            this.cMenu2_Color.Size = new System.Drawing.Size(101, 70);
-            // 
-            // Red2ToolStripMenuItem
-            // 
-            this.Red2ToolStripMenuItem.Name = "Red2ToolStripMenuItem";
-            this.Red2ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
-            this.Red2ToolStripMenuItem.Text = "红色";
-            this.Red2ToolStripMenuItem.Click += new System.EventHandler(this.Red2ToolStripMenuItem_Click);
-            // 
-            // Yellow2ToolStripMenuItem
-            // 
-            this.Yellow2ToolStripMenuItem.Name = "Yellow2ToolStripMenuItem";
-            this.Yellow2ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
-            this.Yellow2ToolStripMenuItem.Text = "黄色";
-            this.Yellow2ToolStripMenuItem.Click += new System.EventHandler(this.Yellow2ToolStripMenuItem_Click);
-            // 
-            // Green2ToolStripMenuItem
-            // 
-            this.Green2ToolStripMenuItem.Name = "Green2ToolStripMenuItem";
-            this.Green2ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
-            this.Green2ToolStripMenuItem.Text = "绿色";
-            this.Green2ToolStripMenuItem.Click += new System.EventHandler(this.Green2ToolStripMenuItem_Click);
             // 
             // s2_pd
             // 
@@ -650,6 +819,9 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.lblstatic7);
+            this.tabPage4.Controls.Add(this.label2);
+            this.tabPage4.Controls.Add(this.lblstatic8);
             this.tabPage4.Controls.Add(this.s3_devStateBox);
             this.tabPage4.Controls.Add(this.s3_devStatelb);
             this.tabPage4.Controls.Add(this.s3_devNameBox);
@@ -664,13 +836,45 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(736, 583);
+            this.tabPage4.Size = new System.Drawing.Size(798, 600);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "tabS3";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // lblstatic7
+            // 
+            this.lblstatic7.AutoSize = true;
+            this.lblstatic7.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblstatic7.Location = new System.Drawing.Point(35, 252);
+            this.lblstatic7.Name = "lblstatic7";
+            this.lblstatic7.Size = new System.Drawing.Size(110, 24);
+            this.lblstatic7.TabIndex = 15;
+            this.lblstatic7.Text = "南沙大桥";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label2.Location = new System.Drawing.Point(272, 16);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(60, 24);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "中山";
+            // 
+            // lblstatic8
+            // 
+            this.lblstatic8.AutoSize = true;
+            this.lblstatic8.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblstatic8.Location = new System.Drawing.Point(35, 88);
+            this.lblstatic8.Name = "lblstatic8";
+            this.lblstatic8.Size = new System.Drawing.Size(110, 24);
+            this.lblstatic8.TabIndex = 15;
+            this.lblstatic8.Text = "虎门大桥";
+            // 
             // s3_devStateBox
             // 
+            this.s3_devStateBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.s3_devStateBox.BackColor = System.Drawing.SystemColors.MenuBar;
             this.s3_devStateBox.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.s3_devStateBox.ForeColor = System.Drawing.Color.Red;
@@ -694,6 +898,8 @@
             // 
             // s3_devNameBox
             // 
+            this.s3_devNameBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.s3_devNameBox.BackColor = System.Drawing.SystemColors.MenuBar;
             this.s3_devNameBox.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.s3_devNameBox.ForeColor = System.Drawing.Color.Red;
@@ -717,9 +923,10 @@
             // 
             // s3_BtnSnd
             // 
-            this.s3_BtnSnd.Location = new System.Drawing.Point(493, 450);
+            this.s3_BtnSnd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.s3_BtnSnd.Location = new System.Drawing.Point(541, 418);
             this.s3_BtnSnd.Name = "s3_BtnSnd";
-            this.s3_BtnSnd.Size = new System.Drawing.Size(97, 45);
+            this.s3_BtnSnd.Size = new System.Drawing.Size(140, 61);
             this.s3_BtnSnd.TabIndex = 10;
             this.s3_BtnSnd.Text = "确定";
             this.s3_BtnSnd.UseVisualStyleBackColor = true;
@@ -784,127 +991,33 @@
             this.s3_pa3.TabStop = false;
             this.s3_pa3.MouseUp += new System.Windows.Forms.MouseEventHandler(this.s3_pa3_MouseUp);
             // 
-            // stsbar
-            // 
-            this.stsbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.stsbarComPort,
-            this.stsbarCMD,
-            this.stsbarAMAP,
-            this.stsbarTime});
-            this.stsbar.Location = new System.Drawing.Point(0, 657);
-            this.stsbar.Name = "stsbar";
-            this.stsbar.Size = new System.Drawing.Size(1115, 26);
-            this.stsbar.TabIndex = 2;
-            this.stsbar.Text = "ststar";
-            // 
-            // stsbarComPort
-            // 
-            this.stsbarComPort.AutoSize = false;
-            this.stsbarComPort.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
-            this.stsbarComPort.Name = "stsbarComPort";
-            this.stsbarComPort.Size = new System.Drawing.Size(135, 21);
-            this.stsbarComPort.Text = "toolStripStatusLabel1";
-            // 
-            // stsbarCMD
-            // 
-            this.stsbarCMD.AutoSize = false;
-            this.stsbarCMD.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
-            this.stsbarCMD.Name = "stsbarCMD";
-            this.stsbarCMD.Size = new System.Drawing.Size(580, 21);
-            this.stsbarCMD.Spring = true;
-            this.stsbarCMD.Text = "toolStripStatusLabel1";
-            // 
-            // stsbarAMAP
-            // 
-            this.stsbarAMAP.AutoSize = false;
-            this.stsbarAMAP.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
-            this.stsbarAMAP.Name = "stsbarAMAP";
-            this.stsbarAMAP.Size = new System.Drawing.Size(250, 21);
-            this.stsbarAMAP.Text = "toolStripStatusLabel1";
-            // 
-            // stsbarTime
-            // 
-            this.stsbarTime.AutoSize = false;
-            this.stsbarTime.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
-            this.stsbarTime.Name = "stsbarTime";
-            this.stsbarTime.Size = new System.Drawing.Size(135, 21);
-            this.stsbarTime.Text = "toolStripStatusLabel1";
-            // 
-            // tmDate
-            // 
-            this.tmDate.Interval = 500;
-            this.tmDate.Tick += new System.EventHandler(this.tmDate_Tick);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(36, 173);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "测试按钮";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(36, 263);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "测试";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // cMenu3_Color
-            // 
-            this.cMenu3_Color.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.Red3ToolStripMenuItem,
-            this.Yellow3ToolStripMenuItem,
-            this.Green3ToolStripMenuItem});
-            this.cMenu3_Color.Name = "cMenu3_Color";
-            this.cMenu3_Color.Size = new System.Drawing.Size(101, 70);
-            // 
-            // Red3ToolStripMenuItem
-            // 
-            this.Red3ToolStripMenuItem.Name = "Red3ToolStripMenuItem";
-            this.Red3ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
-            this.Red3ToolStripMenuItem.Text = "红色";
-            this.Red3ToolStripMenuItem.Click += new System.EventHandler(this.Red3ToolStripMenuItem_Click);
-            // 
-            // Yellow3ToolStripMenuItem
-            // 
-            this.Yellow3ToolStripMenuItem.Name = "Yellow3ToolStripMenuItem";
-            this.Yellow3ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
-            this.Yellow3ToolStripMenuItem.Text = "黄色";
-            this.Yellow3ToolStripMenuItem.Click += new System.EventHandler(this.Yellow3ToolStripMenuItem_Click);
-            // 
-            // Green3ToolStripMenuItem
-            // 
-            this.Green3ToolStripMenuItem.Name = "Green3ToolStripMenuItem";
-            this.Green3ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
-            this.Green3ToolStripMenuItem.Text = "绿色";
-            this.Green3ToolStripMenuItem.Click += new System.EventHandler(this.Green3ToolStripMenuItem_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1115, 683);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.stsbar);
-            this.Controls.Add(this.tabCtlSelect);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.cMenu1_Color.ResumeLayout(false);
+            this.cMenu2_Color.ResumeLayout(false);
+            this.stsbar.ResumeLayout(false);
+            this.stsbar.PerformLayout();
+            this.cMenu3_Color.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.tabCtlSelect.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.s1_pb)).EndInit();
-            this.cMenu1_Color.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.s1_pc)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.s1_pa1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.s1_pa2)).EndInit();
@@ -912,7 +1025,6 @@
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.s2_pe)).EndInit();
-            this.cMenu2_Color.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.s2_pd)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.s2_pb)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.s2_pc)).EndInit();
@@ -928,50 +1040,18 @@
             ((System.ComponentModel.ISupportInitialize)(this.s3_pb)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.s3_pa1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.s3_pa3)).EndInit();
-            this.stsbar.ResumeLayout(false);
-            this.stsbar.PerformLayout();
-            this.cMenu3_Color.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.TabControl tabCtlSelect;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.ComboBox cBoxMode;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.TabPage tabPage4;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.ListView lstview_s3;
-        private System.Windows.Forms.ListView lstview_s2;
-        private System.Windows.Forms.ListView lstview_s1;
-        private System.Windows.Forms.PictureBox s1_pa1;
-        private System.Windows.Forms.PictureBox s1_pa2;
-        private System.Windows.Forms.PictureBox s1_pa3;
         //自定义数组，用于记录屏1的pictureBox，目的是简化myRClickMenuColor_s1代码
         public System.Windows.Forms.PictureBox[] s1_picBoxArr;
         private System.Windows.Forms.ContextMenuStrip cMenu1_Color;
         private System.Windows.Forms.ToolStripMenuItem Red1ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem Yellow1ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem Green1ToolStripMenuItem;
-        private System.Windows.Forms.PictureBox s1_pb;
-        private System.Windows.Forms.PictureBox s1_pc;
-        private System.Windows.Forms.Button s1_BtnSnd;
-        private System.Windows.Forms.Label lblstatic2;
-        private System.Windows.Forms.Label lblstatic3;
-        private System.Windows.Forms.Label lblstatic1;
-        private System.Windows.Forms.PictureBox s2_pe;
-        private System.Windows.Forms.PictureBox s2_pd;
-        private System.Windows.Forms.PictureBox s2_pb;
-        private System.Windows.Forms.PictureBox s2_pc;
-        private System.Windows.Forms.PictureBox s2_pa1;
-        private System.Windows.Forms.PictureBox s2_pa2;
-        private System.Windows.Forms.PictureBox s2_pa3;
-        private System.Windows.Forms.PictureBox s2_pa4;
         //自定义数组，用于记录屏2的pictureBox，目的是简化myRClickMenuColor_s2代码
         public System.Windows.Forms.PictureBox[] s2_picBoxArr;
         //自定义数组，用于记录屏2的pictureBox，目的是简化myRClickMenuColor_s2代码
@@ -981,10 +1061,6 @@
         public System.Drawing.Image[] s1_pxColor;
         public System.Drawing.Image[] s2_pxColor;
         public System.Windows.Forms.TextBox[] devBoxArr;
-        private System.Windows.Forms.Button s2_BtnSnd;
-        private System.Windows.Forms.Label lblstatic4;
-        private System.Windows.Forms.Label lblstatic5;
-        private System.Windows.Forms.Label lblstatic6;
         private System.Windows.Forms.ContextMenuStrip cMenu2_Color;
         private System.Windows.Forms.ToolStripMenuItem Red2ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem Yellow2ToolStripMenuItem;
@@ -993,33 +1069,71 @@
         public System.Windows.Forms.ToolStripStatusLabel stsbarComPort;
         public System.Windows.Forms.ToolStripStatusLabel stsbarCMD;
         public System.Windows.Forms.ToolStripStatusLabel stsbarAMAP;
-        private System.Windows.Forms.Label s1_devNamelb;
-        private System.Windows.Forms.TextBox s1_devStateBox;
-        private System.Windows.Forms.Label s1_devStatelb;
-        private System.Windows.Forms.TextBox s1_devNameBox;
-        private System.Windows.Forms.TextBox s2_devStateBox;
-        private System.Windows.Forms.Label s2_devStatelb;
-        private System.Windows.Forms.TextBox s2_devNameBox;
-        private System.Windows.Forms.Label s2_devNamelb;
         private System.Windows.Forms.ToolStripStatusLabel stsbarTime;
         private System.Windows.Forms.Timer tmDate;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.PictureBox s3_pc;
-        private System.Windows.Forms.PictureBox s3_pd;
-        private System.Windows.Forms.PictureBox s3_pb;
-        private System.Windows.Forms.PictureBox s3_pa1;
-        private System.Windows.Forms.PictureBox s3_pa2;
-        private System.Windows.Forms.PictureBox s3_pa3;
         private System.Windows.Forms.ContextMenuStrip cMenu3_Color;
         private System.Windows.Forms.ToolStripMenuItem Red3ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem Yellow3ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem Green3ToolStripMenuItem;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TabControl tabCtlSelect;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.ComboBox cBoxMode;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TextBox s1_devStateBox;
+        private System.Windows.Forms.Label s1_devStatelb;
+        private System.Windows.Forms.TextBox s1_devNameBox;
+        private System.Windows.Forms.Label s1_devNamelb;
+        private System.Windows.Forms.Button s1_BtnSnd;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TextBox s2_devStateBox;
+        private System.Windows.Forms.Label s2_devStatelb;
+        private System.Windows.Forms.TextBox s2_devNameBox;
+        private System.Windows.Forms.Label s2_devNamelb;
+        private System.Windows.Forms.Label lblstatic4;
+        private System.Windows.Forms.Label lblstatic5;
+        private System.Windows.Forms.Label lblstatic6;
+        private System.Windows.Forms.Button s2_BtnSnd;
+        private System.Windows.Forms.PictureBox s2_pe;
+        private System.Windows.Forms.PictureBox s2_pd;
+        private System.Windows.Forms.PictureBox s2_pb;
+        private System.Windows.Forms.PictureBox s2_pc;
+        private System.Windows.Forms.PictureBox s2_pa1;
+        private System.Windows.Forms.PictureBox s2_pa2;
+        private System.Windows.Forms.PictureBox s2_pa3;
+        private System.Windows.Forms.PictureBox s2_pa4;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.Label lblstatic7;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lblstatic8;
         private System.Windows.Forms.TextBox s3_devStateBox;
         private System.Windows.Forms.Label s3_devStatelb;
         private System.Windows.Forms.TextBox s3_devNameBox;
         private System.Windows.Forms.Label s3_devNamelb;
         private System.Windows.Forms.Button s3_BtnSnd;
+        private System.Windows.Forms.PictureBox s3_pa2;
+        private System.Windows.Forms.PictureBox s3_pd;
+        private System.Windows.Forms.PictureBox s3_pc;
+        private System.Windows.Forms.PictureBox s3_pb;
+        private System.Windows.Forms.PictureBox s3_pa1;
+        private System.Windows.Forms.PictureBox s3_pa3;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.ListView lstview_s1;
+        private System.Windows.Forms.ListView lstview_s3;
+        private System.Windows.Forms.ListView lstview_s2;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private System.Windows.Forms.Label lblstatic2;
+        private System.Windows.Forms.Label lblstatic3;
+        private System.Windows.Forms.Label lblstatic1;
+        private System.Windows.Forms.PictureBox s1_pb;
+        private System.Windows.Forms.PictureBox s1_pc;
+        private System.Windows.Forms.PictureBox s1_pa1;
+        private System.Windows.Forms.PictureBox s1_pa2;
+        private System.Windows.Forms.PictureBox s1_pa3;
     }
 }
 
