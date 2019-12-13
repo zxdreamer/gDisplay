@@ -22,6 +22,7 @@ namespace gdisplay
         public string loc { get; set; }
         public List<string> regions { get; set; }
         public List<CfgRoads> roads { get; set; }
+        public List<List<string>> band { get; set; }
     }
     public class ydpJsonConfig
     {

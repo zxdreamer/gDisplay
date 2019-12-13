@@ -18,6 +18,7 @@ namespace gdisplay
         Byte s1_num = 0;                     //1,2,3,4,5,0(未选中)
         Byte s2_num = 0;                     //屏体2区域编号
         Byte s3_num = 0;                     //屏体3区域编号
+        Byte wk_mode = (byte)ydpModeEm.Amap;                    //默认为高德模式
         List<ScreenResult> ScnRestList = new List<ScreenResult>();
 
         TcpServer sv = null;
@@ -47,8 +48,8 @@ namespace gdisplay
             //1.开启定时器
             tmDate.Start();
             //2.设置comBox工作模式
-            cBoxMode.Items.Add("人工模式");
             cBoxMode.Items.Add("高德模式");
+            cBoxMode.Items.Add("人工模式");       
             cBoxMode.SelectedIndex = 0;
             //3.设置listview显示模式
             lstview_s1.Columns.Add(new ColumnHeader() { Text = "ID", Width = 25 });
@@ -118,8 +119,10 @@ namespace gdisplay
                             RoadsResult path = new RoadsResult(mainRoad, nodeList, angList, idsList);
                             sigPaths.Add(path);
                         }
-                        //5.依次将每一块屏的配置信息添加进去
-                        ScnRestList.Add(new ScreenResult(sigPaths, reL, sid));
+                        //5.屏幕光带显示与路段解析对应关系解析
+                        List<List<string>> bd = screens.band;
+                        //6.依次将每一块屏的配置信息添加进去
+                        ScnRestList.Add(new ScreenResult(sigPaths, reL, bd,sid));
                     }
                     //});
                     WriteLineLog("配置文件解析结果:");
@@ -224,82 +227,147 @@ namespace gdisplay
         * Para:
         *      color:颜色编号
         ********************************************/
-        void myRClickMenuColor_s1(int color)
+        void myChangeMenuColor_s1(int color,int snum)
         {
-            WriteLineLog("右击屏1：" + "区域" + s1_num + " " + "颜色" + color);
+            WriteLineLog("右击屏1：" + "区域" + snum + " " + "颜色" + color);
             //填充s1_sdarr[50]数组
-            if (s1_num < 1 || s1_num > 8)
+            if (snum < 1 || snum > 8)
             {
                 MessageBox.Show("请点击正确区域");
                 return;
             }
-            else if (s1_num >= 1 && s1_num <= 3)
+            else if (snum >= 1 && snum <= 3)
             {
                 if (color == 1)
-                    s1_picBoxArr[s1_num - 1].Image = global::gdisplay.Properties.Resources.pa_red1;
+                    s1_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.pa_green1;
                 else if (color == 2)
-                    s1_picBoxArr[s1_num - 1].Image = global::gdisplay.Properties.Resources.pa_yellow1;
-                else if (color == 3)
-                    s1_picBoxArr[s1_num - 1].Image = global::gdisplay.Properties.Resources.pa_green1;
+                    s1_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.pa_yellow1;
+                else if (color == 3 || color == 4)
+                    s1_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.pa_red1;
             }
-            else if (s1_num == 4 || s1_num == 5)
+            else if (snum == 4 || snum == 5)
             {
                 if (color == 1)
-                    s1_picBoxArr[s1_num - 1].Image = global::gdisplay.Properties.Resources.pbc_red1;
+                    s1_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.pbc_green1;
                 else if (color == 2)
-                    s1_picBoxArr[s1_num - 1].Image = global::gdisplay.Properties.Resources.pbc_yellow1;
-                else if (color == 3)
-                    s1_picBoxArr[s1_num - 1].Image = global::gdisplay.Properties.Resources.pbc_green1;
+                    s1_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.pbc_yellow1;
+                else if (color == 3 || color==4)
+                    s1_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.pbc_red1;
             }
-            s1_num = 0;
+//            snum = 0;
         }
         /**********************************************
         //myRClickMenuColor_s2:屏2右键显示颜色
         //Para:
         //     color:颜色编号
         ********************************************/
-        void myRClickMenuColor_s2(int color)
+        void myChangeMenuColor_s2(int color,int snum)
         {
-            WriteLineLog("右击屏2：" + "区域" + s2_num + " " + "颜色" + color);
-            if (s2_num < 1 || s2_num > 8)
+            //WriteLineLog("右击屏2：" + "区域" + snum + " " + "颜色" + color);
+            if (snum < 1 || snum > 8)
             {
                 MessageBox.Show("请点击正确区域");
                 return;
             }
-            else if (s2_num >= 1 && s2_num <= 4)   //s2_num=1..4：代表同一种类型的图片
+            else if (snum >= 1 && snum <= 4)   //snum=1..4：代表同一种类型的图片
             {
                 if (color == 1)
-                    s2_picBoxArr[s2_num - 1].Image = global::gdisplay.Properties.Resources.lpa_red2;
+                    s2_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpa_red2;
                 else if (color == 2)
-                    s2_picBoxArr[s2_num - 1].Image = global::gdisplay.Properties.Resources.lpa_yellow2;
+                    s2_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpa_yellow2;
                 else if (color == 3)
-                    s2_picBoxArr[s2_num - 1].Image = global::gdisplay.Properties.Resources.lpa_green2;
+                    s2_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpa_green2;
             }
-            else if (s2_num == 5 || s2_num == 6)
+            else if (snum == 5 || snum == 6)
             {
                 if (color == 1)
-                    s2_picBoxArr[s2_num - 1].Image = global::gdisplay.Properties.Resources.rpd_red2;
+                    s2_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.rpd_red2;
                 else if (color == 2)
-                    s2_picBoxArr[s2_num - 1].Image = global::gdisplay.Properties.Resources.rpd_yellow2;
+                    s2_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.rpd_yellow2;
                 else if (color == 3)
-                    s2_picBoxArr[s2_num - 1].Image = global::gdisplay.Properties.Resources.rpd_green2;
+                    s2_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.rpd_green2;
             }
-            else if (s2_num == 7)
+            else if (snum == 7)
             {
                 if (color == 1)
                 {
-                    s2_picBoxArr[s2_num - 1].Image = global::gdisplay.Properties.Resources.lpd_red2;
-                    s2_picBoxArr[s2_num].Image = global::gdisplay.Properties.Resources.pe_red2;
+                    s2_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpd_red2;
+                    s2_picBoxArr[snum].Image = global::gdisplay.Properties.Resources.pe_red2;
                 }
                 else if (color == 2)
                 {
-                    s2_picBoxArr[s2_num - 1].Image = global::gdisplay.Properties.Resources.lpd_yellow2;
-                    s2_picBoxArr[s2_num].Image = global::gdisplay.Properties.Resources.pe_yellow2;
+                    s2_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpd_yellow2;
+                    s2_picBoxArr[snum].Image = global::gdisplay.Properties.Resources.pe_yellow2;
                 }
                 else if (color == 3)
                 {
-                    s2_picBoxArr[s2_num - 1].Image = global::gdisplay.Properties.Resources.lpd_green2;
-                    s2_picBoxArr[s2_num].Image = global::gdisplay.Properties.Resources.pe_green2;
+                    s2_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpd_green2;
+                    s2_picBoxArr[snum].Image = global::gdisplay.Properties.Resources.pe_green2;
+                }
+            }
+            //屏2中半圆形路段与写向左上的路段不同时变化时，需要取消这段注释
+            #region
+            /*************************************************
+            //else if (snum == 8)
+            //{
+            //    if (color == 1)
+            //        s2_pixBox[snum - 1].Image = global::gdisplay.Properties.Resources.pe_red2;
+            //    else if (color == 2)
+            //        s2_pixBox[snum - 1].Image = global::gdisplay.Properties.Resources.pe_yellow2;
+            //    else if (color == 3)
+            //        s2_pixBox[snum - 1].Image = global::gdisplay.Properties.Resources.pe_green2;
+            //}
+            **************************************************/
+            #endregion
+            //s2_num = 0;
+        }
+        /**********************************************
+        //myRClickMenuColor_s2:屏2右键显示颜色
+        //Para:
+        //     color:颜色编号
+        ********************************************/
+        void myChangeMenuColor_s3(int color,int snum)
+        {
+            //WriteLineLog("右击屏3：" + "区域" + snum + " " + "颜色" + color);
+            if (snum < 1 || snum > 6)
+            {
+                MessageBox.Show("请点击正确区域");
+                return;
+            }
+            else if (snum >= 1 && snum <= 3)   //s2_num=1..3：代表同一种类型的图片
+            {
+                if (color == 1)
+                    s3_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.pa_red3;
+                else if (color == 2)
+                    s3_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.pa_yellow3;
+                else if (color == 3)
+                    s3_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.pa_green3;
+            }
+            else if (snum == 4)
+            {
+                if (color == 1)
+                    s3_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpb_red3;
+                else if (color == 2)
+                    s3_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpb_yellow3;
+                else if (color == 3)
+                    s3_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpb_green3;
+            }
+            else if (snum == 5)
+            {
+                if (color == 1)
+                {
+                    s3_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpc_red3;
+                    s3_picBoxArr[snum].Image = global::gdisplay.Properties.Resources.lpd_red3;
+                }
+                else if (color == 2)
+                {
+                    s3_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpc_yellow3;
+                    s3_picBoxArr[snum].Image = global::gdisplay.Properties.Resources.lpd_yellow3;
+                }
+                else if (color == 3)
+                {
+                    s3_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpc_green3;
+                    s3_picBoxArr[snum].Image = global::gdisplay.Properties.Resources.lpd_green3;
                 }
             }
             //屏2中半圆形路段与写向左上的路段不同时变化时，需要取消这段注释
@@ -316,72 +384,7 @@ namespace gdisplay
             //}
             **************************************************/
             #endregion
-            s1_num = 0;
-        }
-        /**********************************************
-        //myRClickMenuColor_s2:屏2右键显示颜色
-        //Para:
-        //     color:颜色编号
-        ********************************************/
-        void myRClickMenuColor_s3(int color)
-        {
-            WriteLineLog("右击屏3：" + "区域" + s3_num + " " + "颜色" + color);
-            if (s3_num < 1 || s3_num > 6)
-            {
-                MessageBox.Show("请点击正确区域");
-                return;
-            }
-            else if (s3_num >= 1 && s3_num <= 3)   //s2_num=1..3：代表同一种类型的图片
-            {
-                if (color == 1)
-                    s3_picBoxArr[s3_num - 1].Image = global::gdisplay.Properties.Resources.pa_red3;
-                else if (color == 2)
-                    s3_picBoxArr[s3_num - 1].Image = global::gdisplay.Properties.Resources.pa_yellow3;
-                else if (color == 3)
-                    s3_picBoxArr[s3_num - 1].Image = global::gdisplay.Properties.Resources.pa_green3;
-            }
-            else if (s3_num == 4)
-            {
-                if (color == 1)
-                    s3_picBoxArr[s3_num - 1].Image = global::gdisplay.Properties.Resources.lpb_red3;
-                else if (color == 2)
-                    s3_picBoxArr[s3_num - 1].Image = global::gdisplay.Properties.Resources.lpb_yellow3;
-                else if (color == 3)
-                    s3_picBoxArr[s3_num - 1].Image = global::gdisplay.Properties.Resources.lpb_green3;
-            }
-            else if (s3_num == 5)
-            {
-                if (color == 1)
-                {
-                    s3_picBoxArr[s3_num - 1].Image = global::gdisplay.Properties.Resources.lpc_red3;
-                    s3_picBoxArr[s3_num].Image = global::gdisplay.Properties.Resources.lpd_red3;
-                }
-                else if (color == 2)
-                {
-                    s3_picBoxArr[s3_num - 1].Image = global::gdisplay.Properties.Resources.lpc_yellow3;
-                    s3_picBoxArr[s3_num].Image = global::gdisplay.Properties.Resources.lpd_yellow3;
-                }
-                else if (color == 3)
-                {
-                    s3_picBoxArr[s3_num - 1].Image = global::gdisplay.Properties.Resources.lpc_green3;
-                    s3_picBoxArr[s3_num].Image = global::gdisplay.Properties.Resources.lpd_green3;
-                }
-            }
-            //屏2中半圆形路段与写向左上的路段不同时变化时，需要取消这段注释
-            #region
-            /*************************************************
-            //else if (s2_num == 8)
-            //{
-            //    if (color == 1)
-            //        s2_pixBox[s2_num - 1].Image = global::gdisplay.Properties.Resources.pe_red2;
-            //    else if (color == 2)
-            //        s2_pixBox[s2_num - 1].Image = global::gdisplay.Properties.Resources.pe_yellow2;
-            //    else if (color == 3)
-            //        s2_pixBox[s2_num - 1].Image = global::gdisplay.Properties.Resources.pe_green2;
-            //}
-            **************************************************/
-            #endregion
-            s1_num = 0;
+            //s3_num = 0;
         }
         private void s1_pa3_MouseUp(object sender, MouseEventArgs e)
         {
@@ -417,17 +420,17 @@ namespace gdisplay
         //3:绿色
         private void Red1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            myRClickMenuColor_s1(1);
+            myChangeMenuColor_s1(3,s1_num);
         }
 
         private void Yellow1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            myRClickMenuColor_s1(2);
+            myChangeMenuColor_s1(2,s1_num);
         }
 
         private void Green1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            myRClickMenuColor_s1(3);
+            myChangeMenuColor_s1(1,s1_num);
         }
 
         private void s2_pa1_MouseUp(object sender, MouseEventArgs e)
@@ -480,17 +483,17 @@ namespace gdisplay
 
         private void Red2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            myRClickMenuColor_s2(1);
+            myChangeMenuColor_s2(1,s2_num);
         }
 
         private void Yellow2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            myRClickMenuColor_s2(2);
+            myChangeMenuColor_s2(2, s2_num);
         }
 
         private void Green2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            myRClickMenuColor_s2(3);
+            myChangeMenuColor_s2(3, s2_num);
         }
 
         private void s1_BtnSnd_Click(object sender, EventArgs e)
@@ -827,6 +830,82 @@ namespace gdisplay
             //            }
         }
 
+        //private void DynamicPixShow(ScreenResult screen)
+        //{
+        //    if (screen.Id == null)    //
+        //        return;
+        //    switch(screen.Id)
+        //    {
+        //        case "ydp001":
+        //            Dictionary<string, Byte> dic_ids_sta = new Dictionary<string, byte>();  //dictionary记录路段和状态数组的对应关系，key是路段，value是路段对应的状态数组
+        //            //1.遍历屏体主路
+        //            foreach (var mroad in screen.Sroads)
+        //            {
+        //                //2.遍历主路中的路段和状态数组，并建立映射
+        //                for(int i=0,j=0;i<mroad.IdsList.ToArray().Length&&
+        //                                j<mroad.StateList.ToArray().Length; i++,j++)
+        //                {
+        //                    dic_ids_sta.Add(mroad.IdsList[i], mroad.StateList[j]);
+        //                }
+        //            }
+        //            int band_num = 0;               //屏体光带计数
+        //            //3.遍历光带列表组
+        //            foreach(var blst in screen.Band)
+        //            {
+        //                int mx_sta = 0;
+        //                band_num++;
+        //                //4.遍历每一条光带，并找到光带的最大状态数组的值
+        //                foreach(var rds in blst)
+        //                {
+        //                    mx_sta = Math.Max(mx_sta, dic_ids_sta[rds]);
+        //                }
+        //                //5.改变屏体颜色
+        //                myChangeMenuColor_s1(mx_sta, band_num);
+        //            }
+        //            break;
+        //        case "ydp002":
+        //            break;
+        //        case "ydp003":
+        //            break;
+        //        default:
+        //            break;
+        //    }
+        //}
+        private void DynamicPixShow(ScreenResult screen)
+        {
+            if (screen.Id == null)    //
+                return;
+            Dictionary<string, Byte> dic_ids_sta = new Dictionary<string, byte>();  //dictionary记录路段和状态数组的对应关系，key是路段，value是路段对应的状态数组
+                                                                                    //1.遍历屏体主路
+            foreach (var mroad in screen.Sroads)
+            {
+                //2.遍历主路中的路段和状态数组，并建立映射
+                for (int i = 0, j = 0; i < mroad.IdsList.ToArray().Length &&
+                                j < mroad.StateList.ToArray().Length; i++, j++)
+                {
+                    dic_ids_sta.Add(mroad.IdsList[i], mroad.StateList[j]);
+                }
+            }
+            int band_num = 0;               //屏体光带计数
+                                            //3.遍历光带列表组
+            foreach (var blst in screen.Band)
+            {
+                int mx_sta = 0;
+                band_num++;
+                //4.遍历每一条光带，并找到光带的最大状态数组的值
+                foreach (var rds in blst)
+                {
+                    mx_sta = Math.Max(mx_sta, dic_ids_sta[rds]);
+                }
+                //5.改变屏体颜色
+                if (screen.Id == "ydp001")
+                    myChangeMenuColor_s1(mx_sta, band_num);
+                else if (screen.Id == "ydp002")
+                    myChangeMenuColor_s2(mx_sta, band_num);
+                else if (screen.Id == "ydp003")
+                    myChangeMenuColor_s3(mx_sta, band_num);
+            }
+        }
         private void tmDate_Tick(object sender, EventArgs e)
         {
             //1.在状态栏显示时间
@@ -841,12 +920,15 @@ namespace gdisplay
                 AMAPReadly[AMAPScCnt] = true;            //屏幕AMAPScCnt抓取完成标志位置true
 
                 ydpBroadCastSend(ScnRestList[AMAPScCnt]);//发送一屏路况交通态势
+                
+                DynamicPixShow(ScnRestList[AMAPScCnt]);  //PC上动态显示图片
+
                 AMAPScCnt = (AMAPScCnt + 1) % 3;
             }
 
             //2.逐屏广播模式发送数据
             ydpBroadCastSend(null);
-            ydpLoopRecv();                //???怎样保证等待500ms
+            ydpLoopRecv(ScnRestList[AMAPScCnt]);                //???怎样保证等待500ms
         }
 
         /*********************************************************************
@@ -864,7 +946,7 @@ namespace gdisplay
                     continue;
 
                 //2 对于刚连接等待询问设备号的描述符，发送查询指令
-                if (sv.connects[i].bAskId)
+                if ( screen==null && sv.connects[i].bAskId)
                 {
                     sv.connects[i].bAskId = false;
                     byte[] ckArr = DataPacked(1, null);
@@ -874,11 +956,14 @@ namespace gdisplay
 
                 //3 对于已经准备好一屏数据的描述符，发送屏幕显示的数据
                 //AMAPScCnt 记录哪一屏数据准备好
-                if (screen != null && screen.Id == sv.connects[i].devid.Replace("\0", ""))
+                if (sv.connects[i].devid == null)         //设备连接成功但是未绑定
+                    continue;
+                //if (screen != null && screen.Id == sv.connects[i].devid.Replace("\0", ""))
+                if (screen != null && screen.Id == sv.connects[i].devid)
                 {
                     AMAPReadly[AMAPScCnt] = false;
                     WriteLineLog("屏幕" + screen.Id);
-                    //await Task.Delay(10);        //???防止连续发送   
+                    //await Task.   Delay(10);        //???防止连续发送   
 
                     byte[] showArr = DataPacked(2, screen);
                     ydpSendData(sv.connects[i], showArr, showArr.Length);
@@ -926,7 +1011,7 @@ namespace gdisplay
          * Param：
          *       无
          * ****************************************************************/
-        private void ydpLoopRecv()
+        private void ydpLoopRecv(ScreenResult screen)
         {
             int len = sv.connects.Length;
             for (int i = 0; i < len; i++)
@@ -947,8 +1032,8 @@ namespace gdisplay
                             {
                                 idbt[j] = rBuff[j + 6];
                             }
-                            sv.connects[i].devid = Encoding.Default.GetString(idbt);
-
+                            sv.connects[i].devid = Encoding.Default.GetString(idbt).Replace("\0","");
+                            screen.IsAns = true;
                             MessageBox.Show("[Dev:" + sv.connects[i].devid + "]" + " 已连接");
                             Program.gdFrom.UpdateState(ydpPlaceEm.StsBar, ydpShowEm.StsDevStat, "[Dev:" + sv.connects[i].devid + "]" + "已连接");
                             Form1.WriteLineLog(DateTime.Now.ToString() + ":应答的设备号" + sv.connects[i].devid);
@@ -956,7 +1041,7 @@ namespace gdisplay
                     }
                     else if (rBuff[3] == 0x38 && rBuff[4] == 0x31)
                     {
-
+                        //接受应答处理函数????
                     }
                 }
             }
@@ -1084,17 +1169,27 @@ namespace gdisplay
 
         private void Red3ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            myRClickMenuColor_s3(1);
+            myChangeMenuColor_s3(1,s3_num);
         }
 
         private void Yellow3ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            myRClickMenuColor_s3(2);
+            myChangeMenuColor_s3(2,s3_num);
         }
 
         private void Green3ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            myRClickMenuColor_s3(3);
+            myChangeMenuColor_s3(3, s3_num);
+        }
+
+        private void cBoxMode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cBoxMode.Text == "高德模式")
+                wk_mode = (byte)ydpModeEm.Amap;
+            else if (cBoxMode.Text == "人工模式")
+                wk_mode = (byte)ydpModeEm.manual;
+
+            //让发送按钮变灰??????
         }
     }
 }

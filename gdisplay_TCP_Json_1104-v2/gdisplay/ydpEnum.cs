@@ -31,4 +31,9 @@ namespace gdisplay
         StsBar = 0,
         TxtBox
     }
+    public enum ydpModeEm
+    {
+        Amap=0,     //高德模式
+        manual      //手动模式
+    }
 }

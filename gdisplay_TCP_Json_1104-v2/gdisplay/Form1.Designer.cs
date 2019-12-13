@@ -430,6 +430,7 @@
             this.cBoxMode.Name = "cBoxMode";
             this.cBoxMode.Size = new System.Drawing.Size(121, 24);
             this.cBoxMode.TabIndex = 1;
+            this.cBoxMode.SelectedIndexChanged += new System.EventHandler(this.cBoxMode_SelectedIndexChanged);
             // 
             // label1
             // 

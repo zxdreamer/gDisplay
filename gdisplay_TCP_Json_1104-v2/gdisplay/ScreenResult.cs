@@ -28,8 +28,8 @@ namespace gdisplay
             set { angleList = value; }
         }
 
-        private List<Byte> stateList;    //主路节点状态列表
-        public List<Byte> StateList
+        private List<Byte> stateList;    //主路节点状态列表，仅stateList由高德解析得到
+        public List<Byte> StateList      
         {
             get { return stateList; }
             set { stateList = value; }
@@ -58,29 +58,44 @@ namespace gdisplay
     //配置文件解析+高德解析
     public class ScreenResult
     {
-        private string id;
+        private bool isAns;                 //屏体是否绑定了ip
+        public bool IsAns
+        {
+            get { return isAns; }
+            set { isAns = value; }
+        }
+        private string id;                  //屏体Id    
         public string Id
         {
             get { return id; }
             set { id = value; }
         }
-        private List<string> sfindRect;
+        private List<string> sfindRect;     //屏体搜索矩形区域列表
         public List<string> SfindRect
         {
             get { return sfindRect; }
             set { sfindRect = value; }
         }
-        private List<RoadsResult> sroads;
+        private List<RoadsResult> sroads;   //主路列表
         public List<RoadsResult> Sroads
         {
             get { return sroads; }
             set { sroads = value; }
         }
-        public ScreenResult(List<RoadsResult> rds, List<string> fdr,string sid)
+        private List<List<string>> band;
+        public List<List<string>> Band
+        {
+            get { return band; }
+            set { band = value; }
+        }
+
+        public ScreenResult(List<RoadsResult> rds, List<string> fdr,List<List<string>> bd,string sid)
         {
             this.id = sid;
             this.sfindRect = fdr;
-            this.sroads = rds;                      
+            this.sroads = rds;
+            this.band = bd;
+            this.isAns = false;
         }
     }
 }
