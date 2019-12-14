@@ -14,33 +14,47 @@ namespace gdisplay
     public class Connect
     {
         public Socket socket;
-        public const int RXBUFFER_SIZE = 1024;
-        public byte[] readBuff = new byte[RXBUFFER_SIZE];   //读缓冲区
-        public int buffCount = 0;                           //当前缓冲区大小
-        public bool isUse = false;
+        public const int RXBUFFER_SIZE = 1550;
+        public byte[] readBuff;                             //读缓冲区
+        public byte[] frameBuff;                            //帧缓冲
+        public int frameLen;                                //帧长度
         public string devid;                                //设备编号
-        public bool bAskId;                                 //连接标志位
-        public bool bRecvData;                              //接受标志位
+
+        public bool flagFrame;                              //标记状态机即将处于RecvDone状态
+        public bool flagClose;                              //标记状态机即将处于Idle状态
+        public ydpMachEm conState;                          //状态机
+                                                            //0:未连接，1:已连接，2:已绑定设备号，3:通信应答正确
+        public int rxCnt;                                   //接受数据计数器
+        public int fsStart;                                 //帧开始标记
+        public int delayCnt;
+
+        public bool flagLog;
         public Connect()
         {
-            readBuff = new byte[RXBUFFER_SIZE];
+            this.readBuff = new byte[RXBUFFER_SIZE];
+            this.frameBuff = new byte[RXBUFFER_SIZE*2];
+            this.frameLen = 0;
+            this.devid = null;
+
+            this.flagFrame = false;
+            this.flagClose = false;
+            this.conState = ydpMachEm.Idle;
+
+            this.rxCnt = 0;
+            this.fsStart = -1;
+            this.delayCnt = 0;
+
+            this.flagLog = false;
         }
         public void Init(Socket socket)
         {
             this.socket = socket;
-            isUse = true;
-            buffCount = 0;
-            bAskId = false;
-            bRecvData = false;
-        }
-        public int BuffRemain()
-        {
-            return RXBUFFER_SIZE - buffCount;
+            this.conState = ydpMachEm.AcceptDone;
         }
         //获取客户端IP地址和端口
         public string GetRemoteAdress()
         {
-            if (!isUse)
+            if(conState == ydpMachEm.Idle)
             {
                 return "don't get IP:Port";
             }
@@ -48,11 +62,11 @@ namespace gdisplay
         }
         public void Close()
         {
-            if (!isUse)
+            if(conState==ydpMachEm.Idle)
                 return;
             socket.Close();
-            isUse = false;
             devid = null;
+            this.flagClose = true;
         }
     }
     class TcpServer
@@ -94,7 +108,8 @@ namespace gdisplay
                     connects[i] = new Connect();
                     return i;
                 }
-                else if (connects[i].isUse == false)
+                //else if (connects[i].isUse == false)
+                else if ( connects[i].conState==ydpMachEm.Idle)
                 {
                     return i;
                 }
@@ -128,14 +143,15 @@ namespace gdisplay
 
                     //需要把每台设备的连接情况显示到状态栏和日志文件
                     Program.gdFrom.UpdateState(0, 0, "[Dev:" + connect.devid + "]" + "已连接");
-                    Form1.WriteLineLog(DateTime.Now.ToString()+":[Dev:" + connect.devid + "]" + "已连接");
-                    
+                    ydpLog.WriteLineLog(DateTime.Now.ToString()+":[Dev:" + connect.devid + "]" + "已连接");
+
                     //4.连接成功标志位有效
-                    connect.bAskId = true;
+                    //connect.bAskId = true;
+                    //connect.conState = ydpMachEm.DoneConn;   //标志链接成功
 
                     //5.启动异步接受
                     //参数的含义:接受buffer,填充开始位置，填充长度，xxx，异步回调函数，传给回调函数的参数
-                    connect.socket.BeginReceive(connect.readBuff, connect.buffCount, connect.BuffRemain(), SocketFlags.None, ReceiveCb, connect);
+                    connect.socket.BeginReceive(connect.readBuff, 0, Connect.RXBUFFER_SIZE, SocketFlags.None, ReceiveCb, connect);
                 }
                 //6.再次开启等待连接事件
                 listenfd.BeginAccept(AcceptCb, null);
@@ -163,23 +179,66 @@ namespace gdisplay
                 {
                     //在状态栏label3处显示客户端断开连接
                     Program.gdFrom.UpdateState(0, 0, "[Dev:" + connect.devid + "]" + "已断开");
-                    Form1.WriteLineLog(DateTime.Now.ToString()+":[Dev:" + connect.devid + "]" + "已断开");
+                    ydpLog.WriteLineLog(DateTime.Now.ToString()+":[Dev:" + connect.devid + "]" + "已断开");
                     connect.Close();
                     return;
                 }
-                //3.接受标志位有效
-                connect.bRecvData = true;
 
-                string str = System.Text.Encoding.UTF8.GetString(connect.readBuff, 0, count);
-                
+                string str = ydpLog.ByteToRawStr(connect.readBuff,0,count);
+                if(connect.flagLog == false)   //???????
+                {
+                    ydpLog.WriteAddLog("用户输入数据");
+                    connect.flagLog = true;
+                }
+                ydpLog.WriteAddLog(":" + str);
+                //3.数据包处理形成帧
+                int index = 0;
+                //3.1.先将数据从读缓冲中复制到帧缓冲中
+                for(int i=0;i < count; i++)
+                {
+                    index = connect.rxCnt;
+                    connect.frameBuff[index] = connect.readBuff[i];
+                    connect.rxCnt++;
+                }                
+
+                //3.2. 判断是否找到了包头,未找到包头，则去寻找包头
+                if(connect.fsStart == -1)       
+                {
+                    for(int i = connect.rxCnt-count;i < connect.rxCnt; i++)
+                    {
+                        if (connect.frameBuff[i] == 0x02)
+                        {
+                            connect.fsStart = i;
+                            break;
+                        }
+                    }
+                }
+                //3.3. 找到包头且此包中包含有效载荷的长度
+                if(connect.fsStart > -1 && (connect.rxCnt- connect.fsStart)>=7)  //长度包含在这一包之内
+                {
+                    int payLoadH = connect.frameBuff[connect.fsStart + 5];
+                    int payLoadL = connect.frameBuff[connect.fsStart + 6];
+                    int plLen = (payLoadH << 8) + payLoadL;
+                    //包格式:02 30 30 cmd cmd lenH lenL payload ...... CRC1 CRC2 03 
+                    if(connect.frameBuff[6 + plLen + 2 + 1]==0x03)
+                    {
+                        //3.4. 标记已经成包
+                        connect.flagFrame = true;
+                        connect.frameLen = plLen;
+                        connect.rxCnt = 0;
+                        string uStr = ydpLog.ByteToRawStr(connect.frameBuff,connect.fsStart, 6 + plLen + 2 + 1);
+                        ydpLog.WriteLineLog("解析用户数据:"+uStr);
+                    }
+                }
+
                 //4.再一次启动异步调用接受函数
-                connect.socket.BeginReceive(connect.readBuff, connect.buffCount, connect.BuffRemain(), SocketFlags.None, ReceiveCb, connect);
+                connect.socket.BeginReceive(connect.readBuff, 0, Connect.RXBUFFER_SIZE, SocketFlags.None, ReceiveCb, connect);
             }
             catch (Exception e)
             {
                 MessageBox.Show("Receive断开");
                 Program.gdFrom.UpdateState(0, 0, "[Dev:" + connect.devid + "]" + "断开");
-                Form1.WriteLineLog(DateTime.Now.ToString() + ":[Dev:" + connect.devid + "]" + "已断开");
+                ydpLog.WriteLineLog(DateTime.Now.ToString() + ":[Dev:" + connect.devid + "]" + "已断开");
                 connect.Close();
             }
         }

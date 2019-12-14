@@ -58,7 +58,7 @@ namespace gdisplay
             }
             catch
             {
-                Form1.WriteLineLog(DateTime.Now.ToString() + "获取高德数据失败");
+                ydpLog.WriteLineLog(DateTime.Now.ToString() + "获取高德数据失败");
                 return null;
             }
 

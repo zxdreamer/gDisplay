@@ -58,12 +58,6 @@ namespace gdisplay
     //配置文件解析+高德解析
     public class ScreenResult
     {
-        private bool isAns;                 //屏体是否绑定了ip
-        public bool IsAns
-        {
-            get { return isAns; }
-            set { isAns = value; }
-        }
         private string id;                  //屏体Id    
         public string Id
         {
@@ -95,7 +89,6 @@ namespace gdisplay
             this.sfindRect = fdr;
             this.sroads = rds;
             this.band = bd;
-            this.isAns = false;
         }
     }
 }

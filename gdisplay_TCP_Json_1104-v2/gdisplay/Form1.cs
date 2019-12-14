@@ -18,6 +18,7 @@ namespace gdisplay
         Byte s1_num = 0;                     //1,2,3,4,5,0(未选中)
         Byte s2_num = 0;                     //屏体2区域编号
         Byte s3_num = 0;                     //屏体3区域编号
+        const int SCREEN_NUMS = 3;            //屏体的数量
         Byte wk_mode = (byte)ydpModeEm.Amap;                    //默认为高德模式
         List<ScreenResult> ScnRestList = new List<ScreenResult>();
 
@@ -28,7 +29,7 @@ namespace gdisplay
         int AMAPreqcnt = 0;         //50ms计数器
         int AMAPreqtime = 0;        //配置文件中高德请求时间
         bool[] AMAPReadly = new bool[3] { false, false, false };      //屏幕1,2,3高德数据处理完成标志位
-        int AMAPScCnt = 0;          //处理哪块儿屏幕计数
+        int AmapIndex = 0;          //处理哪块儿屏幕计数
         public Form1()
         {
             InitializeComponent();
@@ -36,7 +37,7 @@ namespace gdisplay
             userJsonInit();     //Json配置文件解析
             userTcpInit();      //TCPserver初始化，并启动监听
 
-            WriteLineLog(DateTime.Now.ToString() + "---------------------------程序开始启动----------------------------------");
+            ydpLog.WriteLineLog(DateTime.Now.ToString() + "---------------------------程序开始启动----------------------------------");
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -83,7 +84,7 @@ namespace gdisplay
                     //{
                     ydpCfg = JsonConvert.DeserializeObject<ydpJsonConfig>(jsonstr);
 
-                    WriteLineLog("开始解析配置文件......");
+                    ydpLog.WriteLineLog("开始解析配置文件......");
                     ydpApClient = AmapClient.CreateApClientObj(ydpCfg.AMAPkey);     //获得高德数据对象
                     AMAPreqtime = ydpCfg.AMAPreqtime * 2;    //定时器定时500ms，这里乘2
                     foreach (CfgScreens screens in ydpCfg.screens)
@@ -125,27 +126,27 @@ namespace gdisplay
                         ScnRestList.Add(new ScreenResult(sigPaths, reL, bd,sid));
                     }
                     //});
-                    WriteLineLog("配置文件解析结果:");
+                    ydpLog.WriteLineLog("配置文件解析结果:");
                     foreach (var sc in ScnRestList)
                     {
-                        WriteLineLog("屏幕 " + sc.Id);
+                        ydpLog.WriteLineLog("屏幕 " + sc.Id);
 
                         string region = "搜索区域：";
                         foreach (var rect in sc.SfindRect)
                         {
                             region += rect + " ";
                         }
-                        WriteLineLog(region);
+                        ydpLog.WriteLineLog(region);
 
                         foreach (var path in sc.Sroads)
                         {
-                            WriteLineLog(path.MRoad);
+                            ydpLog.WriteLineLog(path.MRoad);
                             string nodes = "节点:";
                             foreach (var node in path.SectList)
                             {
                                 nodes += node + " ";
                             }
-                            WriteLineLog(nodes);
+                            ydpLog.WriteLineLog(nodes);
                         }
                     }
                 }
@@ -156,7 +157,7 @@ namespace gdisplay
             }
             catch (Exception e)
             {
-                WriteLineLog("配置文件解析异常" + e.Message);
+                ydpLog.WriteLineLog("配置文件解析异常" + e.Message);
             }
         }
 
@@ -174,28 +175,6 @@ namespace gdisplay
             //  等待应答
             //  更新devNum成员
 
-        }
-        /*************************************************
-         * WriteLineLog:日志文件写函数
-         * Param：
-         *      strlog：一条写入数据
-         * ************************************************/
-        public static int WriteLineLog(string strlog)
-        {
-            try
-            {
-                using (StreamWriter wrLog = new StreamWriter(@".\\logFile.txt", true))
-                {
-                    wrLog.WriteLine(strlog);
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("文件系统异常" + e.Message);
-                return -1;
-            }
-
-            return 0;
         }
         /* ***********************************************************
         * UpdateState：更新UI控件数据
@@ -229,7 +208,6 @@ namespace gdisplay
         ********************************************/
         void myChangeMenuColor_s1(int color,int snum)
         {
-            WriteLineLog("右击屏1：" + "区域" + snum + " " + "颜色" + color);
             //填充s1_sdarr[50]数组
             if (snum < 1 || snum > 8)
             {
@@ -509,7 +487,7 @@ namespace gdisplay
             Byte[] sArr = new byte[8];
             for (int i = 0; i < sv.connects.Length; i++)
             {
-                if (!sv.connects[i].isUse)
+                if (sv.connects[i].conState==ydpMachEm.Idle)
                     continue;
 
                 int res = sv.SendData(sv.connects[i], CMD, CMD.Length);
@@ -662,7 +640,7 @@ namespace gdisplay
             }
             else                           //新播报格式
             {
-                WriteLineLog("另一种数据格式：" + pathDir);
+                ydpLog.WriteLineLog("另一种数据格式：" + pathDir);
             }
             return res;
         }
@@ -767,23 +745,23 @@ namespace gdisplay
                 catch (Exception e)
                 {
                     stsbarAMAP.Text = "高德解析数据异常";
-                    WriteLineLog(DateTime.Now.ToString() + "高德解析数据异常");
+                    ydpLog.WriteLineLog(DateTime.Now.ToString() + "高德解析数据异常");
                 }
             }
         }
         int IsValidJsonResult(ydpAmapJson json)
         {
-            WriteLineLog(DateTime.Now.ToString() + " " + json.status + " " + json.info);
+            ydpLog.WriteLineLog(DateTime.Now.ToString() + " " + json.status + " " + json.info);
             if (json.status == "0")
             {
                 if (json.info == "DAILY_QUERY_OVER_LIMIT")
                 {
-                    WriteLineLog("当前key值已经超限");
+                    ydpLog.WriteLineLog("当前key值已经超限");
                     return -1;
                 }
                 else if (json.info == "INVALID_USER_KEY")
                 {
-                    WriteLineLog("AMAP请求参数错误");
+                    ydpLog.WriteLineLog("AMAP请求参数错误");
                     return -2;
                 }
                 else
@@ -797,7 +775,7 @@ namespace gdisplay
         {
             //1.遍历屏体列表
             //foreach (var screen in ScnRestList)
-            ScreenResult screen = ScnRestList[AMAPScCnt];
+            ScreenResult screen = ScnRestList[AmapIndex];
             //            {
             List<ydpAmapJson> scAmapJson = new List<ydpAmapJson>();
             ydpAmapJson ydpApJson = null;
@@ -829,52 +807,17 @@ namespace gdisplay
             AmapJsonToSteArr(scAmapJson, screen);
             //            }
         }
-
-        //private void DynamicPixShow(ScreenResult screen)
-        //{
-        //    if (screen.Id == null)    //
-        //        return;
-        //    switch(screen.Id)
-        //    {
-        //        case "ydp001":
-        //            Dictionary<string, Byte> dic_ids_sta = new Dictionary<string, byte>();  //dictionary记录路段和状态数组的对应关系，key是路段，value是路段对应的状态数组
-        //            //1.遍历屏体主路
-        //            foreach (var mroad in screen.Sroads)
-        //            {
-        //                //2.遍历主路中的路段和状态数组，并建立映射
-        //                for(int i=0,j=0;i<mroad.IdsList.ToArray().Length&&
-        //                                j<mroad.StateList.ToArray().Length; i++,j++)
-        //                {
-        //                    dic_ids_sta.Add(mroad.IdsList[i], mroad.StateList[j]);
-        //                }
-        //            }
-        //            int band_num = 0;               //屏体光带计数
-        //            //3.遍历光带列表组
-        //            foreach(var blst in screen.Band)
-        //            {
-        //                int mx_sta = 0;
-        //                band_num++;
-        //                //4.遍历每一条光带，并找到光带的最大状态数组的值
-        //                foreach(var rds in blst)
-        //                {
-        //                    mx_sta = Math.Max(mx_sta, dic_ids_sta[rds]);
-        //                }
-        //                //5.改变屏体颜色
-        //                myChangeMenuColor_s1(mx_sta, band_num);
-        //            }
-        //            break;
-        //        case "ydp002":
-        //            break;
-        //        case "ydp003":
-        //            break;
-        //        default:
-        //            break;
-        //    }
-        //}
-        private void DynamicPixShow(ScreenResult screen)
+        /*****************************************************************
+         * DynamicPixShow：在屏体上动态改变路段的颜色
+         * Param:
+         *      scnIndex：在ScreenResult中的索引
+         * ***************************************************************/
+        private void DynamicPixShow(int scnIndex)
         {
+            ScreenResult screen = ScnRestList[scnIndex];
             if (screen.Id == null)    //
                 return;
+
             Dictionary<string, Byte> dic_ids_sta = new Dictionary<string, byte>();  //dictionary记录路段和状态数组的对应关系，key是路段，value是路段对应的状态数组
                                                                                     //1.遍历屏体主路
             foreach (var mroad in screen.Sroads)
@@ -912,74 +855,28 @@ namespace gdisplay
             string localtime = DateTime.Now.ToString(" yyyy-MM-dd HH:mm:ss");
             stsbarTime.Text = localtime;
             AMAPreqcnt++;
-            //1.高德定时时间到60s，逐屏填充数据，填完发送
-            if (AMAPreqcnt >= AMAPreqtime)
-            {
-                AMAPreqcnt = 0;
-                AMAPReqAndFullMRoadsList();              //高德请求，抓取一屏路况交通态势                
-                AMAPReadly[AMAPScCnt] = true;            //屏幕AMAPScCnt抓取完成标志位置true
-
-                ydpBroadCastSend(ScnRestList[AMAPScCnt]);//发送一屏路况交通态势
-                
-                DynamicPixShow(ScnRestList[AMAPScCnt]);  //PC上动态显示图片
-
-                AMAPScCnt = (AMAPScCnt + 1) % 3;
-            }
 
             //2.逐屏广播模式发送数据
-            ydpBroadCastSend(null);
-            ydpLoopRecv(ScnRestList[AMAPScCnt]);                //???怎样保证等待500ms
-        }
+            DoState(AmapIndex);
+            //ydpBroadCastSend(ScnRestList[AmapIndex]);
+            //ydpBroadCastSend(AmapIndex);
 
-        /*********************************************************************
-         * ytrBroadCastSend:广播形式发送，遍历connects中的每个描述符，依次处理               
-         * Param：
-         *       无
-         * *******************************************************************/
-        private void ydpBroadCastSend(ScreenResult screen)
-        {
-            int len = sv.connects.Length;
-            for (int i = 0; i < len; i++)
+            //ydpLoopRecv(AmapIndex);                //???怎样保证等待500ms
+
+            //1.高德定时时间到60s，逐屏填充数据，填完发送
+            //判断AmapIndex-1是否有数据
+            if (AMAPreqcnt >= AMAPreqtime)
             {
-                //1 对于没有连接的描述符，直接跳过
-                if (!sv.connects[i].isUse)
-                    continue;
+                AmapIndex = (AmapIndex + 1) % SCREEN_NUMS;
 
-                //2 对于刚连接等待询问设备号的描述符，发送查询指令
-                if ( screen==null && sv.connects[i].bAskId)
-                {
-                    sv.connects[i].bAskId = false;
-                    byte[] ckArr = DataPacked(1, null);
-
-                    ydpSendData(sv.connects[i], ckArr, ckArr.Length);
-                }
-
-                //3 对于已经准备好一屏数据的描述符，发送屏幕显示的数据
-                //AMAPScCnt 记录哪一屏数据准备好
-                if (sv.connects[i].devid == null)         //设备连接成功但是未绑定
-                    continue;
-                //if (screen != null && screen.Id == sv.connects[i].devid.Replace("\0", ""))
-                if (screen != null && screen.Id == sv.connects[i].devid)
-                {
-                    AMAPReadly[AMAPScCnt] = false;
-                    WriteLineLog("屏幕" + screen.Id);
-                    //await Task.   Delay(10);        //???防止连续发送   
-
-                    byte[] showArr = DataPacked(2, screen);
-                    ydpSendData(sv.connects[i], showArr, showArr.Length);
-
-                    foreach (var mroad in screen.Sroads)
-                    {
-                        string str = mroad.MRoad + "状态数组: ";
-                        for (int j = 0; j < mroad.StateList.Count; j++)
-                        {
-                            str += "0x" + mroad.StateList[j] + " ";
-                            mroad.StateList[j] = 0x01;    //先默认是无效数据
-                        }
-                        WriteLineLog(str);
-                    }
-                }
+                AMAPreqcnt = 0;
+                AMAPReqAndFullMRoadsList();              //高德请求，抓取一屏路况交通态势                
+                AMAPReadly[AmapIndex] = true;            //屏幕AMAPScCnt抓取完成标志位置true                
             }
+
+            ////2.逐屏广播模式发送数据
+            //ydpBroadCastSend(ScnRestList[curAmapIndex]);
+            //ydpLoopRecv(ScnRestList[curAmapIndex]);                //???怎样保证等待500ms
         }
         /*****************************************************************
          * ydpSendData：发送失败连发三次
@@ -1000,8 +897,116 @@ namespace gdisplay
 
             if (res > 0)
             {
-                Program.gdFrom.UpdateState(ydpPlaceEm.StsBar, ydpShowEm.StsSndData, "发送指令:" + ByteToRawStr(arr));
-                Form1.WriteLineLog(DateTime.Now.ToString() + ":发送指令:" + ByteToRawStr(arr));
+                Program.gdFrom.UpdateState(ydpPlaceEm.StsBar, ydpShowEm.StsSndData, "发送指令:" + ydpLog.ByteToRawStr(arr,0,size));
+                ydpLog.WriteLineLog(DateTime.Now.ToString() + ":发送指令:" + ydpLog.ByteToRawStr(arr,0,size));
+            }
+        }
+        /*********************************************************************
+         * DoState:状态转移处理               
+         * Param：
+         *       scnIndex:屏体在ScnRestList中的索引
+         * *******************************************************************/
+        private void DoState(int scnIndex)
+        {
+            if (scnIndex < 0 || scnIndex > SCREEN_NUMS)
+                return;
+
+            int len = sv.connects.Length;
+            ScreenResult screen = ScnRestList[scnIndex];
+            for (int i = 0; i < len; i++)
+            {
+                switch(sv.connects[i].conState)
+                {
+                    case ydpMachEm.Idle:
+                        break;
+                    case ydpMachEm.AcceptDone:
+                        byte[] ckArr = DataPacked(1, null);
+
+                        ydpSendData(sv.connects[i], ckArr, ckArr.Length);
+                        //a.状态转移2 AcceptDone->RecvId 
+                        sv.connects[i].conState = ydpMachEm.RecvId;
+                        break;
+                    case ydpMachEm.RecvId:
+                        //正等待接受设备号的消息
+                        sv.connects[i].delayCnt++;
+                        if (sv.connects[i].delayCnt == 10)
+                        {
+                            //错误提示????
+                            //d.状态转移5 RecvId->Idle 
+                            sv.connects[i].conState = ydpMachEm.Idle;
+                            sv.connects[i].Close();
+                        }
+                        //收到一帧数据
+                        if (sv.connects[i].flagFrame == true)
+                        {
+                            sv.connects[i].fsStart = -1;
+                            sv.connects[i].flagFrame = false;
+                            //sv.connects[i].delayCnt = 0;  //????
+                            //3. 包分类解析
+                            byte[] rBuff = sv.connects[i].frameBuff;
+                            /********************************************
+                             * 对于查询设备号应答("91")指令：02 30 30 '9' '1' lenH lenL 0 / 1 id xx xx 03,应答结果存到devid中
+                             * 对于发送显示数据应答("81")指令：02 30 30 '8' '1' lenH lenL 0 / 1 xx xx 03
+                             * ****************************************/
+                            //3.1 接受到39 31状态码，代表查询应答
+                            if (rBuff[3] == 0x39 && rBuff[4] == 0x31)
+                            {
+                                if (rBuff[7] == 0x31)
+                                {
+                                    sv.connects[i].delayCnt = 0;    //接收到正确的应答就将等待计数标志位清0
+                                    byte[] idbt = new byte[7];
+                                    for (int j = 0; j < 6; j++)
+                                    {
+                                        idbt[j] = rBuff[j + 8];
+                                    }
+                                    sv.connects[i].devid = Encoding.Default.GetString(idbt).Replace("\0", "");
+                                    //b.状态转移3 RecvId->DevAns 
+                                    sv.connects[i].conState = ydpMachEm.DevAns;
+
+                                    MessageBox.Show("[Dev:" + sv.connects[i].devid + "]" + " 已连接");
+                                    Program.gdFrom.UpdateState(ydpPlaceEm.StsBar, ydpShowEm.StsDevStat, "[Dev:" + sv.connects[i].devid + "]" + "已连接");
+                                    ydpLog.WriteLineLog(DateTime.Now.ToString() + ":应答的设备号" + sv.connects[i].devid);
+                                }
+                            }
+                            //4. 接受到38 31状态码，代表发送状态数组应答
+                            else if (rBuff[3] == 0x38 && rBuff[4] == 0x31)
+                            {
+                                //接受应答处理函数????
+                                if(rBuff[7] == 0x31)
+                                {
+                                    DynamicPixShow(AmapIndex);          //PC上动态显示图片
+                                                                                     //c.状态转移4 RecvId->InfoAns 
+                                    sv.connects[i].conState = ydpMachEm.InfoAns;
+                                }
+                            }
+                        }
+                        break;
+                    case ydpMachEm.DevAns:
+                    case ydpMachEm.InfoAns:
+                        if (screen.Id == sv.connects[i].devid)
+                        {
+                            AMAPReadly[AmapIndex] = false;
+                            ydpLog.WriteLineLog("屏幕" + screen.Id);
+
+                            byte[] showArr = DataPacked(2, screen);
+                            ydpSendData(sv.connects[i], showArr, showArr.Length);
+                            sv.connects[i].conState = ydpMachEm.RecvInfo;
+
+                            foreach (var mroad in screen.Sroads)
+                            {
+                                string str = mroad.MRoad + "状态数组: ";
+                                for (int j = 0; j < mroad.StateList.Count; j++)
+                                {
+                                    str += "0x" + mroad.StateList[j] + " ";
+                                    mroad.StateList[j] = 0x01;    //先默认是畅通
+                                }
+                                ydpLog.WriteLineLog(str);
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
         }
         /*****************************************************************
@@ -1011,43 +1016,60 @@ namespace gdisplay
          * Param：
          *       无
          * ****************************************************************/
-        private void ydpLoopRecv(ScreenResult screen)
+        private void ydpLoopRecv(int ScnNum)
         {
+            ScreenResult screen = ScnRestList[ScnNum];
             int len = sv.connects.Length;
             for (int i = 0; i < len; i++)
             {
-                //1 此描述符接受到数据
-                if (sv.connects[i].bRecvData)
+                //1.判断指定的屏体是否收到了应答???????
+                if (sv.connects[i].devid == screen.Id)
                 {
-                    sv.connects[i].bRecvData = false;
-                    byte[] rBuff = sv.connects[i].readBuff;
-                    //2 接受到39 31状态码，代表查询应答
+                    sv.connects[i].delayCnt++;
+
+                    if (sv.connects[i].delayCnt == 10)              //发送10次查询指令都没有收到应答，认为失败
+                    {
+                        sv.connects[i].Close();
+                        MessageBox.Show(screen.Id + "数据应答失败");
+                    }
+                }
+                //2 此描述符接受到数据
+                if (sv.connects[i].conState==ydpMachEm.RecvDone)  
+                {
+                    //sv.connects[i].bRecvData = false;
+                    byte[] rBuff = sv.connects[i].frameBuff;
+                    //3 接受到39 31状态码，代表查询设备号
                     if (rBuff[3] == 0x39 && rBuff[4] == 0x31)
                     {
                         if (rBuff[5] == 0x31)
                         {
-                            byte[] idbt = new byte[7];
+                            sv.connects[i].delayCnt = 0;    //接收到正确的应答就将等待技术标志位清0
+                            byte[] idbt = new byte[10];
                             //3 记录屏幕id
                             for (int j = 0; j < 6; j++)
                             {
                                 idbt[j] = rBuff[j + 6];
                             }
                             sv.connects[i].devid = Encoding.Default.GetString(idbt).Replace("\0","");
-                            screen.IsAns = true;
+                            sv.connects[i].conState = ydpMachEm.DevAns;
+
                             MessageBox.Show("[Dev:" + sv.connects[i].devid + "]" + " 已连接");
                             Program.gdFrom.UpdateState(ydpPlaceEm.StsBar, ydpShowEm.StsDevStat, "[Dev:" + sv.connects[i].devid + "]" + "已连接");
-                            Form1.WriteLineLog(DateTime.Now.ToString() + ":应答的设备号" + sv.connects[i].devid);
+                            ydpLog.WriteLineLog(DateTime.Now.ToString() + ":应答的设备号" + sv.connects[i].devid);
                         }
                     }
+                    //4. 接受到38 31状态码，代表发送状态数组应答
                     else if (rBuff[3] == 0x38 && rBuff[4] == 0x31)
                     {
                         //接受应答处理函数????
+                        sv.connects[i].conState = ydpMachEm.InfoAns;
+                        //DynamicPixShow(ScnRestList[AmapIndex]);          //PC上动态显示图片
                     }
                 }
             }
         }
         /*********************************************************************
-         * DataPacked:广播形式发送，遍历connects中的每个描述符，依次处理
+         * DataPacked:发送数据之前的打包操作
          * Param：
          *      flag:标志是查询指令打包还是发送显示数据指令打包
          *      screen:记录屏幕信息
@@ -1097,26 +1119,6 @@ namespace gdisplay
 
             res.Add(0x03);          //包尾0x03
             return res.ToArray();
-        }
-        /**********************************************************
-         * ByteToRawStr:将byte[]数组直译成字符串，便于日志文件，状态栏记录
-         * Param:
-         *      arr:需要转换的数组
-         * Result:
-         *      数组直译后的字符串
-         * */
-        public string ByteToRawStr(byte[] arr)
-        {
-            string res = null;
-            string[] state = new string[16] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F" };
-            for (int i = 0; i < arr.Length; i++)
-            {
-                string shi = state[(arr[i] & 0xf0) >> 4];
-                string ge = state[arr[i] & 0x0f];
-                res += (shi + ge + " ");
-            }
-
-            return res;
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -1187,7 +1189,7 @@ namespace gdisplay
             if (cBoxMode.Text == "高德模式")
                 wk_mode = (byte)ydpModeEm.Amap;
             else if (cBoxMode.Text == "人工模式")
-                wk_mode = (byte)ydpModeEm.manual;
+                wk_mode = (byte)ydpModeEm.Manual;
 
             //让发送按钮变灰??????
         }

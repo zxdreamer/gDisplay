@@ -19,13 +19,6 @@ namespace gdisplay
         RecvAMAP = 2,
         STime = 3
     }
-    //public enum ydpShowStsEm
-    //{
-    //    DevStat=0,
-    //    SndData,
-    //    RecvAMAP,
-    //    STime
-    //}
     public enum ydpPlaceEm
     {
         StsBar = 0,
@@ -34,6 +27,16 @@ namespace gdisplay
     public enum ydpModeEm
     {
         Amap=0,     //高德模式
-        manual      //手动模式
+        Manual      //手动模式
+    }
+    public enum ydpMachEm
+    {
+        Idle=0,   //未连接
+        AcceptDone,     //链接成功
+        RecvId,         //等待接受设备ID状态
+        RecvInfo,       //等待接受消息应答状态
+        RecvDone,       //接收到数据
+        DevAns,         //询问设备号应答成功
+        InfoAns,        //发送态势信息应答成功
     }
 }
