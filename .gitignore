@@ -1,1 +1,4 @@
-*.txt
+./gdisplay_TCP_Json_1104-v2/gdisplay/bin/Debug/description.txt
+./gdisplay_TCP_Json_1104-v2/gdisplay/bin/Debug/logFile.txt
+*.pptx
+*.docx
