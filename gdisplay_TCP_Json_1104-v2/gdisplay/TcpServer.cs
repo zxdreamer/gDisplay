@@ -67,6 +67,7 @@ namespace gdisplay
             socket.Close();
             devid = null;
             this.flagClose = true;
+            ydpLog.WriteLineLog(DateTime.Now.ToString() + ":设备" + this.devid + " 已断开!");
         }
     }
     class TcpServer
@@ -142,8 +143,8 @@ namespace gdisplay
                     string adr = connect.GetRemoteAdress();
 
                     //需要把每台设备的连接情况显示到状态栏和日志文件
-                    Program.gdFrom.UpdateState(0, 0, "[Dev:" + connect.devid + "]" + "已连接");
-                    ydpLog.WriteLineLog(DateTime.Now.ToString()+":[Dev:" + connect.devid + "]" + "已连接");
+                    //Program.gdFrom.UpdateState(0, 0, "[Dev:" + connect.devid + "]" + "已连接");
+                    //ydpLog.WriteLineLog(DateTime.Now.ToString()+":[Dev:" + connect.devid + "]" + "已连接");
 
                     //4.连接成功标志位有效
                     //connect.bAskId = true;
@@ -190,7 +191,7 @@ namespace gdisplay
                     ydpLog.WriteAddLog("用户输入数据");
                     connect.flagLog = true;
                 }
-                ydpLog.WriteAddLog(":" + str);
+                ydpLog.WriteAddLog(":" + str+"\n");
                 //3.数据包处理形成帧
                 int index = 0;
                 //3.1.先将数据从读缓冲中复制到帧缓冲中

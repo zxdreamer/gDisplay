@@ -548,16 +548,16 @@
             // s1_BtnSnd
             // 
             this.s1_BtnSnd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.s1_BtnSnd.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.s1_BtnSnd.Location = new System.Drawing.Point(551, 451);
             this.s1_BtnSnd.Name = "s1_BtnSnd";
             this.s1_BtnSnd.Size = new System.Drawing.Size(140, 61);
             this.s1_BtnSnd.TabIndex = 2;
-            this.s1_BtnSnd.Text = "确定";
+            this.s1_BtnSnd.Text = "确 定";
             this.s1_BtnSnd.UseVisualStyleBackColor = true;
             // 
             // s1_pb
             // 
-            this.s1_pb.ContextMenuStrip = this.cMenu1_Color;
             this.s1_pb.Image = global::gdisplay.Properties.Resources.pbc_row1;
             this.s1_pb.Location = new System.Drawing.Point(200, 312);
             this.s1_pb.Name = "s1_pb";
@@ -570,7 +570,6 @@
             // s1_pc
             // 
             this.s1_pc.BackColor = System.Drawing.Color.White;
-            this.s1_pc.ContextMenuStrip = this.cMenu1_Color;
             this.s1_pc.Image = global::gdisplay.Properties.Resources.pbc_row1;
             this.s1_pc.Location = new System.Drawing.Point(200, 153);
             this.s1_pc.Name = "s1_pc";
@@ -582,7 +581,6 @@
             // 
             // s1_pa1
             // 
-            this.s1_pa1.ContextMenuStrip = this.cMenu1_Color;
             this.s1_pa1.Image = global::gdisplay.Properties.Resources.pa_raw1;
             this.s1_pa1.Location = new System.Drawing.Point(169, 353);
             this.s1_pa1.Name = "s1_pa1";
@@ -594,7 +592,6 @@
             // 
             // s1_pa2
             // 
-            this.s1_pa2.ContextMenuStrip = this.cMenu1_Color;
             this.s1_pa2.Image = global::gdisplay.Properties.Resources.pa_raw1;
             this.s1_pa2.Location = new System.Drawing.Point(169, 194);
             this.s1_pa2.Name = "s1_pa2";
@@ -606,7 +603,6 @@
             // 
             // s1_pa3
             // 
-            this.s1_pa3.ContextMenuStrip = this.cMenu1_Color;
             this.s1_pa3.Image = global::gdisplay.Properties.Resources.pa_raw1;
             this.s1_pa3.Location = new System.Drawing.Point(169, 35);
             this.s1_pa3.Name = "s1_pa3";
@@ -725,16 +721,16 @@
             // s2_BtnSnd
             // 
             this.s2_BtnSnd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.s2_BtnSnd.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.s2_BtnSnd.Location = new System.Drawing.Point(564, 430);
             this.s2_BtnSnd.Name = "s2_BtnSnd";
             this.s2_BtnSnd.Size = new System.Drawing.Size(140, 61);
             this.s2_BtnSnd.TabIndex = 2;
-            this.s2_BtnSnd.Text = "确定";
+            this.s2_BtnSnd.Text = "确 定";
             this.s2_BtnSnd.UseVisualStyleBackColor = true;
             // 
             // s2_pe
             // 
-            this.s2_pe.ContextMenuStrip = this.cMenu2_Color;
             this.s2_pe.Image = global::gdisplay.Properties.Resources.pe_black2;
             this.s2_pe.Location = new System.Drawing.Point(246, 388);
             this.s2_pe.Name = "s2_pe";
@@ -745,7 +741,6 @@
             // 
             // s2_pd
             // 
-            this.s2_pd.ContextMenuStrip = this.cMenu2_Color;
             this.s2_pd.Image = global::gdisplay.Properties.Resources.lpd_black2;
             this.s2_pd.Location = new System.Drawing.Point(121, 358);
             this.s2_pd.Name = "s2_pd";
@@ -756,7 +751,6 @@
             // 
             // s2_pb
             // 
-            this.s2_pb.ContextMenuStrip = this.cMenu2_Color;
             this.s2_pb.Image = global::gdisplay.Properties.Resources.rpd_black2;
             this.s2_pb.Location = new System.Drawing.Point(246, 224);
             this.s2_pb.Name = "s2_pb";
@@ -767,7 +761,6 @@
             // 
             // s2_pc
             // 
-            this.s2_pc.ContextMenuStrip = this.cMenu2_Color;
             this.s2_pc.Image = global::gdisplay.Properties.Resources.rpd_black2;
             this.s2_pc.Location = new System.Drawing.Point(246, 111);
             this.s2_pc.Name = "s2_pc";
@@ -778,7 +771,6 @@
             // 
             // s2_pa1
             // 
-            this.s2_pa1.ContextMenuStrip = this.cMenu2_Color;
             this.s2_pa1.Image = ((System.Drawing.Image)(resources.GetObject("s2_pa1.Image")));
             this.s2_pa1.Location = new System.Drawing.Point(215, 380);
             this.s2_pa1.Name = "s2_pa1";
@@ -789,7 +781,6 @@
             // 
             // s2_pa2
             // 
-            this.s2_pa2.ContextMenuStrip = this.cMenu2_Color;
             this.s2_pa2.Image = global::gdisplay.Properties.Resources.lpa_row2;
             this.s2_pa2.Location = new System.Drawing.Point(215, 267);
             this.s2_pa2.Name = "s2_pa2";
@@ -800,7 +791,6 @@
             // 
             // s2_pa3
             // 
-            this.s2_pa3.ContextMenuStrip = this.cMenu2_Color;
             this.s2_pa3.Image = ((System.Drawing.Image)(resources.GetObject("s2_pa3.Image")));
             this.s2_pa3.Location = new System.Drawing.Point(215, 154);
             this.s2_pa3.Name = "s2_pa3";
@@ -811,7 +801,6 @@
             // 
             // s2_pa4
             // 
-            this.s2_pa4.ContextMenuStrip = this.cMenu2_Color;
             this.s2_pa4.Image = ((System.Drawing.Image)(resources.GetObject("s2_pa4.Image")));
             this.s2_pa4.Location = new System.Drawing.Point(215, 41);
             this.s2_pa4.Name = "s2_pa4";
@@ -927,11 +916,12 @@
             // s3_BtnSnd
             // 
             this.s3_BtnSnd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.s3_BtnSnd.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.s3_BtnSnd.Location = new System.Drawing.Point(541, 418);
             this.s3_BtnSnd.Name = "s3_BtnSnd";
             this.s3_BtnSnd.Size = new System.Drawing.Size(140, 61);
             this.s3_BtnSnd.TabIndex = 10;
-            this.s3_BtnSnd.Text = "确定";
+            this.s3_BtnSnd.Text = "确 定";
             this.s3_BtnSnd.UseVisualStyleBackColor = true;
             // 
             // s3_pa2
@@ -1064,6 +1054,7 @@
         public System.Drawing.Image[] s1_pxColor;
         public System.Drawing.Image[] s2_pxColor;
         public System.Windows.Forms.TextBox[] devBoxArr;
+        public System.Windows.Forms.ContextMenuStrip[] sMenuArr;
         private System.Windows.Forms.ContextMenuStrip cMenu2_Color;
         private System.Windows.Forms.ToolStripMenuItem Red2ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem Yellow2ToolStripMenuItem;

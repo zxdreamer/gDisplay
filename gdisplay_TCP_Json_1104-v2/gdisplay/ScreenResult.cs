@@ -64,6 +64,12 @@ namespace gdisplay
             get { return id; }
             set { id = value; }
         }
+        private bool amapReadly;            //判断屏体的高德数据是否准备好
+        public bool AmapReadly
+        {
+            get { return amapReadly; }
+            set { amapReadly = value; }      
+        }
         private List<string> sfindRect;     //屏体搜索矩形区域列表
         public List<string> SfindRect
         {
@@ -89,6 +95,7 @@ namespace gdisplay
             this.sfindRect = fdr;
             this.sroads = rds;
             this.band = bd;
+            this.amapReadly = false;
         }
     }
 }
