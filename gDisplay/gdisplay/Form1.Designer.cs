@@ -38,11 +38,6 @@
             this.Red2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Yellow2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Green2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.stsbar = new System.Windows.Forms.StatusStrip();
-            this.stsbarComPort = new System.Windows.Forms.ToolStripStatusLabel();
-            this.stsbarCMD = new System.Windows.Forms.ToolStripStatusLabel();
-            this.stsbarAMAP = new System.Windows.Forms.ToolStripStatusLabel();
-            this.stsbarTime = new System.Windows.Forms.ToolStripStatusLabel();
             this.tmDate = new System.Windows.Forms.Timer(this.components);
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -109,7 +104,6 @@
             this.s3_pa3 = new System.Windows.Forms.PictureBox();
             this.cMenu1_Color.SuspendLayout();
             this.cMenu2_Color.SuspendLayout();
-            this.stsbar.SuspendLayout();
             this.cMenu3_Color.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabCtlSelect.SuspendLayout();
@@ -200,52 +194,6 @@
             this.Green2ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.Green2ToolStripMenuItem.Text = "绿色";
             this.Green2ToolStripMenuItem.Click += new System.EventHandler(this.Green2ToolStripMenuItem_Click);
-            // 
-            // stsbar
-            // 
-            this.stsbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.stsbarComPort,
-            this.stsbarCMD,
-            this.stsbarAMAP,
-            this.stsbarTime});
-            this.stsbar.Location = new System.Drawing.Point(0, 657);
-            this.stsbar.Name = "stsbar";
-            this.stsbar.Size = new System.Drawing.Size(1115, 26);
-            this.stsbar.TabIndex = 2;
-            this.stsbar.Text = "ststar";
-            // 
-            // stsbarComPort
-            // 
-            this.stsbarComPort.AutoSize = false;
-            this.stsbarComPort.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
-            this.stsbarComPort.Name = "stsbarComPort";
-            this.stsbarComPort.Size = new System.Drawing.Size(135, 21);
-            this.stsbarComPort.Text = "toolStripStatusLabel1";
-            // 
-            // stsbarCMD
-            // 
-            this.stsbarCMD.AutoSize = false;
-            this.stsbarCMD.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
-            this.stsbarCMD.Name = "stsbarCMD";
-            this.stsbarCMD.Size = new System.Drawing.Size(580, 21);
-            this.stsbarCMD.Spring = true;
-            this.stsbarCMD.Text = "toolStripStatusLabel1";
-            // 
-            // stsbarAMAP
-            // 
-            this.stsbarAMAP.AutoSize = false;
-            this.stsbarAMAP.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
-            this.stsbarAMAP.Name = "stsbarAMAP";
-            this.stsbarAMAP.Size = new System.Drawing.Size(250, 21);
-            this.stsbarAMAP.Text = "toolStripStatusLabel1";
-            // 
-            // stsbarTime
-            // 
-            this.stsbarTime.AutoSize = false;
-            this.stsbarTime.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
-            this.stsbarTime.Name = "stsbarTime";
-            this.stsbarTime.Size = new System.Drawing.Size(135, 21);
-            this.stsbarTime.Text = "toolStripStatusLabel1";
             // 
             // tmDate
             // 
@@ -555,6 +503,7 @@
             this.s1_BtnSnd.TabIndex = 2;
             this.s1_BtnSnd.Text = "确 定";
             this.s1_BtnSnd.UseVisualStyleBackColor = true;
+            this.s1_BtnSnd.Click += new System.EventHandler(this.s1_BtnSnd_Click);
             // 
             // s1_pb
             // 
@@ -728,6 +677,7 @@
             this.s2_BtnSnd.TabIndex = 2;
             this.s2_BtnSnd.Text = "确 定";
             this.s2_BtnSnd.UseVisualStyleBackColor = true;
+            this.s2_BtnSnd.Click += new System.EventHandler(this.s2_BtnSnd_Click);
             // 
             // s2_pe
             // 
@@ -923,6 +873,7 @@
             this.s3_BtnSnd.TabIndex = 10;
             this.s3_BtnSnd.Text = "确 定";
             this.s3_BtnSnd.UseVisualStyleBackColor = true;
+            this.s3_BtnSnd.Click += new System.EventHandler(this.s3_BtnSnd_Click);
             // 
             // s3_pa2
             // 
@@ -992,14 +943,11 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.stsbar);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.cMenu1_Color.ResumeLayout(false);
             this.cMenu2_Color.ResumeLayout(false);
-            this.stsbar.ResumeLayout(false);
-            this.stsbar.PerformLayout();
             this.cMenu3_Color.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tabCtlSelect.ResumeLayout(false);
@@ -1034,7 +982,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.s3_pa1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.s3_pa3)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -1050,7 +997,7 @@
         //自定义数组，用于记录屏2的pictureBox，目的是简化myRClickMenuColor_s2代码
         public System.Windows.Forms.PictureBox[] s3_picBoxArr;
         //自定义数组，用于记录stsbar的四个label，目的是简化UpdateState代码
-        public System.Windows.Forms.ToolStripStatusLabel[] stsbarArr;
+        //public System.Windows.Forms.ToolStripStatusLabel[] stsbarArr;
         public System.Drawing.Image[] s1_pxColor;
         public System.Drawing.Image[] s2_pxColor;
         public System.Windows.Forms.TextBox[] devBoxArr;
@@ -1059,11 +1006,6 @@
         private System.Windows.Forms.ToolStripMenuItem Red2ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem Yellow2ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem Green2ToolStripMenuItem;
-        public System.Windows.Forms.StatusStrip stsbar;
-        public System.Windows.Forms.ToolStripStatusLabel stsbarComPort;
-        public System.Windows.Forms.ToolStripStatusLabel stsbarCMD;
-        public System.Windows.Forms.ToolStripStatusLabel stsbarAMAP;
-        private System.Windows.Forms.ToolStripStatusLabel stsbarTime;
         private System.Windows.Forms.Timer tmDate;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;

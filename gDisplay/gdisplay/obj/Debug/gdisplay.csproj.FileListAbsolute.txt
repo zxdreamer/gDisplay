@@ -106,3 +106,14 @@ C:\Users\Mrzxd\Desktop\殷老师\gitDIsplay\gDisplay\gdisplay_TCP_Json_1104-v2\g
 C:\Users\Mrzxd\Desktop\殷老师\gitDIsplay\gDisplay\gdisplay_TCP_Json_1104-v2\gdisplay\obj\Debug\gdisplay.csproj.GenerateResource.Cache
 C:\Users\Mrzxd\Desktop\殷老师\gitDIsplay\gDisplay\gdisplay_TCP_Json_1104-v2\gdisplay\obj\Debug\gdisplay.exe
 C:\Users\Mrzxd\Desktop\殷老师\gitDIsplay\gDisplay\gdisplay_TCP_Json_1104-v2\gdisplay\obj\Debug\gdisplay.pdb
+C:\Users\Mrzxd\Desktop\gitDisplay\gDisplay\gDisplay\gdisplay\bin\Debug\gdisplay.exe.config
+C:\Users\Mrzxd\Desktop\gitDisplay\gDisplay\gDisplay\gdisplay\bin\Debug\gdisplay.exe
+C:\Users\Mrzxd\Desktop\gitDisplay\gDisplay\gDisplay\gdisplay\bin\Debug\gdisplay.pdb
+C:\Users\Mrzxd\Desktop\gitDisplay\gDisplay\gDisplay\gdisplay\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Mrzxd\Desktop\gitDisplay\gDisplay\gDisplay\gdisplay\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Mrzxd\Desktop\gitDisplay\gDisplay\gDisplay\gdisplay\obj\Debug\gdisplay.Form1.resources
+C:\Users\Mrzxd\Desktop\gitDisplay\gDisplay\gDisplay\gdisplay\obj\Debug\gdisplay.Properties.Resources.resources
+C:\Users\Mrzxd\Desktop\gitDisplay\gDisplay\gDisplay\gdisplay\obj\Debug\gdisplay.csproj.GenerateResource.Cache
+C:\Users\Mrzxd\Desktop\gitDisplay\gDisplay\gDisplay\gdisplay\obj\Debug\gdisplay.exe
+C:\Users\Mrzxd\Desktop\gitDisplay\gDisplay\gDisplay\gdisplay\obj\Debug\gdisplay.pdb
+C:\Users\Mrzxd\Desktop\gitDisplay\gDisplay\gDisplay\gdisplay\obj\Debug\gdisplay.csprojResolveAssemblyReference.cache

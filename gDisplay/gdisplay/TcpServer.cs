@@ -179,7 +179,7 @@ namespace gdisplay
                 if (count <= 0)
                 {
                     //在状态栏label3处显示客户端断开连接
-                    Program.gdFrom.UpdateState(0, 0, "[Dev:" + connect.devid + "]" + "已断开");
+                    //Program.gdFrom.UpdateState(0, 0, "[Dev:" + connect.devid + "]" + "已断开");
                     ydpLog.WriteLineLog(DateTime.Now.ToString()+":[Dev:" + connect.devid + "]" + "已断开");
                     connect.Close();
                     return;
@@ -238,7 +238,7 @@ namespace gdisplay
             catch (Exception e)
             {
                 MessageBox.Show("Receive断开");
-                Program.gdFrom.UpdateState(0, 0, "[Dev:" + connect.devid + "]" + "断开");
+                //Program.gdFrom.UpdateState(0, 0, "[Dev:" + connect.devid + "]" + "断开");
                 ydpLog.WriteLineLog(DateTime.Now.ToString() + ":[Dev:" + connect.devid + "]" + "已断开");
                 connect.Close();
             }
@@ -264,13 +264,13 @@ namespace gdisplay
             catch (ObjectDisposedException e)
             {
                 nRes = -1;
-                Program.gdFrom.UpdateState(0, 0, "[Dev:" + con.devid + "]" + "已断开!");
+                //Program.gdFrom.UpdateState(0, 0, "[Dev:" + con.devid + "]" + "已断开!");
                 con.Close();
             }
             catch(Exception e)
             {
                 nRes = -2;
-                Program.gdFrom.UpdateState(0, 0, "[Dev:" + con.devid + "]" + "发送失败!");
+                //Program.gdFrom.UpdateState(0, 0, "[Dev:" + con.devid + "]" + "发送失败!");
             }
 
             return nRes;

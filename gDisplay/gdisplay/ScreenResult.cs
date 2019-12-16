@@ -64,11 +64,11 @@ namespace gdisplay
             get { return id; }
             set { id = value; }
         }
-        private bool amapReadly;            //判断屏体的高德数据是否准备好
-        public bool AmapReadly
+        private ydpOkMachEm dataOk;            //判断屏体的高德发送模式数据是否准备好
+        public ydpOkMachEm DataOk
         {
-            get { return amapReadly; }
-            set { amapReadly = value; }      
+            get { return dataOk; }
+            set { dataOk = value; }      
         }
         private List<string> sfindRect;     //屏体搜索矩形区域列表
         public List<string> SfindRect
@@ -88,6 +88,13 @@ namespace gdisplay
             get { return band; }
             set { band = value; }
         }
+        private Byte[] colorArr;
+        public Byte[] ColorArr
+        {
+            get { return colorArr; }
+            set { colorArr = value; }
+        }
+
 
         public ScreenResult(List<RoadsResult> rds, List<string> fdr,List<List<string>> bd,string sid)
         {
@@ -95,7 +102,8 @@ namespace gdisplay
             this.sfindRect = fdr;
             this.sroads = rds;
             this.band = bd;
-            this.amapReadly = false;
+            this.dataOk = ydpOkMachEm.Unok;
+            this.colorArr = new byte[10];
         }
     }
 }
