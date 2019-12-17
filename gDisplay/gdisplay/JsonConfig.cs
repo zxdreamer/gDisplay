@@ -29,8 +29,9 @@ namespace gdisplay
         public string company { get; set; }
         public string version { get; set; }
         public string url { get; set; }
-        public string TCPport { get; set; }
-        public string isAMAP { get; set; }
+        public int TCPport { get; set; }
+        public string IpAddr { get; set; }
+        public bool isAMAP { get; set; }
         public string AMAPcount { get; set; }
         public string AMAPkey { get; set; }
         public int AMAPreqtime { get; set; }

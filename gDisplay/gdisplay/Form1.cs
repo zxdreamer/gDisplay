@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using System.Threading;
+using System.Net;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 
 namespace gdisplay
 {
@@ -21,7 +24,7 @@ namespace gdisplay
 
         const int SCREEN_NUMS = 3;            //屏体的数量
         ydpModeEm wk_mode = ydpModeEm.Amap;                    //默认为高德模式
-        List<ScreenResult> ScnHandleList = new List<ScreenResult>();
+        List<ScreenResult> scrResultList = new List<ScreenResult>();
 
         TcpServer sv = null;
         ydpJsonConfig ydpCfg = new ydpJsonConfig();               //json配置文件对象
@@ -30,12 +33,14 @@ namespace gdisplay
         int AMAPreqcnt = 0;         //50ms计数器
         int AMAPreqtime = 0;        //配置文件中高德请求时间
         int AmapIndex = 0;          //处理哪块儿屏幕计数
+        int tcpPort = 8000;
+        string tcpIp = "";
         public Form1()
         {
             ydpLog.WriteLineLog(DateTime.Now.ToString() + "---------------------------程序开始启动----------------------------------");
             InitializeComponent();
-            userUIInit();       //窗体控件初始化
             userJsonInit();     //Json配置文件解析
+            userUIInit();       //窗体控件初始化            
             userTcpInit();      //TCPserver初始化，并启动监听
         }
         private void Form1_Load(object sender, EventArgs e)
@@ -45,11 +50,21 @@ namespace gdisplay
 
         void userUIInit()
         {
-            //1.开启定时器
-            tmDate.Start();
+            //1.这些数组的内存要在使用之前先申请，所以放到最前面
+            this.stsbarArr = new ToolStripStatusLabel[4] { stsbarDev, stsbarSta, stsbarMode, stsbarTime };
+            this.devBoxArr = new TextBox[6] { s1_devNameBox, s1_devStateBox, s2_devNameBox, s2_devStateBox, s3_devNameBox, s3_devStateBox };
+            this.sMenuArr = new ContextMenuStrip[3] { cMenu1_Color, cMenu2_Color, cMenu3_Color };
             //2.设置comBox工作模式
-            cBoxMode.Items.Add("高德模式");
-            cBoxMode.Items.Add("人工模式");       
+            if(ydpCfg.isAMAP==true)
+            {
+                cBoxMode.Items.Add("高德模式");
+                cBoxMode.Items.Add("人工模式");
+            } 
+            else
+            {
+                cBoxMode.Items.Add("人工模式");
+                cBoxMode.Items.Add("高德模式");                
+            }
             cBoxMode.SelectedIndex = 0;
             //3.设置listview显示模式
             lstview_s1.Columns.Add(new ColumnHeader() { Text = "ID", Width = 25 });
@@ -67,24 +82,25 @@ namespace gdisplay
             this.s1_picBoxArr = new System.Windows.Forms.PictureBox[5] { s1_pa1, s1_pa2, s1_pa3, s1_pb, s1_pc };
             this.s2_picBoxArr = new System.Windows.Forms.PictureBox[8] { s2_pa1, s2_pa2, s2_pa3, s2_pa4, s2_pb, s2_pc, s2_pd, s2_pe };
             this.s3_picBoxArr = new System.Windows.Forms.PictureBox[6] { s3_pa1, s3_pa2, s3_pa3, s3_pb, s3_pc, s3_pd };
-            //this.stsbarArr = new ToolStripStatusLabel[4] { stsbarDev, stsbarSta, stsbarMode, stsbarTime };
-            this.devBoxArr = new TextBox[6] { s1_devNameBox, s1_devStateBox, s2_devNameBox, s2_devStateBox, s3_devNameBox, s3_devStateBox };
-            this.sMenuArr = new ContextMenuStrip[3] { cMenu1_Color, cMenu2_Color, cMenu3_Color };
+            //5.开启定时器
+            ydpTimer.Start();
         } //async void userUIInit()
 
-        async void userJsonInit()
+        void userJsonInit()
         {
             try
             {
                 using (StreamReader rd = new StreamReader(@".\\ytr3.json"))
                 {
-                    var jsonstr = await rd.ReadToEndAsync();
-
+                    //var jsonstr = await rd.ReadToEndAsync();
+                    var jsonstr = rd.ReadToEnd();
                     ydpCfg = JsonConvert.DeserializeObject<ydpJsonConfig>(jsonstr);
 
                     ydpLog.WriteLineLog("开始解析配置文件......");
                     ydpApClient = AmapClient.CreateApClientObj(ydpCfg.AMAPkey);     //获得高德数据对象
                     AMAPreqtime = ydpCfg.AMAPreqtime * 2;    //定时器定时500ms，这里乘2
+                    tcpPort = ydpCfg.TCPport;
+                    tcpIp = ydpCfg.IpAddr;
                     foreach (CfgScreens screens in ydpCfg.screens)
                     {
                         //1.获得屏幕id
@@ -121,11 +137,11 @@ namespace gdisplay
                         //5.屏幕光带显示与路段解析对应关系解析
                         List<List<string>> bd = screens.band;
                         //6.依次将每一块屏的配置信息添加进去
-                        ScnHandleList.Add(new ScreenResult(sigPaths, reL, bd,sid));
+                        scrResultList.Add(new ScreenResult(sigPaths, reL, bd,sid));
                     }
                     //});
                     ydpLog.WriteLineLog("配置文件解析结果:");
-                    foreach (var sc in ScnHandleList)
+                    foreach (var sc in scrResultList)
                     {
                         ydpLog.WriteLineLog("屏幕 " + sc.Id);
 
@@ -163,7 +179,9 @@ namespace gdisplay
         void userTcpInit()
         {
             sv = new TcpServer();
-            sv.Start("127.0.0.1", 1234);
+            //sv.Start("127.0.0.1", 1234);
+            sv.Start(tcpIp, tcpPort);
+            //扩展：IP自动获取本地
         }
         /* ***********************************************************
         * UpdateState：更新UI控件数据
@@ -181,13 +199,38 @@ namespace gdisplay
             switch (msgType)
             {
                 case ydpPlaceEm.StsBar:        //在状态栏显示
-                    //stsbarArr[msg].Text = text;
+                    stsbarArr[msg].Text = text;
                     break;
                 case ydpPlaceEm.TxtBox:       //在tabControl显示
                     devBoxArr[msg].Text = text;
                     break;
                 default:
                     break;
+            }
+        }
+        /********************************************************
+         * TxBoxState:用于屏体的两个TextBox显示
+         * Param:
+         *      sc:与屏体绑定的connect对象
+         *      onOroff:打开关闭指示符 0：未连接，1：连接成功
+         * *******************************************************/
+        public void TxBoxState(Connect sc, int onOoff)
+        {
+            string[] arr = { "未连接", "连接成功" };
+            if (sc.devid == "ydp001")
+            {
+                UpdateState(ydpPlaceEm.TxtBox, ydpShowEm.S1DevName, "[Dev:" + sc.devid + "]");
+                UpdateState(ydpPlaceEm.TxtBox, ydpShowEm.S1DevState, arr[onOoff]);
+            }
+            else if (sc.devid == "ydp002")
+            {
+                UpdateState(ydpPlaceEm.TxtBox, ydpShowEm.S2DevName, "[Dev:" + sc.devid + "]");
+                UpdateState(ydpPlaceEm.TxtBox, ydpShowEm.S2DevState, arr[onOoff]);
+            }
+            else if (sc.devid == "ydp003")
+            {
+                UpdateState(ydpPlaceEm.TxtBox, ydpShowEm.S3DevName, "[Dev:" + sc.devid + "]");
+                UpdateState(ydpPlaceEm.TxtBox, ydpShowEm.S3DevState, arr[onOoff]);
             }
         }
         /**********************************************
@@ -222,7 +265,7 @@ namespace gdisplay
                     s1_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.pbc_red1;
             }
             //s1_StaArr[snum - 1] = (byte)color;             
-            ScnHandleList[0].ColorArr[snum - 1] = (byte)color; //将当前的路段颜色存入路段数组中
+            scrResultList[0].ColorArr[snum - 1] = (byte)color; //将当前的路段颜色存入路段数组中
         }
         /**********************************************
         //myRClickMenuColor_s2:屏2右键显示颜色
@@ -240,37 +283,37 @@ namespace gdisplay
             else if (snum >= 1 && snum <= 4)   //snum=1..4：代表同一种类型的图片
             {
                 if (color == 1)
-                    s2_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpa_red2;
+                    s2_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpa_green2;
                 else if (color == 2)
                     s2_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpa_yellow2;
-                else if (color == 3)
-                    s2_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpa_green2;
+                else if (color == 3 || color == 4)
+                    s2_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpa_red2;
             }
             else if (snum == 5 || snum == 6)
             {
                 if (color == 1)
-                    s2_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.rpd_red2;
+                    s2_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.rpd_green2;
                 else if (color == 2)
                     s2_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.rpd_yellow2;
-                else if (color == 3)
-                    s2_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.rpd_green2;
+                else if (color == 3 || color == 4)
+                    s2_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.rpd_red2;
             }
             else if (snum == 7)
             {
                 if (color == 1)
                 {
-                    s2_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpd_red2;
-                    s2_picBoxArr[snum].Image = global::gdisplay.Properties.Resources.pe_red2;
+                    s2_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpd_green2;
+                    s2_picBoxArr[snum].Image = global::gdisplay.Properties.Resources.pe_green2;
                 }
                 else if (color == 2)
                 {
                     s2_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpd_yellow2;
                     s2_picBoxArr[snum].Image = global::gdisplay.Properties.Resources.pe_yellow2;
                 }
-                else if (color == 3)
+                else if (color == 3 || color == 4)
                 {
-                    s2_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpd_green2;
-                    s2_picBoxArr[snum].Image = global::gdisplay.Properties.Resources.pe_green2;
+                    s2_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpd_red2;
+                    s2_picBoxArr[snum].Image = global::gdisplay.Properties.Resources.pe_red2;
                 }
             }
             //屏2中半圆形路段与写向左上的路段不同时变化时，需要取消这段注释
@@ -287,7 +330,7 @@ namespace gdisplay
             //}
             **************************************************/
             #endregion
-            ScnHandleList[1].ColorArr[snum - 1] = (byte)color; //将当前的路段颜色存入路段数组中
+            scrResultList[1].ColorArr[snum - 1] = (byte)color; //将当前的路段颜色存入路段数组中
         }
         /**********************************************
         //myRClickMenuColor_s2:屏2右键显示颜色
@@ -305,37 +348,37 @@ namespace gdisplay
             else if (snum >= 1 && snum <= 3)   //s2_num=1..3：代表同一种类型的图片
             {
                 if (color == 1)
-                    s3_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.pa_red3;
+                    s3_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.pa_green3;
                 else if (color == 2)
                     s3_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.pa_yellow3;
-                else if (color == 3)
-                    s3_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.pa_green3;
+                else if (color == 3 || color == 4)
+                    s3_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.pa_red3;
             }
             else if (snum == 4)
             {
                 if (color == 1)
-                    s3_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpb_red3;
+                    s3_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpb_green3;
                 else if (color == 2)
                     s3_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpb_yellow3;
-                else if (color == 3)
-                    s3_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpb_green3;
+                else if (color == 3 || color == 4)
+                    s3_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpb_red3;
             }
             else if (snum == 5)
             {
                 if (color == 1)
                 {
-                    s3_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpc_red3;
-                    s3_picBoxArr[snum].Image = global::gdisplay.Properties.Resources.lpd_red3;
+                    s3_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpc_green3;
+                    s3_picBoxArr[snum].Image = global::gdisplay.Properties.Resources.lpd_green3;
                 }
                 else if (color == 2)
                 {
                     s3_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpc_yellow3;
                     s3_picBoxArr[snum].Image = global::gdisplay.Properties.Resources.lpd_yellow3;
                 }
-                else if (color == 3)
+                else if (color == 3 || color == 4)
                 {
-                    s3_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpc_green3;
-                    s3_picBoxArr[snum].Image = global::gdisplay.Properties.Resources.lpd_green3;
+                    s3_picBoxArr[snum - 1].Image = global::gdisplay.Properties.Resources.lpc_red3;
+                    s3_picBoxArr[snum].Image = global::gdisplay.Properties.Resources.lpd_red3;
                 }
             }
             //屏2中半圆形路段与写向左上的路段不同时变化时，需要取消这段注释
@@ -352,7 +395,7 @@ namespace gdisplay
             //}
             **************************************************/
             #endregion
-            ScnHandleList[2].ColorArr[snum - 1] = (byte)color; //将当前的路段颜色存入路段数组中
+            scrResultList[2].ColorArr[snum - 1] = (byte)color; //将当前的路段颜色存入路段数组中
         }
 
         private void manualPixShow(PictureBox s_pix,int scn)
@@ -479,7 +522,7 @@ namespace gdisplay
 
         private void Red2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            myChangeMenuColor_s2(1,s2_num);
+            myChangeMenuColor_s2(3,s2_num);
         }
 
         private void Yellow2ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -489,7 +532,7 @@ namespace gdisplay
 
         private void Green2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            myChangeMenuColor_s2(3, s2_num);
+            myChangeMenuColor_s2(1, s2_num);
         }
 
         //发送DEV1寻址
@@ -672,7 +715,7 @@ namespace gdisplay
             if (jsonRegionList.Count == 0)
                 return;
 
-            int scIndex = ScnHandleList.FindIndex((item) =>         //此键值不再配置文件所列范围内
+            int scIndex = scrResultList.FindIndex((item) =>         //此键值不再配置文件所列范围内
             {
                 return item.Id.Equals(screen.Id);
             });
@@ -723,7 +766,7 @@ namespace gdisplay
                 }
                 catch (Exception e)
                 {
-                    //stsbarMode.Text = "高德解析数据异常";
+                    stsbarMode.Text = "高德解析数据异常";
                     ydpLog.WriteLineLog(DateTime.Now.ToString() + "高德解析数据异常");
                 }
             }
@@ -764,9 +807,9 @@ namespace gdisplay
         async void AMAPReqAndFullMRoadsList()
         {
             //1.获得屏体句柄
-            ScreenResult scnHandle = ScnHandleList[AmapIndex];
+            ScreenResult scnHandle = scrResultList[AmapIndex];
 
-            List<ydpAmapJson> scnAmapJson = new List<ydpAmapJson>();
+            List<ydpAmapJson> ydpAJlist = new List<ydpAmapJson>();
             ydpAmapJson ydpApJson = null;
 
             //2.对某一屏规定的区域向高德发送请求
@@ -786,25 +829,48 @@ namespace gdisplay
                 if (ydpApJson != null)
                 {
                     if (0 == IsValidJsonResult(ydpApJson)) //返回结果是否正确
-                        scnAmapJson.Add(ydpApJson);
+                        ydpAJlist.Add(ydpApJson);
 
                     ydpApJson = null;
                 }
             }
 
             //3.统一处理一块屏的所有AmapJson数据
-            AmapJsonToSteArr(scnAmapJson, scnHandle);
+            AmapJsonToSteArr(ydpAJlist, scnHandle);
         }
-        /*****************************************************************
-         * DynamicPixShow：在屏体上动态改变路段的颜色
-         * Param:
-         *      scnIndex：在ScreenResult中的索引
-         * ***************************************************************/
-        private void DynamicPixShow(int scnIndex)
+        private void ydpTimer_Tick(object sender, EventArgs e)
         {
-            ScreenResult screen = ScnHandleList[scnIndex];
+            //1.在状态栏显示时间
+            string localtime = DateTime.Now.ToString(" yyyy-MM-dd HH:mm:ss");
+            stsbarTime.Text = localtime;
+            AMAPreqcnt++;
+
+            //2.状态转移函数，根据接受和发送的数据，进行状态转移
+            DoState(AmapIndex);
+
+            //对于手动模式，到此不再向下运行
+            //对于高德模式而言，定时时间到自动发送交通态势信息
+            if (wk_mode == ydpModeEm.Amap)
+            {
+                //3.高德定时时间到60s，逐屏填充数据，填完发送
+                if (AMAPreqcnt >= AMAPreqtime)
+                {
+                    AMAPreqcnt = 0;
+                    AmapIndex = (AmapIndex + 1) % SCREEN_NUMS;
+                    //4.高德请求，抓取一屏路况交通态势
+                    AMAPReqAndFullMRoadsList();
+                    //5.屏幕AMAPScCnt状态机转向高德模式抓取数据完成
+                    scrResultList[AmapIndex].DataOk = ydpOkMachEm.Amap;
+                    DynamicPixShow(AmapIndex);                   
+                }
+            }
+        }
+
+        private Dictionary<string,Byte> SectMapBand(int scnIndex)
+        {
+            ScreenResult screen = scrResultList[scnIndex];
             if (screen.Id == null)    //
-                return;
+                return null;
 
             Dictionary<string, Byte> dic_rid_sta = new Dictionary<string, byte>();  //dictionary记录路段和状态数组的对应关系，key是路段，value是路段对应的状态数组
                                                                                     //1.遍历屏体主路
@@ -817,6 +883,18 @@ namespace gdisplay
                     dic_rid_sta.Add(mroad.IdsList[i], mroad.StateList[j]);
                 }
             }
+
+            return dic_rid_sta;
+        }
+        /*****************************************************************
+         * DynamicPixShow：在屏体上动态改变路段的颜色
+         * Param:
+         *      scnIndex：在ScreenResult中的索引
+         * ***************************************************************/
+        private void DynamicPixShow(int scnIndex)
+        {
+            Dictionary<string,Byte> dic_rid_sta = SectMapBand(scnIndex);
+            ScreenResult screen = scrResultList[scnIndex];
             int band_num = 0;               //屏体光带计数
                                             //3.遍历光带列表组
             foreach (var blst in screen.Band)
@@ -835,32 +913,6 @@ namespace gdisplay
                     myChangeMenuColor_s2(mx_sta, band_num);
                 else if (screen.Id == "ydp003")
                     myChangeMenuColor_s3(mx_sta, band_num);
-            }
-        }
-        private void tmDate_Tick(object sender, EventArgs e)
-        {
-            //1.在状态栏显示时间
-            string localtime = DateTime.Now.ToString(" yyyy-MM-dd HH:mm:ss");
-            //stsbarTime.Text = localtime;
-            AMAPreqcnt++;
-
-            //2.状态转移函数，根据接受和发送的数据，进行状态转移
-            DoState(AmapIndex);
-
-            //对于手动模式，到此不再向下运行
-            //对于高德模式而言，定时时间到自动发送交通态势信息
-            if(wk_mode==ydpModeEm.Amap)
-            {
-                //3.高德定时时间到60s，逐屏填充数据，填完发送
-                if (AMAPreqcnt >= AMAPreqtime)
-                {
-                    AMAPreqcnt = 0;
-                    //4.高德请求，抓取一屏路况交通态势
-                    AMAPReqAndFullMRoadsList();
-                    //5.屏幕AMAPScCnt状态机转向高德模式抓取数据完成
-                    ScnHandleList[AmapIndex].DataOk = ydpOkMachEm.Amap;
-                    AmapIndex = (AmapIndex + 1) % SCREEN_NUMS;
-                }
             }
         }
         /*****************************************************************
@@ -882,7 +934,7 @@ namespace gdisplay
 
             if (res > 0)
             {
-                //Program.gdFrom.UpdateState(ydpPlaceEm.StsBar, ydpShowEm.StsSndData, "已发送指令");
+                Program.gdFrom.UpdateState(ydpPlaceEm.StsBar, ydpShowEm.StsSndData, "已发送指令");
                 ydpLog.WriteLineLog(DateTime.Now.ToString() + ":发送指令:" + ydpLog.ByteToRawStr(arr,0,size));
             }
         }
@@ -897,7 +949,7 @@ namespace gdisplay
                 return;
 
             int len = sv.connects.Length;
-            ScreenResult screen = ScnHandleList[scnIndex];
+            ScreenResult screen = scrResultList[scnIndex];
             for (int i = 0; i < len; i++)
             {
                 switch(sv.connects[i].conState)
@@ -905,51 +957,56 @@ namespace gdisplay
                     case ydpMachEm.Idle:
                         break;
                     case ydpMachEm.AcceptDone:
-                        byte[] ckArr = AmapDataPack(1, null);
+                        byte[] ckArr = AmapDataPack(1, 0);
 
                         ydpSendData(sv.connects[i], ckArr, ckArr.Length);
                         //a.状态转移2 AcceptDone->RecvId 
                         sv.connects[i].conState = ydpMachEm.RecvId;
+                        sv.connects[i].delayCnt=0;
                         break;
                     case ydpMachEm.RecvId:
-                        //正等待接受设备号的消息
+                    case ydpMachEm.RecvReply:
+                        //超时处理
                         sv.connects[i].delayCnt++;
                         if (sv.connects[i].delayCnt == 10)
                         {
                             //错误提示????
-                            //d.状态转移5 RecvId->Idle 
-                            sv.connects[i].conState = ydpMachEm.Idle;
-                            sv.connects[i].Close();
+                            //d.状态转移5 RecvId->TxReady 
+                            sv.connects[i].conState = ydpMachEm.TxReady;
+                            break;
+                            //sv.connects[i].Close();
                         }
                         //收到一帧数据
                         if (sv.connects[i].flagFrame == true)
                         {
                             sv.connects[i].fsStart = -1;
                             sv.connects[i].flagFrame = false;
-                            //sv.connects[i].delayCnt = 0;  //????
+                            //sv.connects[i].delayCnt = 0;  
                             //3. 包分类解析
-                            byte[] rBuff = sv.connects[i].frameBuff;
+                            byte[] rBuff = sv.connects[i].frameBuff;  //????
                             /********************************************
                              * 对于查询设备号应答("91")指令：02 30 30 '9' '1' lenH lenL 0 / 1 id xx xx 03,应答结果存到devid中
                              * 对于发送显示数据应答("81")指令：02 30 30 '8' '1' lenH lenL 0 / 1 xx xx 03
                              * ****************************************/
                             //3.1 接受到39 31状态码，代表查询应答
-                            if (rBuff[3] == 0x39 && rBuff[4] == 0x31)
+                            if (rBuff[3] == 0x39 && rBuff[4] == 0x31)//?????
                             {
-                                if (rBuff[7] == 0x31)
+                                if (rBuff[7] == 0x30)
                                 {
-                                    sv.connects[i].delayCnt = 0;    //接收到正确的应答就将等待计数标志位清0
-                                    byte[] idbt = new byte[7];
-                                    for (int j = 0; j < 6; j++)
+                                    //sv.connects[i].delayCnt = 0;    //接收到正确的应答就将等待计数标志位清0
+                                    byte[] idbt = new byte[8];          //????改格式
+                                    for (int j = 0; j < 8; j++)
                                     {
                                         idbt[j] = rBuff[j + 8];
                                     }
                                     sv.connects[i].devid = Encoding.Default.GetString(idbt).Replace("\0", "");
                                     //b.状态转移3 RecvId->DevAns 
-                                    sv.connects[i].conState = ydpMachEm.DevAns;
+                                    sv.connects[i].conState = ydpMachEm.TxReady;
 
-                                    MessageBox.Show("[Dev:" + sv.connects[i].devid + "]" + " 已连接");
-                                    //Program.gdFrom.UpdateState(ydpPlaceEm.StsBar, ydpShowEm.StsDevStat, "[Dev:" + sv.connects[i].devid + "]" + "已连接");
+                                    //如果设备不再设备列表中怎么办???
+                                    TxBoxState(sv.connects[i], 1);
+                                    //MessageBox.Show("[Dev:" + sv.connects[i].devid + "]" + " 已连接");
+                                    Program.gdFrom.UpdateState(ydpPlaceEm.StsBar, ydpShowEm.StsDevStat, "[Dev:" + sv.connects[i].devid + "]" + "已连接");
                                     ydpLog.WriteLineLog(DateTime.Now.ToString() + ":设备" + sv.connects[i].devid+" 连接成功!");
                                 }
                             }
@@ -957,26 +1014,26 @@ namespace gdisplay
                             else if (rBuff[3] == 0x38 && rBuff[4] == 0x31)
                             {
                                 //接受应答处理函数????
-                                if(rBuff[7] == 0x31)
+                                if(rBuff[7] == 0x30)
                                 {
-                                    DynamicPixShow(AmapIndex);          //PC上动态显示图片
+                                    //DynamicPixShow(AmapIndex);          //PC上动态显示图片
                                                                                      //c.状态转移4 RecvId->InfoAns 
-                                    sv.connects[i].conState = ydpMachEm.InfoAns;
+                                    sv.connects[i].conState = ydpMachEm.TxReady;
                                 }
                             }
                         }
                         break;
-                    case ydpMachEm.RecvInfo:            //没有应答依然下发
-                    case ydpMachEm.DevAns:              //只有应答正确才发送下一包数据
-                    case ydpMachEm.InfoAns:
-                        if(screen.Id==sv.connects[i].devid && screen.DataOk==ydpOkMachEm.Manual)
+                    case ydpMachEm.TxReady:             //发送数据应答成功
+                        
+                        if (screen.Id==sv.connects[i].devid && screen.DataOk==ydpOkMachEm.Manual)
                         {
                             screen.DataOk = ydpOkMachEm.Unok;
                             ydpLog.WriteLineLog("处于手动模式屏幕" + screen.Id);
 
                             byte[] manualArr = ManualDataPack(scnIndex);
+                            sv.connects[i].delayCnt = 0;
                             ydpSendData(sv.connects[i], manualArr, manualArr.Length);
-                            sv.connects[i].conState = ydpMachEm.RecvInfo;
+                            sv.connects[i].conState = ydpMachEm.RecvReply;
 
                             ydpLog.WriteLineLog("用户点击的交通态势:"+ydpLog.ByteToRawStr(manualArr, 0, manualArr.Length));
                         }
@@ -987,9 +1044,10 @@ namespace gdisplay
 
                             ydpLog.WriteLineLog("处于高德模式屏幕" + screen.Id);
 
-                            byte[] amapArr = AmapDataPack(2, screen);
+                            byte[] amapArr = AmapDataPack(2, AmapIndex);
+                            sv.connects[i].delayCnt = 0;
                             ydpSendData(sv.connects[i], amapArr, amapArr.Length);
-                            sv.connects[i].conState = ydpMachEm.RecvInfo;
+                            sv.connects[i].conState = ydpMachEm.RecvReply;
 
                             foreach (var mroad in screen.Sroads)
                             {
@@ -1018,8 +1076,9 @@ namespace gdisplay
          *       对于查询("91")指令：数据包：02 30 30 '9' '1' xx xx 03
          *       对于发送状态("81")指令：数据包：02 30 30 '8' '1' '{' id ':' xx} ...
          * *******************************************************************/
-        private byte[] AmapDataPack(int flag, ScreenResult screen)
+        private byte[] AmapDataPack(int flag, int scnIndex)
         {
+            ScreenResult screen = scrResultList[scnIndex];
             List<byte> res = new List<byte>();
             res.Add(0x02);              //前三位固定 0x02 0x30 0x30
             res.Add(0x30);
@@ -1042,27 +1101,24 @@ namespace gdisplay
                 byte[] tmp1 = Encoding.Default.GetBytes("{");
                 byte[] tmp2 = Encoding.Default.GetBytes(":");
                 byte[] tmp3 = Encoding.Default.GetBytes("}");
-                //1. 获得屏幕的一条路
-                foreach (var road in screen.Sroads)
+                //1. 获得屏幕SectionList和Band映射值
+                Dictionary<string,Byte> dic_rid_sta = SectMapBand(scnIndex);
+                Byte bdIndex = 0;
+                //2. 遍历Band列表
+                foreach(var blst in screen.Band)
                 {
-                    //2.获得屏幕上路的路段编号和路段状态
-                    for (int i = 0; i < road.IdsList.Count; i++)
+                    //3.构造出格式{bdIndex:state}的形式，这是一节数据
+                    res.Add(tmp1[0]);
+                    res.Add(bdIndex);
+                    res.Add(tmp2[0]);
+                    int mx_sta = 0;
+                    foreach(var rds in blst)
                     {
-                        //3.填充"{id:x}"
-                        res.Add(tmp1[0]);
-                        plLen++;
-                        byte[] idbt = Encoding.Default.GetBytes(road.IdsList[i]);
-                        foreach (var id in idbt)
-                        {
-                            res.Add(id);
-                            plLen++;
-                        }
-                        res.Add(tmp2[0]);
-                        plLen++;
-                        res.Add(road.StateList[i]);
-                        res.Add(tmp3[0]);
-                        plLen++;
+                        mx_sta = Math.Max(mx_sta, dic_rid_sta[rds]);
                     }
+                    res.Add((Byte)mx_sta);
+                    res.Add(tmp3[0]);
+                    bdIndex++;
                 }
             }
             res[5] = (byte)((plLen & 0xff00) >> 8);  //补充包有效载荷长度
@@ -1081,49 +1137,43 @@ namespace gdisplay
          * ***************************************************************************/
         private byte[] ManualDataPack(int scnIndex)
         {
-            ScreenResult screen = ScnHandleList[scnIndex];
+            ScreenResult screen = scrResultList[scnIndex];
             Dictionary<string, Byte> dic_rid_sta = new Dictionary<string, byte>();  //dictionary记录路段和状态数组的对应关系，key是路段，value是路段对应的状态数组
 
             int index = 0;
-            List<Byte> sndLst = new List<byte>();
-            sndLst.Add(0x02);
-            sndLst.Add(0x30);
-            sndLst.Add(0x30);
-            sndLst.Add(0x38);
-            sndLst.Add(0x31);
-            sndLst.Add(0x00);
-            sndLst.Add(0x00);
+            List<Byte> sndList = new List<byte>();
+            sndList.Add(0x02);
+            sndList.Add(0x30);
+            sndList.Add(0x30);
+            sndList.Add(0x38);
+            sndList.Add(0x31);
+            sndList.Add(0x00);
+            sndList.Add(0x00);
             byte[] tmp1 = Encoding.Default.GetBytes("{");
             byte[] tmp2 = Encoding.Default.GetBytes(":");
             byte[] tmp3 = Encoding.Default.GetBytes("}");
             int plLen = 0;
+
             foreach (var bdlst in screen.Band)
             {
-                foreach (var rids in bdlst)
-                {
-                    sndLst.Add(tmp1[0]);
-                    plLen++;
-                    byte[] rdbs = Encoding.Default.GetBytes(rids);
-                    foreach (var rd in rdbs)
-                    {
-                        sndLst.Add(rd);
-                        plLen++;
-                    }
-                    sndLst.Add(tmp2[0]);
-                    plLen++;
-                    sndLst.Add(screen.ColorArr[index]);
-                    sndLst.Add(tmp3[0]);
-                    plLen++;
-                }
+                sndList.Add(tmp1[0]);
+                plLen++;
+                sndList.Add((Byte)index);
+                sndList.Add(tmp2[0]);
+                plLen++;
+                sndList.Add(screen.ColorArr[index]);
+                sndList.Add(tmp3[0]);
+                plLen++;
                 index++;
             }
-            sndLst[5] = (byte)((plLen & 0xff00) >> 8);
-            sndLst[6] = (byte)((plLen & 0xff));
-            sndLst.Add(0x00);
-            sndLst.Add(0x00);
-            sndLst.Add(0x03);
-            return sndLst.ToArray();
-        }        private void button1_Click(object sender, EventArgs e)
+            sndList[5] = (byte)((plLen & 0xff00) >> 8);
+            sndList[6] = (byte)((plLen & 0xff));
+            sndList.Add(0x00);
+            sndList.Add(0x00);
+            sndList.Add(0x03);
+            return sndList.ToArray();
+        }
+        private void button1_Click(object sender, EventArgs e)
         {
             byte[] arr = { 0x31, 0x32, 0x33, 0x34 };
             
@@ -1179,7 +1229,7 @@ namespace gdisplay
 
         private void Red3ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            myChangeMenuColor_s3(1,s3_num);
+            myChangeMenuColor_s3(3,s3_num);
         }
 
         private void Yellow3ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1189,7 +1239,7 @@ namespace gdisplay
 
         private void Green3ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            myChangeMenuColor_s3(3, s3_num);
+            myChangeMenuColor_s3(1, s3_num);
         }
 
         private void cBoxMode_SelectedIndexChanged(object sender, EventArgs e)
@@ -1205,7 +1255,7 @@ namespace gdisplay
                 s2_BtnSnd.ForeColor = Color.Black;
                 s2_BtnSnd.ForeColor = Color.Black;
                 ydpLog.WriteLineLog("目前工作在高德模式!!!");
-                //UpdateState(ydpPlaceEm.StsBar, ydpShowEm.StsMode, "高德模式");
+                UpdateState(ydpPlaceEm.StsBar, ydpShowEm.StsMode, "高德模式");
             }               
             else if (cBoxMode.Text == "人工模式")
             {
@@ -1217,7 +1267,7 @@ namespace gdisplay
                 s2_BtnSnd.ForeColor = Color.LightSeaGreen;
                 s2_BtnSnd.ForeColor = Color.LightSeaGreen;
                 ydpLog.WriteLineLog("目前工作在手动模式!!!");
-                //UpdateState(ydpPlaceEm.StsBar, ydpShowEm.StsMode, "人工模式");
+                UpdateState(ydpPlaceEm.StsBar, ydpShowEm.StsMode, "人工模式");
             }
         }
 
@@ -1225,21 +1275,21 @@ namespace gdisplay
         {
             AmapIndex = 0;
             byte[] sndArr = ManualDataPack(0);
-            ScnHandleList[0].DataOk = ydpOkMachEm.Manual;//屏幕1状态机转向手动模式抓取完成
+            scrResultList[0].DataOk = ydpOkMachEm.Manual;//屏幕1状态机转向手动模式抓取完成
         }
 
         private void s2_BtnSnd_Click(object sender, EventArgs e)
         {
             AmapIndex = 1;
             byte[] sndArr = ManualDataPack(1);
-            ScnHandleList[1].DataOk = ydpOkMachEm.Manual;//屏幕2状态机转向手动模式抓取完成
+            scrResultList[1].DataOk = ydpOkMachEm.Manual;//屏幕2状态机转向手动模式抓取完成
         }
 
         private void s3_BtnSnd_Click(object sender, EventArgs e)
         {
             AmapIndex = 2;
             byte[] sndArr = ManualDataPack(2);
-            ScnHandleList[2].DataOk = ydpOkMachEm.Manual;//屏幕3状态机转向手动模式抓取完成
+            scrResultList[2].DataOk = ydpOkMachEm.Manual;//屏幕3状态机转向手动模式抓取完成
         }
     }
 }

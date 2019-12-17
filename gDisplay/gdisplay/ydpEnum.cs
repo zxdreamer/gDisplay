@@ -36,10 +36,9 @@ namespace gdisplay
         Idle=0,         //未连接
         AcceptDone,     //链接成功
         RecvId,         //等待接受设备ID状态
-        RecvInfo,       //等待接受消息应答状态
         Manual,         //接收到数据
-        DevAns,         //询问设备号应答成功
-        InfoAns,        //发送态势信息应答成功
+        RecvReply,        //询问设备号应答成功
+        TxReady,        //发送态势信息应答成功
     }
     //要发送数据是否准备好的状态机枚举
     public enum ydpOkMachEm

@@ -38,7 +38,7 @@
             this.Red2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Yellow2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Green2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tmDate = new System.Windows.Forms.Timer(this.components);
+            this.ydpTimer = new System.Windows.Forms.Timer(this.components);
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.cMenu3_Color = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -102,6 +102,11 @@
             this.s3_pb = new System.Windows.Forms.PictureBox();
             this.s3_pa1 = new System.Windows.Forms.PictureBox();
             this.s3_pa3 = new System.Windows.Forms.PictureBox();
+            this.stsbar = new System.Windows.Forms.StatusStrip();
+            this.stsbarDev = new System.Windows.Forms.ToolStripStatusLabel();
+            this.stsbarSta = new System.Windows.Forms.ToolStripStatusLabel();
+            this.stsbarMode = new System.Windows.Forms.ToolStripStatusLabel();
+            this.stsbarTime = new System.Windows.Forms.ToolStripStatusLabel();
             this.cMenu1_Color.SuspendLayout();
             this.cMenu2_Color.SuspendLayout();
             this.cMenu3_Color.SuspendLayout();
@@ -133,6 +138,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.s3_pb)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.s3_pa1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.s3_pa3)).BeginInit();
+            this.stsbar.SuspendLayout();
             this.SuspendLayout();
             // 
             // cMenu1_Color
@@ -195,10 +201,10 @@
             this.Green2ToolStripMenuItem.Text = "绿色";
             this.Green2ToolStripMenuItem.Click += new System.EventHandler(this.Green2ToolStripMenuItem_Click);
             // 
-            // tmDate
+            // ydpTimer
             // 
-            this.tmDate.Interval = 500;
-            this.tmDate.Tick += new System.EventHandler(this.tmDate_Tick);
+            this.ydpTimer.Interval = 500;
+            this.ydpTimer.Tick += new System.EventHandler(this.ydpTimer_Tick);
             // 
             // button1
             // 
@@ -418,9 +424,9 @@
             this.s1_devStateBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.s1_devStateBox.BackColor = System.Drawing.SystemColors.MenuBar;
-            this.s1_devStateBox.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.s1_devStateBox.ForeColor = System.Drawing.Color.Red;
-            this.s1_devStateBox.Location = new System.Drawing.Point(402, 273);
+            this.s1_devStateBox.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.s1_devStateBox.ForeColor = System.Drawing.Color.DeepSkyBlue;
+            this.s1_devStateBox.Location = new System.Drawing.Point(402, 281);
             this.s1_devStateBox.Multiline = true;
             this.s1_devStateBox.Name = "s1_devStateBox";
             this.s1_devStateBox.ReadOnly = true;
@@ -430,11 +436,11 @@
             // s1_devStatelb
             // 
             this.s1_devStatelb.AutoSize = true;
-            this.s1_devStatelb.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.s1_devStatelb.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.s1_devStatelb.ForeColor = System.Drawing.Color.Red;
             this.s1_devStatelb.Location = new System.Drawing.Point(390, 252);
             this.s1_devStatelb.Name = "s1_devStatelb";
-            this.s1_devStatelb.Size = new System.Drawing.Size(76, 16);
+            this.s1_devStatelb.Size = new System.Drawing.Size(110, 24);
             this.s1_devStatelb.TabIndex = 4;
             this.s1_devStatelb.Text = "连接状态";
             // 
@@ -443,9 +449,9 @@
             this.s1_devNameBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.s1_devNameBox.BackColor = System.Drawing.SystemColors.MenuBar;
-            this.s1_devNameBox.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.s1_devNameBox.ForeColor = System.Drawing.Color.Red;
-            this.s1_devNameBox.Location = new System.Drawing.Point(402, 60);
+            this.s1_devNameBox.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.s1_devNameBox.ForeColor = System.Drawing.Color.DeepSkyBlue;
+            this.s1_devNameBox.Location = new System.Drawing.Point(402, 68);
             this.s1_devNameBox.Multiline = true;
             this.s1_devNameBox.Name = "s1_devNameBox";
             this.s1_devNameBox.ReadOnly = true;
@@ -455,11 +461,11 @@
             // s1_devNamelb
             // 
             this.s1_devNamelb.AutoSize = true;
-            this.s1_devNamelb.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.s1_devNamelb.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.s1_devNamelb.ForeColor = System.Drawing.Color.Red;
             this.s1_devNamelb.Location = new System.Drawing.Point(390, 37);
             this.s1_devNamelb.Name = "s1_devNamelb";
-            this.s1_devNamelb.Size = new System.Drawing.Size(76, 16);
+            this.s1_devNamelb.Size = new System.Drawing.Size(110, 24);
             this.s1_devNamelb.TabIndex = 4;
             this.s1_devNamelb.Text = "设备名称";
             // 
@@ -592,9 +598,9 @@
             this.s2_devStateBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.s2_devStateBox.BackColor = System.Drawing.SystemColors.MenuBar;
-            this.s2_devStateBox.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.s2_devStateBox.ForeColor = System.Drawing.Color.Red;
-            this.s2_devStateBox.Location = new System.Drawing.Point(424, 275);
+            this.s2_devStateBox.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.s2_devStateBox.ForeColor = System.Drawing.Color.DeepSkyBlue;
+            this.s2_devStateBox.Location = new System.Drawing.Point(424, 286);
             this.s2_devStateBox.Multiline = true;
             this.s2_devStateBox.Name = "s2_devStateBox";
             this.s2_devStateBox.ReadOnly = true;
@@ -604,11 +610,11 @@
             // s2_devStatelb
             // 
             this.s2_devStatelb.AutoSize = true;
-            this.s2_devStatelb.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.s2_devStatelb.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.s2_devStatelb.ForeColor = System.Drawing.Color.Red;
             this.s2_devStatelb.Location = new System.Drawing.Point(411, 256);
             this.s2_devStatelb.Name = "s2_devStatelb";
-            this.s2_devStatelb.Size = new System.Drawing.Size(76, 16);
+            this.s2_devStatelb.Size = new System.Drawing.Size(110, 24);
             this.s2_devStatelb.TabIndex = 6;
             this.s2_devStatelb.Text = "连接状态";
             // 
@@ -617,9 +623,9 @@
             this.s2_devNameBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.s2_devNameBox.BackColor = System.Drawing.SystemColors.MenuBar;
-            this.s2_devNameBox.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.s2_devNameBox.ForeColor = System.Drawing.Color.Red;
-            this.s2_devNameBox.Location = new System.Drawing.Point(424, 62);
+            this.s2_devNameBox.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.s2_devNameBox.ForeColor = System.Drawing.Color.DeepSkyBlue;
+            this.s2_devNameBox.Location = new System.Drawing.Point(424, 73);
             this.s2_devNameBox.Multiline = true;
             this.s2_devNameBox.Name = "s2_devNameBox";
             this.s2_devNameBox.ReadOnly = true;
@@ -629,11 +635,11 @@
             // s2_devNamelb
             // 
             this.s2_devNamelb.AutoSize = true;
-            this.s2_devNamelb.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.s2_devNamelb.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.s2_devNamelb.ForeColor = System.Drawing.Color.Red;
             this.s2_devNamelb.Location = new System.Drawing.Point(411, 41);
             this.s2_devNamelb.Name = "s2_devNamelb";
-            this.s2_devNamelb.Size = new System.Drawing.Size(76, 16);
+            this.s2_devNamelb.Size = new System.Drawing.Size(110, 24);
             this.s2_devNamelb.TabIndex = 7;
             this.s2_devNamelb.Text = "设备名称";
             // 
@@ -818,9 +824,9 @@
             this.s3_devStateBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.s3_devStateBox.BackColor = System.Drawing.SystemColors.MenuBar;
-            this.s3_devStateBox.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.s3_devStateBox.ForeColor = System.Drawing.Color.Red;
-            this.s3_devStateBox.Location = new System.Drawing.Point(401, 279);
+            this.s3_devStateBox.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.s3_devStateBox.ForeColor = System.Drawing.Color.DeepSkyBlue;
+            this.s3_devStateBox.Location = new System.Drawing.Point(401, 291);
             this.s3_devStateBox.Multiline = true;
             this.s3_devStateBox.Name = "s3_devStateBox";
             this.s3_devStateBox.ReadOnly = true;
@@ -830,11 +836,11 @@
             // s3_devStatelb
             // 
             this.s3_devStatelb.AutoSize = true;
-            this.s3_devStatelb.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.s3_devStatelb.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.s3_devStatelb.ForeColor = System.Drawing.Color.Red;
             this.s3_devStatelb.Location = new System.Drawing.Point(388, 260);
             this.s3_devStatelb.Name = "s3_devStatelb";
-            this.s3_devStatelb.Size = new System.Drawing.Size(76, 16);
+            this.s3_devStatelb.Size = new System.Drawing.Size(110, 24);
             this.s3_devStatelb.TabIndex = 11;
             this.s3_devStatelb.Text = "连接状态";
             // 
@@ -843,9 +849,9 @@
             this.s3_devNameBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.s3_devNameBox.BackColor = System.Drawing.SystemColors.MenuBar;
-            this.s3_devNameBox.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.s3_devNameBox.ForeColor = System.Drawing.Color.Red;
-            this.s3_devNameBox.Location = new System.Drawing.Point(401, 66);
+            this.s3_devNameBox.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.s3_devNameBox.ForeColor = System.Drawing.Color.DeepSkyBlue;
+            this.s3_devNameBox.Location = new System.Drawing.Point(401, 78);
             this.s3_devNameBox.Multiline = true;
             this.s3_devNameBox.Name = "s3_devNameBox";
             this.s3_devNameBox.ReadOnly = true;
@@ -855,11 +861,11 @@
             // s3_devNamelb
             // 
             this.s3_devNamelb.AutoSize = true;
-            this.s3_devNamelb.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.s3_devNamelb.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.s3_devNamelb.ForeColor = System.Drawing.Color.Red;
             this.s3_devNamelb.Location = new System.Drawing.Point(388, 45);
             this.s3_devNamelb.Name = "s3_devNamelb";
-            this.s3_devNamelb.Size = new System.Drawing.Size(76, 16);
+            this.s3_devNamelb.Size = new System.Drawing.Size(110, 24);
             this.s3_devNamelb.TabIndex = 12;
             this.s3_devNamelb.Text = "设备名称";
             // 
@@ -935,11 +941,52 @@
             this.s3_pa3.TabStop = false;
             this.s3_pa3.MouseUp += new System.Windows.Forms.MouseEventHandler(this.s3_pa3_MouseUp);
             // 
+            // stsbar
+            // 
+            this.stsbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.stsbarDev,
+            this.stsbarSta,
+            this.stsbarMode,
+            this.stsbarTime});
+            this.stsbar.Location = new System.Drawing.Point(0, 661);
+            this.stsbar.Name = "stsbar";
+            this.stsbar.Size = new System.Drawing.Size(1115, 22);
+            this.stsbar.TabIndex = 6;
+            this.stsbar.Text = "stsbar";
+            // 
+            // stsbarDev
+            // 
+            this.stsbarDev.AutoSize = false;
+            this.stsbarDev.Name = "stsbarDev";
+            this.stsbarDev.Size = new System.Drawing.Size(120, 17);
+            this.stsbarDev.Text = "Dev";
+            // 
+            // stsbarSta
+            // 
+            this.stsbarSta.AutoSize = false;
+            this.stsbarSta.Name = "stsbarSta";
+            this.stsbarSta.Size = new System.Drawing.Size(600, 17);
+            this.stsbarSta.Text = "State";
+            // 
+            // stsbarMode
+            // 
+            this.stsbarMode.AutoSize = false;
+            this.stsbarMode.Name = "stsbarMode";
+            this.stsbarMode.Size = new System.Drawing.Size(150, 17);
+            this.stsbarMode.Text = "高德模式";
+            // 
+            // stsbarTime
+            // 
+            this.stsbarTime.AutoSize = false;
+            this.stsbarTime.Name = "stsbarTime";
+            this.stsbarTime.Size = new System.Drawing.Size(200, 17);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1115, 683);
+            this.Controls.Add(this.stsbar);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -981,7 +1028,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.s3_pb)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.s3_pa1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.s3_pa3)).EndInit();
+            this.stsbar.ResumeLayout(false);
+            this.stsbar.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -997,7 +1047,7 @@
         //自定义数组，用于记录屏2的pictureBox，目的是简化myRClickMenuColor_s2代码
         public System.Windows.Forms.PictureBox[] s3_picBoxArr;
         //自定义数组，用于记录stsbar的四个label，目的是简化UpdateState代码
-        //public System.Windows.Forms.ToolStripStatusLabel[] stsbarArr;
+        public System.Windows.Forms.ToolStripStatusLabel[] stsbarArr;
         public System.Drawing.Image[] s1_pxColor;
         public System.Drawing.Image[] s2_pxColor;
         public System.Windows.Forms.TextBox[] devBoxArr;
@@ -1006,7 +1056,7 @@
         private System.Windows.Forms.ToolStripMenuItem Red2ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem Yellow2ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem Green2ToolStripMenuItem;
-        private System.Windows.Forms.Timer tmDate;
+        private System.Windows.Forms.Timer ydpTimer;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.ContextMenuStrip cMenu3_Color;
@@ -1070,6 +1120,11 @@
         private System.Windows.Forms.PictureBox s1_pa1;
         private System.Windows.Forms.PictureBox s1_pa2;
         private System.Windows.Forms.PictureBox s1_pa3;
+        private System.Windows.Forms.StatusStrip stsbar;
+        private System.Windows.Forms.ToolStripStatusLabel stsbarDev;
+        private System.Windows.Forms.ToolStripStatusLabel stsbarSta;
+        private System.Windows.Forms.ToolStripStatusLabel stsbarMode;
+        private System.Windows.Forms.ToolStripStatusLabel stsbarTime;
     }
 }
 
