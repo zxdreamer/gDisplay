@@ -33,6 +33,12 @@ namespace gdisplay
         int AMAPreqcnt = 0;         //50ms计数器
         int AMAPreqtime = 0;        //配置文件中高德请求时间
         int AmapIndex = 0;          //处理哪块儿屏幕计数
+        int preAmapIndex = 0;       //处理AmapIndex上一块屏
+        int scnFindIndex = 0;       //3块屏总的搜索区域索引
+        int s1_findNum = 0;         //1号屏总的搜索区域数
+        int s2_findNum = 0;         //2号屏总的搜索区域数
+        int s3_findNum = 0;         //3号屏总的搜索区域数
+        int allfindNum = 0;         //3个屏幕的搜索总数
         int tcpPort = 8000;
         string tcpIp = "";
         public Form1()
@@ -98,9 +104,10 @@ namespace gdisplay
 
                     ydpLog.WriteLineLog("开始解析配置文件......");
                     ydpApClient = AmapClient.CreateApClientObj(ydpCfg.AMAPkey);     //获得高德数据对象
-                    AMAPreqtime = ydpCfg.AMAPreqtime * 2;    //定时器定时500ms，这里乘2
+                    
                     tcpPort = ydpCfg.TCPport;
                     tcpIp = ydpCfg.IpAddr;
+                    int i = 0;
                     foreach (CfgScreens screens in ydpCfg.screens)
                     {
                         //1.获得屏幕id
@@ -112,6 +119,11 @@ namespace gdisplay
                         {
                             reL.Add(rect);
                         }
+                        //增加屏幕时，这里需要跟着增加si_num
+                        i++;
+                        if (i == 1) s1_findNum = reL.ToArray().Length;
+                        else if (i == 2) s2_findNum = reL.ToArray().Length;
+                        else if (i == 3) s3_findNum = reL.ToArray().Length;
 
                         //4.添加屏id和路结构的Dict
                         List<RoadsResult> sigPaths = new List<RoadsResult>();
@@ -139,7 +151,10 @@ namespace gdisplay
                         //6.依次将每一块屏的配置信息添加进去
                         scrResultList.Add(new ScreenResult(sigPaths, reL, bd,sid));
                     }
-                    //});
+
+                    allfindNum = s1_findNum + s2_findNum + s3_findNum;
+                    AMAPreqtime = (ydpCfg.AMAPreqtime * 2)/allfindNum;    //定时器定时500ms，这里乘2
+
                     ydpLog.WriteLineLog("配置文件解析结果:");
                     foreach (var sc in scrResultList)
                     {
@@ -710,11 +725,12 @@ namespace gdisplay
          *      jsonRegionList:AMAP的json数据列表
          *      screen:屏幕配置文件的整屏json信息
          * *****************************************************/
-        public void AmapJsonToSteArr(List<ydpAmapJson> jsonRegionList, ScreenResult screen)
+        public void AmapJsonToSteArr(ydpAmapJson jsonRegion, int scnIndex)
         {
-            if (jsonRegionList.Count == 0)
+            if (jsonRegion==null)
                 return;
 
+            ScreenResult screen = scrResultList[scnIndex];
             int scIndex = scrResultList.FindIndex((item) =>         //此键值不再配置文件所列范围内
             {
                 return item.Id.Equals(screen.Id);
@@ -723,52 +739,49 @@ namespace gdisplay
             if (scIndex == -1)
                 return;
 
-            foreach (var sigJson in jsonRegionList)
+            try                 //解决AMAPjson缺少数据造成的异常
             {
-                try                 //解决AMAPjson缺少数据造成的异常
+                string wholeDesc = jsonRegion.trafficinfo.description;   //???整体描述不知道怎么处理
+                WholeDescFullSteList(wholeDesc, screen);              //通过description预填充数组
+
+                using (StreamWriter w = new StreamWriter(".\\description.txt", true))
                 {
-                    string wholeDesc = sigJson.trafficinfo.description;   //???整体描述不知道怎么处理
-                    WholeDescFullSteList(wholeDesc, screen);              //通过description预填充数组
-
-                    using (StreamWriter w = new StreamWriter(".\\description.txt", true))
+                    w.WriteLine(wholeDesc);
+                }
+                foreach (var road in jsonRegion.trafficinfo.roads)
+                {
+                    int mrIndex = screen.Sroads.FindIndex((item) =>
                     {
-                        w.WriteLine(wholeDesc);
-                    }
-                    foreach (var road in sigJson.trafficinfo.roads)
+                        return item.MRoad.Equals(road.name);
+                    });
+                    if (mrIndex != -1)
                     {
-                        int mrIndex = screen.Sroads.FindIndex((item) =>
+                        string pathDir = road.direction;
+                        Byte pathSta = Byte.Parse(road.status);
+                        int pathAngle = int.Parse(road.angle);
+                        int pathSpeed = 0;
+                        try             //speed容易丢失(为空) 单独处理
                         {
-                            return item.MRoad.Equals(road.name);
-                        });
-                        if (mrIndex != -1)
+                            pathSpeed = int.Parse(road.speed);
+                        }
+                        catch (Exception)
+                        { }
+
+                        List<int> nodes = RoadDirToIndex(pathDir, pathAngle, screen.Sroads[mrIndex].SectList, screen.Sroads[mrIndex].AngleList);
+                        if (nodes.Count != 2 || (nodes[0] == 0 && nodes[1] == 0))
+                            continue;
+
+                        for (int i = nodes[0]; i < nodes[1]; i++)
                         {
-                            string pathDir = road.direction;
-                            Byte pathSta = Byte.Parse(road.status);
-                            int pathAngle = int.Parse(road.angle);
-                            int pathSpeed = 0;
-                            try             //speed容易丢失 单独处理
-                            {
-                                pathSpeed = int.Parse(road.speed);
-                            }
-                            catch (Exception)
-                            { }
-
-                            List<int> nodes = RoadDirToIndex(pathDir, pathAngle, screen.Sroads[mrIndex].SectList, screen.Sroads[mrIndex].AngleList);
-                            if (nodes.Count != 2 || (nodes[0] == 0 && nodes[1] == 0))
-                                continue;
-
-                            for (int i = nodes[0]; i < nodes[1]; i++)
-                            {
-                                screen.Sroads[mrIndex].StateList[i] = Math.Max(screen.Sroads[mrIndex].StateList[i], pathSta);
-                            }
+                            screen.Sroads[mrIndex].StateList[i] = Math.Max(screen.Sroads[mrIndex].StateList[i], pathSta);
                         }
                     }
                 }
-                catch (Exception e)
-                {
-                    stsbarMode.Text = "高德解析数据异常";
-                    ydpLog.WriteLineLog(DateTime.Now.ToString() + "高德解析数据异常");
-                }
+            }
+            catch (Exception e)
+            {
+                stsbarMode.Text = "高德解析数据异常";
+                ydpLog.WriteLineLog(DateTime.Now.ToString() + "高德解析数据异常:"+e.ToString());
             }
         }
         /*****************************************************************
@@ -804,40 +817,64 @@ namespace gdisplay
          * Param:
          *      无
          * ***************************************************************/
-        async void AMAPReqAndFullMRoadsList()
+        async void AMAPReqAndFullMRoadsList(int scnIndex)
         {
-            //1.获得屏体句柄
-            ScreenResult scnHandle = scrResultList[AmapIndex];
-
-            List<ydpAmapJson> ydpAJlist = new List<ydpAmapJson>();
             ydpAmapJson ydpApJson = null;
-
-            //2.对某一屏规定的区域向高德发送请求
-            foreach (string region in scnHandle.SfindRect)
+            
+            int scnfd = 0;
+            if(scnIndex == 2)
             {
-                int reSendCont = 0;
-
-                //2.1 按区域异步发送请求，失败，连发三次
-                do
-                {
-                    ydpApJson = await ydpApClient.GetJsonFromAmapAsync(region);
-                    if (ydpApJson == null)              //保证第一次成功不延迟，失败延迟
-                        await Task.Delay(10000);        //异步延迟
-                } while (ydpApJson == null && reSendCont++ < 3);
-
-                //2.2 对于返回的AmapJson数据到一个列表中，后面统一处理
-                if (ydpApJson != null)
-                {
-                    if (0 == IsValidJsonResult(ydpApJson)) //返回结果是否正确
-                        ydpAJlist.Add(ydpApJson);
-
-                    ydpApJson = null;
-                }
+                int a = 1;
             }
+            //根据scnFindIndex的范围得出在某个屏体内搜索区域的索引
+            scnfd=(scnFindIndex>=0 && scnFindIndex<s1_findNum)?
+                        scnFindIndex:(scnFindIndex>=s1_findNum && scnFindIndex<(s1_findNum + s2_findNum))?
+                                   (scnFindIndex-s1_findNum):(scnFindIndex-s1_findNum-s2_findNum);
 
-            //3.统一处理一块屏的所有AmapJson数据
-            AmapJsonToSteArr(ydpAJlist, scnHandle);
+            string region = scrResultList[scnIndex].SfindRect[scnfd];
+
+            int reSendCont = 0;
+            //1 按区域异步发送请求，成功，执行1次，失败，连发三次
+            do
+            {
+                ydpApJson = await ydpApClient.GetJsonFromAmapAsync(region);
+                if (ydpApJson == null)              //保证第一次成功不延迟，失败延迟
+                    await Task.Delay(10000);        //异步延迟
+            } while (ydpApJson == null && reSendCont++ < 3);
+
+            if (ydpApJson != null)
+            {
+                if (0 == IsValidJsonResult(ydpApJson))      //返回结果是否正确
+                    AmapJsonToSteArr(ydpApJson, scnIndex); //3.统一处理一块屏的所有AmapJson数据
+
+            }
+            ////2.对某一屏规定的区域向高德发送请求
+            //foreach (string region in scnHandle.SfindRect)
+            //{
+            //    int reSendCont = 0;
+
+            //    //2.1 按区域异步发送请求，失败，连发三次
+            //    do
+            //    {
+            //        ydpApJson = await ydpApClient.GetJsonFromAmapAsync(region);
+            //        if (ydpApJson == null)              //保证第一次成功不延迟，失败延迟
+            //            await Task.Delay(10000);        //异步延迟
+            //    } while (ydpApJson == null && reSendCont++ < 3);
+
+            //    //2.2 对于返回的AmapJson数据到一个列表中，后面统一处理
+            //    if (ydpApJson != null)
+            //    {
+            //        if (0 == IsValidJsonResult(ydpApJson)) //返回结果是否正确
+            //            ydpAJlist.Add(ydpApJson);
+
+            //        ydpApJson = null;
+            //    }
+            //}
+
+            ////3.统一处理一块屏的所有AmapJson数据
+            //AmapJsonToSteArr(ydpAJlist, scnHandle);
         }
+        
         private void ydpTimer_Tick(object sender, EventArgs e)
         {
             //1.在状态栏显示时间
@@ -845,8 +882,8 @@ namespace gdisplay
             stsbarTime.Text = localtime;
             AMAPreqcnt++;
 
-            //2.状态转移函数，根据接受和发送的数据，进行状态转移
-            DoState(AmapIndex);
+            //2.记录这一屏处理的索引，以便发送数据，状态机状态转变，本次处理全部用preAmapIndex
+            preAmapIndex = AmapIndex;
 
             //对于手动模式，到此不再向下运行
             //对于高德模式而言，定时时间到自动发送交通态势信息
@@ -855,15 +892,26 @@ namespace gdisplay
                 //3.高德定时时间到60s，逐屏填充数据，填完发送
                 if (AMAPreqcnt >= AMAPreqtime)
                 {
-                    AMAPreqcnt = 0;
-                    AmapIndex = (AmapIndex + 1) % SCREEN_NUMS;
-                    //4.高德请求，抓取一屏路况交通态势
-                    AMAPReqAndFullMRoadsList();
-                    //5.屏幕AMAPScCnt状态机转向高德模式抓取数据完成
-                    scrResultList[AmapIndex].DataOk = ydpOkMachEm.Amap;
-                    DynamicPixShow(AmapIndex);                   
+                    AMAPreqcnt = 0;                    
+                    //4.高德请求，抓取一个矩形区域的路况交通态势
+                    AMAPReqAndFullMRoadsList(preAmapIndex);
+                    //5.搜索区域加1
+                    scnFindIndex = (scnFindIndex + 1) % allfindNum;
+                    //6.搜索区域等于1,2,3屏体的搜索总数时
+                    if (scnFindIndex == s1_findNum || 
+                              scnFindIndex == s1_findNum+s2_findNum ||
+                                    scnFindIndex==0)
+                    {
+                        //7.屏幕AMAPScCnt状态机转向高德模式抓取数据完成
+                        scrResultList[preAmapIndex].DataOk = ydpOkMachEm.Amap;
+                        DynamicPixShow(preAmapIndex);
+                        //8.屏幕索引+1
+                        AmapIndex = (AmapIndex + 1) % SCREEN_NUMS;
+                    }              
                 }
-            }
+            }//(wk_mode == ydpModeEm.Amap)
+            //2.状态转移函数，根据接受和发送的数据，进行状态转移
+            DoState(preAmapIndex);
         }
 
         private Dictionary<string,Byte> SectMapBand(int scnIndex)
