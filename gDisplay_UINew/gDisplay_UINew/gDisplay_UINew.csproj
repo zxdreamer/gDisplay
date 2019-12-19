@@ -1,0 +1,290 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7F3B8504-7892-4953-8E23-297939B9EF6E}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>gDisplay_UINew</RootNamespace>
+    <AssemblyName>gDisplay_UINew</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AmapClient.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="JsonAMAP.cs" />
+    <Compile Include="JsonConfig.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScreenResult.cs" />
+    <Compile Include="TcpServer.cs" />
+    <Compile Include="ydpACK.cs" />
+    <Compile Include="ydpEnum.cs" />
+    <Compile Include="ydpLog.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\lpb_black1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\lpb_green1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\lpb_red1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\lpb_yellow1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\lpc_black1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\lpc_green1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\lpc_red1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\lpc_yellow1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\lpd_black1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\lpd_green1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\lpd_red1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\lpd_yellow1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\pa_black1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\pa_green1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\pa_red1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\pa_yellow1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s2\pa_green2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s2\pa_raw2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s2\pa_red2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s2\pa_yellow2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s2\pbc_green2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s2\pbc_red2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s2\pbc_row2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s2\pbc_yellow2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\lpd_black3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\lpd_green3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\lpd_red3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\lpd_yellow3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\pa_green3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\pa_red3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\pa_row3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\pa_yellow3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\pe_black3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\pe_green3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\pe_red3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\pe_yellow3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\rpd_black3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\rpd_green3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\rpd_red3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\rpd_yellow3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\lp_black3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\lp_green3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\lp_red3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\lp_yellow3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\rp_green3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\rp_red3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\rp_yellow3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\rpb_black3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\pb_black1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\pb_green1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\pb_red1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\pb_yellow1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\pc_black1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\pc_green1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\pc_red1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\pc_yellow1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\pd_black1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\pd_green1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\pd_red1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s1\pd_yellow1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\pb_black3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\pb_green3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\pb_red3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\pb_yellow3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\s3\rp_black3.jpg" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
